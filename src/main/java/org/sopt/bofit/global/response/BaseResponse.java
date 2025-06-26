@@ -6,12 +6,10 @@ import org.springframework.http.HttpStatus;
 @Getter
 public class BaseResponse<T> {
     private final int code;
-    private final String message;
     private final T data;
 
     private BaseResponse(T data) {
         this.code = HttpStatus.OK.value();
-        this.message = "요청에 성공하였습니다.";
         this.data = data;
     }
 
