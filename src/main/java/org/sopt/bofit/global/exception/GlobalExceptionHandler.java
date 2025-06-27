@@ -5,6 +5,7 @@ import org.sopt.bofit.global.response.BaseErrorResponse;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
@@ -46,10 +47,13 @@ public class GlobalExceptionHandler {
 
     //커스텀 예외
     @ExceptionHandler(CustomException.class)
-    public BaseErrorResponse handleCustomException(CustomException e) {
-        log.warn("CustomException: code={}, message={}, detail={}",
-                e.getErrorCode().getHttpStatus(), e.getMessage(), e.getMessageDetail());
-        return BaseErrorResponse.of(e.getErrorCode().getHttpStatus(), e.getMessage(), e.getMessageDetail());
+    public ResponseEntity<BaseErrorResponse> handleCustomException(CustomException e) {
+        return ResponseEntity
+                .status(e.getErrorCode().getHttpStatus())
+                .body(BaseErrorResponse.of(
+                        e.getErrorCode().getHttpStatus(),
+                        e.getMessage(),
+                        e.getMessageDetail()));
     }
 
     //입력값 검증할 때 발생하는 예외
