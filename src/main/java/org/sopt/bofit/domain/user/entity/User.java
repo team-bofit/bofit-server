@@ -3,6 +3,7 @@ package org.sopt.bofit.domain.user.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.sopt.bofit.domain.user.entity.constant.Gender;
+import org.sopt.bofit.domain.user.entity.constant.Job;
 import org.sopt.bofit.global.entity.BaseEntity;
 
 @Entity
@@ -39,7 +40,8 @@ public class User extends BaseEntity {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    private String job;
+    @Enumerated(EnumType.STRING)
+    private Job job;
 
     @Column(name = "is_married")
     private boolean isMarried;
