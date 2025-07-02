@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.sopt.bofit.domain.user.entity.constant.Gender;
 import org.sopt.bofit.domain.user.entity.constant.Job;
+import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.entity.constant.UserStatus;
 import org.sopt.bofit.global.entity.BaseEntity;
 
@@ -18,8 +19,12 @@ public class User extends BaseEntity {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private Long kakaoId;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "login_provider", nullable = false)
+    private LoginProvider loginProvider;
+
+    @Column(unique = true, nullable = false, name = "oauth_id")
+    private String oauthId;
 
     private String name;
 
