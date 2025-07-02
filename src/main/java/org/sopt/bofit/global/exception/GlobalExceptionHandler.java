@@ -1,6 +1,7 @@
 package org.sopt.bofit.global.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.bofit.global.exception.custom_exception.CustomException;
 import org.sopt.bofit.global.response.BaseErrorResponse;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
