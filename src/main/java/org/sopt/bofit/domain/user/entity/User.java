@@ -2,6 +2,7 @@ package org.sopt.bofit.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.sopt.bofit.domain.user.entity.constant.Gender;
 import org.sopt.bofit.global.entity.BaseEntity;
 
 @Entity
@@ -26,7 +27,8 @@ public class User extends BaseEntity {
     @Column(name = "profile_image")
     private String profileImage;
 
-    private String gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Column(name = "birth_day")
     private String birthDay;
