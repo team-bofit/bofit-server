@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.sopt.bofit.domain.user.entity.constant.Gender;
 import org.sopt.bofit.domain.user.entity.constant.Job;
+import org.sopt.bofit.domain.user.entity.constant.UserStatus;
 import org.sopt.bofit.global.entity.BaseEntity;
 
 @Entity
@@ -55,7 +56,9 @@ public class User extends BaseEntity {
     @Column(name = "is_registered")
     private boolean isRegistered;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserStatus status = UserStatus.ACTIVE;
 
 
 
