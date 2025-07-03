@@ -8,6 +8,8 @@ import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.entity.constant.UserStatus;
 import org.sopt.bofit.global.entity.BaseEntity;
 
+import java.time.MonthDay;
+
 @Entity
 @Getter
 @Builder
@@ -40,10 +42,10 @@ public class User extends BaseEntity {
     private Gender gender;
 
     @Column(name = "birth_day")
-    private String birthDay;
+    private MonthDay birthDay;
 
     @Column(name = "birth_year")
-    private String birthYear;
+    private int birthYear;
 
     @Column(name = "phone_number")
     private String phoneNumber;
