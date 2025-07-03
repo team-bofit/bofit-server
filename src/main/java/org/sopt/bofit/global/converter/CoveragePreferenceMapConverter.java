@@ -7,7 +7,7 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import org.sopt.bofit.domain.user.entity.constant.ConveragePreference;
 import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
-import org.sopt.bofit.global.exception.custom_exception.JsonConvertException;
+import org.sopt.bofit.global.exception.custom_exception.InternalException;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -22,7 +22,7 @@ public class CoveragePreferenceMapConverter implements AttributeConverter<Map<Co
         try {
             return mapper.writeValueAsString(attribute);
         } catch (JsonProcessingException e) {
-            throw new JsonConvertException(GlobalErrorCode.JSON_SERIALIZATION_ERROR);
+            throw new InternalException(GlobalErrorCode.JSON_SERIALIZATION_ERROR);
         }
     }
 
@@ -31,7 +31,7 @@ public class CoveragePreferenceMapConverter implements AttributeConverter<Map<Co
         try {
             return mapper.readValue(dbData, new TypeReference<LinkedHashMap<ConveragePreference, Integer>>() {});
         } catch (IOException e) {
-            throw new JsonConvertException(GlobalErrorCode.JSON_DESERIALIZATION_ERROR);
+            throw new InternalException(GlobalErrorCode.JSON_DESERIALIZATION_ERROR);
         }
     }
 }
