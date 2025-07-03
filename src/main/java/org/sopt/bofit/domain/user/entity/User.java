@@ -47,9 +47,6 @@ public class User extends BaseEntity {
     @Column(name = "birth_year")
     private int birthYear;
 
-    @Column(name = "phone_number")
-    private String phoneNumber;
-
     @Enumerated(EnumType.STRING)
     private Job job;
 
