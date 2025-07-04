@@ -25,6 +25,7 @@ spring:
 server:
   forward-headers-strategy: FRAMEWORK
 
+
 ---
 spring:
   config:
