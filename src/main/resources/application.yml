@@ -45,7 +45,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 kakao:
   client-id: ${KAKAO_CLIENT_ID}
-  redirect-uri: ${LOCAL_REDIRECT_URI}
+  redirect-uri: ${KAKAO_REDIRECT_URI}
 ---
 spring:
   config:
@@ -69,7 +69,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 kakao:
   client-id: ${KAKAO_CLIENT_ID}
-  redirect-uri: ${PROD_REDIRECT_URI}
+  redirect-uri: ${KAKAO_REDIRECT_URI}
 
 ---
 spring:
