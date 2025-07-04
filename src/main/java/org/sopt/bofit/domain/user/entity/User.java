@@ -63,4 +63,28 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private UserStatus status = UserStatus.ACTIVE;
 
+    public static User create(
+            LoginProvider loginProvider,
+            String oauthId,
+            String name,
+            String nickname,
+            String profileImage,
+            Gender gender,
+            int birthYear,
+            MonthDay birthDay
+    ) {
+        return User.builder()
+                .loginProvider(loginProvider)
+                .oauthId(oauthId)
+                .name(name)
+                .nickname(nickname)
+                .profileImage(profileImage)
+                .gender(gender)
+                .birthYear(birthYear)
+                .birthDay(birthDay)
+                .isRegistered(false)
+                .status(UserStatus.ACTIVE)
+                .build();
+    }
+
 }
