@@ -32,9 +32,6 @@ public class User extends BaseEntity {
 
     private String nickname;
 
-    @Column(unique = true)
-    private String email;
-
     @Column(name = "profile_image")
     private String profileImage;
 
