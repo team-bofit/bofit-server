@@ -52,8 +52,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(e.getErrorCode().getHttpStatus())
                 .body(BaseErrorResponse.of(
-                        e.getErrorCode().getHttpStatus(),
-                        e.getMessage(),
+                        e.getErrorCode(),
                         e.getMessageDetail()));
     }
 
