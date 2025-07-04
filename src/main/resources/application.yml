@@ -4,12 +4,12 @@ spring:
   profiles:
     group:
       local: local-db, local-port, common
-      dev : dev-db, dev-port, common
+      dev-blue: common, dev-db, dev-blue-port
+      dev-green: common, dev-db, dev-green-port
       prod: prod-db, prod-port, common
     active: local
 
 ---
-# ?? ??
 spring:
   config:
     activate:
@@ -22,13 +22,17 @@ spring:
         format_sql: true
         show_sql: true
         highlight_sql: true
+server:
+  forward-headers-strategy: FRAMEWORK
 
 ---
-# ??? DB
 spring:
   config:
     activate:
       on-profile: local-db
+  jpa:
+    hibernate:
+      ddl-auto: ${LOCAL_DATASOURCE_DDL_AUTO}
   datasource:
     url: ${LOCAL_DATASOURCE_URL}
     username: ${LOCAL_DATASOURCE_USERNAME}
@@ -36,7 +40,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 ---
-# ??? ??
 spring:
   config:
     activate:
@@ -45,32 +48,52 @@ server:
   port: 8080
 
 ---
-# ??? DB
 spring:
   config:
     activate:
       on-profile: dev-db
+  jpa:
+    hibernate:
+      ddl-auto: ${DEV_DATASOURCE_DDL_AUTO}
   datasource:
     url: ${DEV_DATASOURCE_URL}
     username: ${DEV_DATASOURCE_USERNAME}
     password: ${DEV_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-
 ---
-# ??? ??
 spring:
   config:
     activate:
       on-profile: dev-port
 server:
   port: 8081
+
 ---
-# ??? DB
+spring:
+  config:
+    activate:
+      on-profile: dev-blue-port
+server:
+  port: 8080
+
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev-green-port
+server:
+  port: 8081
+
+---
 spring:
   config:
     activate:
       on-profile: prod-db
+  jpa:
+    hibernate:
+      ddl-auto: ${PROD_DATASOURCE_DDL_AUTO}
   datasource:
     url: ${PROD_DATASOURCE_URL}
     username: ${PROD_DATASOURCE_USERNAME}
@@ -78,7 +101,6 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 ---
-# ??? ??
 spring:
   config:
     activate:

@@ -30,7 +30,7 @@ dependencies {
 	//Spring Boot
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 
-	//lombok
+	//Lombok
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
@@ -38,11 +38,14 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	
-	//mysql
+	//Mysql
 	implementation 'mysql:mysql-connector-java:8.0.33'
 
 	//Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+	//Actuator
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 tasks.named('test') {
