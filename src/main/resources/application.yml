@@ -22,6 +22,10 @@ spring:
         format_sql: true
         show_sql: true
         highlight_sql: true
+kakao:
+  authorization-uri: https://kauth.kakao.com/oauth/authorize
+  token-uri: https://kauth.kakao.com/oauth/token
+  user-info-uri: https://kapi.kakao.com/v2/user/me
 server:
   forward-headers-strategy: FRAMEWORK
 
@@ -39,7 +43,9 @@ spring:
     username: ${LOCAL_DATASOURCE_USERNAME}
     password: ${LOCAL_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+kakao:
+  client-id: ${KAKAO_CLIENT_ID}
+  redirect-uri: ${LOCAL_REDIRECT_URI}
 ---
 spring:
   config:
@@ -61,6 +67,9 @@ spring:
     username: ${DEV_DATASOURCE_USERNAME}
     password: ${DEV_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
+kakao:
+  client-id: ${KAKAO_CLIENT_ID}
+  redirect-uri: ${PROD_REDIRECT_URI}
 
 ---
 spring:
