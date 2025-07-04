@@ -22,6 +22,8 @@ spring:
         format_sql: true
         show_sql: true
         highlight_sql: true
+server:
+  forward-headers-strategy: FRAMEWORK
 
 ---
 # ??? DB
