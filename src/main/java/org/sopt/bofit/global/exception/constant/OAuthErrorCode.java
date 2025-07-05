@@ -11,7 +11,9 @@ public enum OAuthErrorCode implements ErrorCode {
     JWT_INVALID_SIGNATURE(HttpStatus.UNAUTHORIZED.value(), "잘못된 JWT 서명입니다."),
     JWT_EXPIRED(HttpStatus.UNAUTHORIZED.value(), "만료된 토큰입니다."),
     JWT_UNSUPPORTED(HttpStatus.UNAUTHORIZED.value(), "지원하지 않는 JWT입니다."),
-    JWT_INVALID(HttpStatus.UNAUTHORIZED.value(), "유효하지 않은 JWT입니다.")
+    JWT_INVALID(HttpStatus.UNAUTHORIZED.value(), "유효하지 않은 JWT입니다."),
+    JWT_REFRESH_NOT_FOUND(HttpStatus.UNAUTHORIZED.value(), "RefreshToken 정보가 존재하지 않습니다."),
+    JWT_REFRESH_TOKEN_MISMATCH(HttpStatus.UNAUTHORIZED.value(), "RefreshToken이 일치하지 않습니다.")
     ;
     private final int httpStatus;
     private final String message;

@@ -2,11 +2,14 @@ package org.sopt.bofit.global.oauth.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.bofit.global.exception.custom_exception.UnAuthorizedException;
 import org.sopt.bofit.global.oauth.dto.KaKaoLoginResponse;
 import org.sopt.bofit.global.oauth.dto.KaKaoTokenResponse;
 import org.sopt.bofit.global.oauth.dto.KakaoUserResponse;
+import org.sopt.bofit.global.oauth.dto.TokenReissueResponse;
 import org.sopt.bofit.global.oauth.entity.RefreshToken;
 import org.sopt.bofit.global.oauth.jwt.JwtProvider;
+import org.sopt.bofit.global.oauth.jwt.JwtUtil;
 import org.sopt.bofit.global.oauth.repository.RefreshTokenRepository;
 import org.sopt.bofit.global.oauth.util.OAuthUtil;
 import org.sopt.bofit.domain.user.entity.User;
@@ -35,6 +38,8 @@ public class OAuthService {
     private final UserRepository userRepository;
 
     private final JwtProvider jwtProvider;
+
+    private final JwtUtil jwtUtil;
 
     private final WebClient webClient = WebClient.create();
 
@@ -132,6 +137,28 @@ public class OAuthService {
                                     );
                                 })
                 );
+    }
+
+    public TokenReissueResponse reissue(String refreshToken) {
+        if (!jwtUtil.isTokenValid(refreshToken)) {
+            throw new UnAuthorizedException(JWT_INVALID);
+        }
+
+        Long userId = jwtUtil.extractUserIdFromToken(refreshToken);
+
+        RefreshToken savedToken = refreshTokenRepository.findByUserId(userId)
+                .orElseThrow(() -> new UnAuthorizedException(JWT_REFRESH_NOT_FOUND));
+
+        if (!savedToken.getRefreshToken().equals(refreshToken)) {
+            throw new UnAuthorizedException(JWT_REFRESH_TOKEN_MISMATCH);
+        }
+
+        String newAccessToken = jwtProvider.generateAccessToken(userId);
+        String newRefreshToken = jwtProvider.generateRefreshToken(userId);
+        savedToken.updateToken(newRefreshToken);
+        refreshTokenRepository.save(savedToken);
+
+        return TokenReissueResponse.of(newAccessToken, newRefreshToken);
     }
 
 }
