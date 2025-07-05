@@ -25,7 +25,7 @@ public class OAuthController {
 
     @CustomExceptionDescription(KAKAO_TOKEN_REQUEST)
     @Operation(summary = "카카오 토큰 요청", description = "카카오 로그인 후 인가 코드를 요청합니다.")
-    @GetMapping("/kakao/callback")
+    @GetMapping("/kakao/login")
     public Mono<BaseResponse<KaKaoLoginResponse>> kakaoCallback(@RequestParam("code") String code) {
         return oAuthService.requestToken(code)
                 .flatMap(token ->

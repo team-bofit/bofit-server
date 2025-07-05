@@ -76,21 +76,27 @@ public class OAuthService {
                 .flatMap(kakaoUser -> {
                     KakaoAccount account = kakaoUser.getKakaoAccount();
                     UserProfile profile = account.getProfile();
-                    return userRepository.findByOauthId(String.valueOf(kakaoUser.getOauthId()))
-                            .switchIfEmpty(Mono.defer(() -> {
-                                User newUser = User.create(
-                                        LoginProvider.KAKAO,
-                                        String.valueOf(kakaoUser.getOauthId()),
-                                        account.getName(),
-                                        profile.getNickname(),
-                                        profile.getProfile_image_url(),
-                                        parseGender(account.getGender()),
-                                        parseBirthYear(account.getBirthyear()),
-                                        parseBirthday(account.getBirthday())
-                                );
-                                return Mono.fromCallable(() -> userRepository.save(newUser))
-                                        .subscribeOn(Schedulers.boundedElastic()); // 별도 스레드풀에서 실행
-                            }));
+
+                    return Mono.fromCallable(() ->
+                                    userRepository.findByOauthId(String.valueOf(kakaoUser.getOauthId()))
+                            )
+                            .subscribeOn(Schedulers.boundedElastic())
+                            .flatMap(optionalUser ->
+                                    optionalUser.map(Mono::just).orElseGet(() -> {
+                                        User newUser = User.create(
+                                                LoginProvider.KAKAO,
+                                                String.valueOf(kakaoUser.getOauthId()),
+                                                account.getName(),
+                                                profile.getNickname(),
+                                                profile.getProfile_image_url(),
+                                                parseGender(account.getGender()),
+                                                parseBirthYear(account.getBirthyear()),
+                                                parseBirthday(account.getBirthday())
+                                        );
+                                        return Mono.fromCallable(() -> userRepository.save(newUser))
+                                                .subscribeOn(Schedulers.boundedElastic());
+                                    })
+                            );
                 });
     }
 }
