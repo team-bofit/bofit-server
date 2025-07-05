@@ -13,11 +13,4 @@ public class UserInfoUtil {
     public static int parseBirthYear(String birthyear) {
         return (birthyear != null && birthyear.matches("\\d+")) ? Integer.parseInt(birthyear) : 0;
     }
-
-    public static MonthDay parseBirthday(String birthday) {
-        if (birthday == null || birthday.length() != 4) return null;
-        int month = Integer.parseInt(birthday.substring(0, 2));
-        int day = Integer.parseInt(birthday.substring(2, 4));
-        return MonthDay.of(month, day);
-    }
 }

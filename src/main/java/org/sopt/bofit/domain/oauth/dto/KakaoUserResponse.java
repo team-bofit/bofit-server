@@ -23,9 +23,6 @@ public class KakaoUserResponse {
         @Schema(description = "성별", example = "male")
         private String gender;
 
-        @Schema(description = "생일", example = "1112")
-        private String birthday;
-
         @Schema(description = "출생연도", example = "2000")
         private String birthyear;
 

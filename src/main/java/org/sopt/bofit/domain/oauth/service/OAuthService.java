@@ -94,8 +94,7 @@ public class OAuthService {
                                                 profile.getNickname(),
                                                 profile.getProfile_image_url(),
                                                 parseGender(account.getGender()),
-                                                parseBirthYear(account.getBirthyear()),
-                                                parseBirthday(account.getBirthday())
+                                                parseBirthYear(account.getBirthyear())
                                         );
                                         return Mono.fromCallable(() -> userRepository.save(newUser))
                                                 .subscribeOn(Schedulers.boundedElastic());

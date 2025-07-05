@@ -38,9 +38,6 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(name = "birth_day")
-    private MonthDay birthDay;
-
     @Column(name = "birth_year")
     private int birthYear;
 
@@ -70,8 +67,7 @@ public class User extends BaseEntity {
             String nickname,
             String profileImage,
             Gender gender,
-            int birthYear,
-            MonthDay birthDay
+            int birthYear
     ) {
         return User.builder()
                 .loginProvider(loginProvider)
@@ -81,7 +77,6 @@ public class User extends BaseEntity {
                 .profileImage(profileImage)
                 .gender(gender)
                 .birthYear(birthYear)
-                .birthDay(birthDay)
                 .isRegistered(false)
                 .status(UserStatus.ACTIVE)
                 .build();
