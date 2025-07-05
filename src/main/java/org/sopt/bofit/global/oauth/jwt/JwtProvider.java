@@ -3,6 +3,7 @@ package org.sopt.bofit.global.oauth.jwt;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import java.util.Date;
 
 @Slf4j
 @Component
+@Getter
 public class JwtProvider {
 
     private final Long accessTokenExpireMillis;
@@ -46,5 +48,7 @@ public class JwtProvider {
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
+
+
 
 }

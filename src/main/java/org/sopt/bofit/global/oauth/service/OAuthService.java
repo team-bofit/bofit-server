@@ -2,8 +2,10 @@ package org.sopt.bofit.global.oauth.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.bofit.global.oauth.dto.KaKaoLoginResponse;
 import org.sopt.bofit.global.oauth.dto.KaKaoTokenResponse;
 import org.sopt.bofit.global.oauth.dto.KakaoUserResponse;
+import org.sopt.bofit.global.oauth.jwt.JwtProvider;
 import org.sopt.bofit.global.oauth.util.OAuthUtil;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
@@ -28,6 +30,8 @@ public class OAuthService {
 
     private final UserRepository userRepository;
 
+    private final JwtProvider jwtProvider;
+
     private final WebClient webClient = WebClient.create();
 
     @Value("${kakao.client-id}")
@@ -42,7 +46,7 @@ public class OAuthService {
     @Value("${kakao.user-info-uri}")
     private String userInfoUri;
 
-    public Mono<KaKaoTokenResponse> requestToken(String code) {
+    private Mono<KaKaoTokenResponse> requestToken(String code) {
         String body = OAuthUtil.buildTokenRequestBody(code, clientId, redirectUri);
 
         return webClient.post()
@@ -71,7 +75,7 @@ public class OAuthService {
                 .bodyToMono(KakaoUserResponse.class);
     }
 
-    public Mono<User> registerOrLogin(String accessToken) {
+    private Mono<User> registerOrLogin(String accessToken) {
         return getUserInfo(accessToken)
                 .flatMap(kakaoUser -> {
                     KakaoAccount account = kakaoUser.kakaoAccount();
@@ -102,6 +106,25 @@ public class OAuthService {
                             );
                 });
     }
+
+    public Mono<KaKaoLoginResponse> login(String code) {
+        return requestToken(code)
+                .flatMap(token ->
+                        registerOrLogin(token.access_token())
+                                .map(user -> {
+                                    String accessToken = jwtProvider.generateAccessToken(user.getId());
+                                    String refreshToken = jwtProvider.generateRefreshToken(user.getId());
+
+                                    return KaKaoLoginResponse.of(
+                                            user.getId(),
+                                            user.isRegistered(),
+                                            accessToken,
+                                            refreshToken
+                                    );
+                                })
+                );
+    }
+
 }
 
 

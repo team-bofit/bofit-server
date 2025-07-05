@@ -25,11 +25,12 @@ public class OAuthController {
     @Operation(summary = "카카오 로그인", description = "카카오 API를 통해 로그인합니다.")
     @GetMapping("/kakao/login")
     public Mono<BaseResponse<KaKaoLoginResponse>> kakaoCallback(@RequestParam("code") String code) {
-        return oAuthService.requestToken(code)
-                .flatMap(token ->
-                            oAuthService.registerOrLogin(token.access_token())
-                                    .map(user -> KaKaoLoginResponse.of(user.getId(), user.isRegistered()))
-                        )
+        return oAuthService.login(code)
                 .map(response -> BaseResponse.ok(response, "카카오 로그인 성공"));
     }
+
+    @GetMapping("/test")
+    public void test(){
+    }
+
 }

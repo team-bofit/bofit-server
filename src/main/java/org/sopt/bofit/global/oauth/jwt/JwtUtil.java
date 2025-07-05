@@ -22,15 +22,11 @@ import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
 @RequiredArgsConstructor
 public class JwtUtil {
 
-    private SecretKey secretKey;
-
-    public JwtUtil(@Value("${jwt.secret}") String secretKey) {
-        this.secretKey = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-    }
+    private final JwtProvider jwtProvider;
 
     public Claims getClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(secretKey)
+                .setSigningKey(jwtProvider.getSecretKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -38,21 +34,22 @@ public class JwtUtil {
 
     public boolean isTokenValid(String token) {
         try {
+            log.info("🔍 받은 JWT 토큰: [{}]", token);
             getClaims(token);
         } catch (SecurityException | MalformedJwtException e) {
-            log.debug("잘못된 JWT 서명입니다.");
+            log.info("잘못된 JWT 서명입니다.");
             throw new UnAuthorizedException(JWT_INVALID_SIGNATURE);
         } catch (ExpiredJwtException e) {
-            log.debug("만료된 토큰입니다.");
+            log.info("만료된 토큰입니다.");
             throw new UnAuthorizedException(JWT_EXPIRED);
         } catch (UnsupportedJwtException e) {
-            log.debug("지원하지 않는 토큰입니다.");
+            log.info("지원하지 않는 토큰입니다.");
             throw new UnAuthorizedException(JWT_UNSUPPORTED);
         } catch (IllegalArgumentException e) {
-            log.debug("잘못된 토큰입니다.");
+            log.info("잘못된 토큰입니다.");
             throw new UnAuthorizedException(JWT_INVALID);
         } catch (Exception e) {
-            log.debug(e.getMessage());
+            log.info(e.getMessage());
             throw new InternalException(INTERNAL_SERVER_ERROR);
         }
         return true;
