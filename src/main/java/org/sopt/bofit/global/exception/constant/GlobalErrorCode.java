@@ -19,7 +19,12 @@ public enum GlobalErrorCode implements ErrorCode {
     MISSING_PATH_VARIABLE(HttpStatus.BAD_REQUEST.value(), "경로 변수 값이 누락되었습니다."),
     JSON_SERIALIZATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Enum 리스트를 JSON 문자열로 직렬화하는 데 실패했습니다."),
     JSON_DESERIALIZATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "JSON 문자열을 Enum 리스트로 역직렬화하는 데 실패했습니다."),
-    AUTHENTICATION_SETTING_FAIL(HttpStatus.INTERNAL_SERVER_ERROR.value(), "인증 정보 처리에 실패했습니다")
+    AUTHENTICATION_SETTING_FAIL(HttpStatus.INTERNAL_SERVER_ERROR.value(), "인증 정보 처리에 실패했습니다"),
+    JWT_USER_ID_EXTRACTION_FAILED(HttpStatus.UNAUTHORIZED.value(), "JWT에서 userId 추출 실패"),
+    JWT_INVALID_SIGNATURE(HttpStatus.UNAUTHORIZED.value(), "잘못된 JWT 서명입니다."),
+    JWT_EXPIRED(HttpStatus.UNAUTHORIZED.value(), "만료된 토큰입니다."),
+    JWT_UNSUPPORTED(HttpStatus.UNAUTHORIZED.value(), "지원하지 않는 JWT입니다."),
+    JWT_INVALID(HttpStatus.UNAUTHORIZED.value(), "유효하지 않은 JWT입니다."),
     ;
 
 

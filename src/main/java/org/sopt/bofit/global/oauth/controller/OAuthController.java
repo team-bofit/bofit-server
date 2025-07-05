@@ -3,13 +3,11 @@ package org.sopt.bofit.global.oauth.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.global.oauth.dto.KaKaoLoginResponse;
+import org.sopt.bofit.global.oauth.dto.TokenReissueResponse;
 import org.sopt.bofit.global.oauth.service.OAuthService;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.response.BaseResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
@@ -29,8 +27,10 @@ public class OAuthController {
                 .map(response -> BaseResponse.ok(response, "카카오 로그인 성공"));
     }
 
-    @GetMapping("/test")
-    public void test(){
+    @PostMapping("/reissue")
+    public BaseResponse<TokenReissueResponse> reissue(@RequestHeader("Authorization") String bearerToken) {
+        String refreshToken = bearerToken.replace("Bearer ", "").trim();
+        return BaseResponse.ok(oAuthService.reissue(refreshToken), "토큰 재발급 성공");
     }
 
 }
