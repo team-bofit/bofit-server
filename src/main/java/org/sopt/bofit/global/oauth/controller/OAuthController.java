@@ -27,6 +27,8 @@ public class OAuthController {
                 .map(response -> BaseResponse.ok(response, "카카오 로그인 성공"));
     }
 
+    @CustomExceptionDescription(TOKEN_REISSUE)
+    @Operation(summary = "토큰 재발급")
     @PostMapping("/reissue")
     public BaseResponse<TokenReissueResponse> reissue(@RequestHeader("Authorization") String bearerToken) {
         String refreshToken = bearerToken.replace("Bearer ", "").trim();
