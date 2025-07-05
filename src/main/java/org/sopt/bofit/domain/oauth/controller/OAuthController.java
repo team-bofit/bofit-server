@@ -2,6 +2,7 @@ package org.sopt.bofit.domain.oauth.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import org.sopt.bofit.domain.oauth.dto.KaKaoLoginResponse;
 import org.sopt.bofit.domain.oauth.dto.KaKaoTokenResponse;
 import org.sopt.bofit.domain.oauth.service.OAuthService;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
@@ -25,8 +26,12 @@ public class OAuthController {
     @CustomExceptionDescription(KAKAO_TOKEN_REQUEST)
     @Operation(summary = "카카오 토큰 요청", description = "카카오 로그인 후 인가 코드를 요청합니다.")
     @GetMapping("/kakao/callback")
-    public Mono<BaseResponse<KaKaoTokenResponse>> kakaoCallback(@RequestParam("code") String code) {
+    public Mono<BaseResponse<KaKaoLoginResponse>> kakaoCallback(@RequestParam("code") String code) {
         return oAuthService.requestToken(code)
-                .map(token -> BaseResponse.ok(token, "카카오 로그인 성공"));
+                .flatMap(token ->
+                            oAuthService.registerOrLogin(token.getAccessToken())
+                                    .map(user -> KaKaoLoginResponse.of(user.getId(), user.isRegistered()))
+                        )
+                .map(response -> BaseResponse.ok(response, "카카오 로그인 성공"));
     }
 }
