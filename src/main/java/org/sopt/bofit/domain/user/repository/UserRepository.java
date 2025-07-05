@@ -6,5 +6,4 @@ import reactor.core.publisher.Mono;
 
 public interface UserRepository  extends JpaRepository<User, Long> {
     Mono<User> findByOauthId(String oauthId);
-
 }

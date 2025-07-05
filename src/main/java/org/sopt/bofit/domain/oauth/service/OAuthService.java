@@ -3,21 +3,30 @@ package org.sopt.bofit.domain.oauth.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.bofit.domain.oauth.dto.KaKaoTokenResponse;
+import org.sopt.bofit.domain.oauth.dto.KakaoUserResponse;
 import org.sopt.bofit.domain.oauth.util.OAuthUtil;
-import org.sopt.bofit.global.exception.constant.OAuthErrorCode;
+import org.sopt.bofit.domain.user.entity.User;
+import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
+import org.sopt.bofit.domain.user.repository.UserRepository;
 import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
+import static org.sopt.bofit.domain.oauth.dto.KakaoUserResponse.*;
+import static org.sopt.bofit.domain.oauth.dto.KakaoUserResponse.KakaoAccount.*;
+import static org.sopt.bofit.domain.oauth.util.UserInfoUtil.*;
 import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class OAuthService {
+
+    private final UserRepository userRepository;
 
     private final WebClient webClient = WebClient.create();
 
@@ -29,6 +38,9 @@ public class OAuthService {
 
     @Value("${kakao.token-uri}")
     private String tokenUri;
+
+    @Value("${kakao.user-info-uri}")
+    private String userInfoUri;
 
     public Mono<KaKaoTokenResponse> requestToken(String code) {
         String body = OAuthUtil.buildTokenRequestBody(code, clientId, redirectUri);
@@ -51,4 +63,37 @@ public class OAuthService {
                 .doOnError(e -> log.error("❌ Kakao 토큰 요청 중 예외 발생", e));
     }
 
+    private Mono<KakaoUserResponse> getUserInfo(String accessToken) {
+        return webClient.get()
+                .uri(userInfoUri)
+                .headers(headers -> headers.setBearerAuth(accessToken))
+                .retrieve()
+                .bodyToMono(KakaoUserResponse.class);
+    }
+
+    public Mono<User> registerOrLogin(String accessToken) {
+        return getUserInfo(accessToken)
+                .flatMap(kakaoUser -> {
+                    KakaoAccount account = kakaoUser.getKakaoAccount();
+                    UserProfile profile = account.getProfile();
+                    return userRepository.findByOauthId(String.valueOf(kakaoUser.getOauthId()))
+                            .switchIfEmpty(Mono.defer(() -> {
+                                User newUser = User.create(
+                                        LoginProvider.KAKAO,
+                                        String.valueOf(kakaoUser.getOauthId()),
+                                        account.getName(),
+                                        profile.getNickname(),
+                                        profile.getProfile_image_url(),
+                                        parseGender(account.getGender()),
+                                        parseBirthYear(account.getBirthyear()),
+                                        parseBirthday(account.getBirthday())
+                                );
+                                return Mono.fromCallable(() -> userRepository.save(newUser))
+                                        .subscribeOn(Schedulers.boundedElastic()); // 별도 스레드풀에서 실행
+                            }));
+                });
+    }
 }
+
+
+

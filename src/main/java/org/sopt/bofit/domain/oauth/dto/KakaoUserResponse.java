@@ -12,9 +12,8 @@ public class KakaoUserResponse {
     @Schema(description = "카카오 계정 정보")
     private KakaoAccount kakaoAccount;
 
+    @Getter
     public static class KakaoAccount {
-        @Schema(description = "이메일", example = "dlwjddus1112@naver.com")
-        private String email;
 
         @Schema(description = "이름", example = "이정연")
         private String name;
@@ -31,6 +30,7 @@ public class KakaoUserResponse {
         @Schema(description = "유저 프로필 정보")
         private UserProfile profile;
 
+        @Getter
         public static class UserProfile {
             @Schema(description = "유저가 설정한 닉네임", example = "JeongYeon")
             private String nickname;
