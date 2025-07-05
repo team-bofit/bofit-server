@@ -74,27 +74,27 @@ public class OAuthService {
     public Mono<User> registerOrLogin(String accessToken) {
         return getUserInfo(accessToken)
                 .flatMap(kakaoUser -> {
-                    KakaoAccount account = kakaoUser.getKakaoAccount();
+                    KakaoAccount account = kakaoUser.kakaoAccount();
                     if (account == null) {
                         log.error("❌kakao_account 정보가 없습니다. 사용자 동의 누락 가능성");
                         return Mono.error(new BadRequestException(KAKAO_USER_INFO_REQUEST_FAILED));
                     }
-                    UserProfile profile = account.getProfile();
+                    UserProfile profile = account.profile();
 
                     return Mono.fromCallable(() ->
-                                    userRepository.findByOauthId(String.valueOf(kakaoUser.getOauthId()))
+                                    userRepository.findByOauthId(String.valueOf(kakaoUser.oauthId()))
                             )
                             .subscribeOn(Schedulers.boundedElastic())
                             .flatMap(optionalUser ->
                                     optionalUser.map(Mono::just).orElseGet(() -> {
                                         User newUser = User.create(
                                                 LoginProvider.KAKAO,
-                                                String.valueOf(kakaoUser.getOauthId()),
-                                                account.getName(),
-                                                profile.getNickname(),
-                                                profile.getProfile_image_url(),
-                                                parseGender(account.getGender()),
-                                                parseBirthYear(account.getBirthyear())
+                                                String.valueOf(kakaoUser.oauthId()),
+                                                account.name(),
+                                                profile.nickname(),
+                                                profile.profile_image_url(),
+                                                parseGender(account.gender()),
+                                                parseBirthYear(account.birthyear())
                                         );
                                         return Mono.fromCallable(() -> userRepository.save(newUser))
                                                 .subscribeOn(Schedulers.boundedElastic());
