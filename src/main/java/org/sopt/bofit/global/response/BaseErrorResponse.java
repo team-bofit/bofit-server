@@ -19,4 +19,7 @@ public class BaseErrorResponse {
         return new BaseErrorResponse(errorCode.getHttpStatus(),errorCode.getMessage(), null);
     }
 
+    public static BaseErrorResponse of(ErrorCode errorCode, String messageDetail){
+        return new BaseErrorResponse(errorCode.getHttpStatus(),errorCode.getMessage(), messageDetail);
+    }
 }
