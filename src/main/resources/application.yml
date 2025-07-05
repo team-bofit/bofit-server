@@ -26,6 +26,10 @@ kakao:
   authorization-uri: https://kauth.kakao.com/oauth/authorize
   token-uri: https://kauth.kakao.com/oauth/token
   user-info-uri: https://kapi.kakao.com/v2/user/me
+jwt:
+  secret: ${JWT_SECRET}
+  accessTokenExpiration: ${ACCESS_EXPIRED_AT}
+  refreshTokenExpiration: ${REFRESH_EXPIRED_AT}
 server:
   forward-headers-strategy: FRAMEWORK
 
