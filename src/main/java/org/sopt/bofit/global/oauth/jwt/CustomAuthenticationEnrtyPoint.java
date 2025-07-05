@@ -33,13 +33,13 @@ public class CustomAuthenticationEnrtyPoint implements AuthenticationEntryPoint 
     private ErrorCode getErrorCode(Object exceptionType) {
         ErrorCode error;
         if ("JWT_EXPIRED".equals(exceptionType)) {
-            error = OAuthErrorCode.JWT_EXPIRED;
+            error = GlobalErrorCode.JWT_EXPIRED;
         } else if ("JWT_INVALID_SIGNATURE".equals(exceptionType)) {
-            error = OAuthErrorCode.JWT_INVALID_SIGNATURE;
+            error = GlobalErrorCode.JWT_INVALID_SIGNATURE;
         } else if ("JWT_INVALID".equals(exceptionType)) {
-            error = OAuthErrorCode.JWT_INVALID;
+            error = GlobalErrorCode.JWT_INVALID;
         } else if("JWT_UNSUPPORTED".equals(exceptionType)) {
-            error = OAuthErrorCode.JWT_UNSUPPORTED;
+            error = GlobalErrorCode.JWT_UNSUPPORTED;
         } else {
             error = GlobalErrorCode.UNAUTHORIZED;
         }
