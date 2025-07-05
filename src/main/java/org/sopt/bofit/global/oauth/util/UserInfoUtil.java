@@ -1,4 +1,4 @@
-package org.sopt.bofit.domain.oauth.util;
+package org.sopt.bofit.global.oauth.util;
 
 import org.sopt.bofit.domain.user.entity.constant.Gender;
 

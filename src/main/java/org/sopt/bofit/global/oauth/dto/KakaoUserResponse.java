@@ -1,4 +1,4 @@
-package org.sopt.bofit.domain.oauth.dto;
+package org.sopt.bofit.global.oauth.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

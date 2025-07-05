@@ -1,12 +1,10 @@
-package org.sopt.bofit.domain.oauth.controller;
+package org.sopt.bofit.global.oauth.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
-import org.sopt.bofit.domain.oauth.dto.KaKaoLoginResponse;
-import org.sopt.bofit.domain.oauth.dto.KaKaoTokenResponse;
-import org.sopt.bofit.domain.oauth.service.OAuthService;
+import org.sopt.bofit.global.oauth.dto.KaKaoLoginResponse;
+import org.sopt.bofit.global.oauth.service.OAuthService;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
-import org.sopt.bofit.global.config.swagger.SwaggerResponseDescription;
 import org.sopt.bofit.global.response.BaseResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

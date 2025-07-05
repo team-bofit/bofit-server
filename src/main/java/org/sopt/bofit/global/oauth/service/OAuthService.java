@@ -1,10 +1,10 @@
-package org.sopt.bofit.domain.oauth.service;
+package org.sopt.bofit.global.oauth.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.bofit.domain.oauth.dto.KaKaoTokenResponse;
-import org.sopt.bofit.domain.oauth.dto.KakaoUserResponse;
-import org.sopt.bofit.domain.oauth.util.OAuthUtil;
+import org.sopt.bofit.global.oauth.dto.KaKaoTokenResponse;
+import org.sopt.bofit.global.oauth.dto.KakaoUserResponse;
+import org.sopt.bofit.global.oauth.util.OAuthUtil;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserRepository;
@@ -16,9 +16,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
-import static org.sopt.bofit.domain.oauth.dto.KakaoUserResponse.*;
-import static org.sopt.bofit.domain.oauth.dto.KakaoUserResponse.KakaoAccount.*;
-import static org.sopt.bofit.domain.oauth.util.UserInfoUtil.*;
+import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.*;
+import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.KakaoAccount.*;
+import static org.sopt.bofit.global.oauth.util.UserInfoUtil.*;
 import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
 
 @Slf4j
