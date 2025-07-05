@@ -75,6 +75,10 @@ public class OAuthService {
         return getUserInfo(accessToken)
                 .flatMap(kakaoUser -> {
                     KakaoAccount account = kakaoUser.getKakaoAccount();
+                    if (account == null) {
+                        log.error("❌kakao_account 정보가 없습니다. 사용자 동의 누락 가능성");
+                        return Mono.error(new BadRequestException(KAKAO_USER_INFO_REQUEST_FAILED));
+                    }
                     UserProfile profile = account.getProfile();
 
                     return Mono.fromCallable(() ->

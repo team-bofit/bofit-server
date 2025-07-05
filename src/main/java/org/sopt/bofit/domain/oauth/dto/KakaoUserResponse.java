@@ -1,6 +1,7 @@
 package org.sopt.bofit.domain.oauth.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 
@@ -10,6 +11,7 @@ public class KakaoUserResponse {
     private Long oauthId;
 
     @Schema(description = "카카오 계정 정보")
+    @JsonProperty("kakao_account")
     private KakaoAccount kakaoAccount;
 
     @Getter

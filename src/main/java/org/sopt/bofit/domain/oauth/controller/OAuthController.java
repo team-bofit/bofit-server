@@ -29,7 +29,7 @@ public class OAuthController {
     public Mono<BaseResponse<KaKaoLoginResponse>> kakaoCallback(@RequestParam("code") String code) {
         return oAuthService.requestToken(code)
                 .flatMap(token ->
-                            oAuthService.registerOrLogin(token.getAccessToken())
+                            oAuthService.registerOrLogin(token.getAccess_token())
                                     .map(user -> KaKaoLoginResponse.of(user.getId(), user.isRegistered()))
                         )
                 .map(response -> BaseResponse.ok(response, "카카오 로그인 성공"));

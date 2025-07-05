@@ -13,7 +13,8 @@ import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
 @Getter
 public enum SwaggerResponseDescription {
     KAKAO_TOKEN_REQUEST(new LinkedHashSet<>(Set.of(
-            KAKAO_TOKEN_REQUEST_FAILED
+            KAKAO_TOKEN_REQUEST_FAILED,
+            KAKAO_USER_INFO_REQUEST_FAILED
     )))
     ;
     private final Set<ErrorCode> errorCodeList;
