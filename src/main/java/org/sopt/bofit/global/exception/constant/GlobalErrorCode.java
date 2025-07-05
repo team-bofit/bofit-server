@@ -18,7 +18,8 @@ public enum GlobalErrorCode implements ErrorCode {
     TYPE_MISMATCH(HttpStatus.BAD_REQUEST.value(), "요청 파라미터 타입이 일치하지 않습니다."),
     MISSING_PATH_VARIABLE(HttpStatus.BAD_REQUEST.value(), "경로 변수 값이 누락되었습니다."),
     JSON_SERIALIZATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Enum 리스트를 JSON 문자열로 직렬화하는 데 실패했습니다."),
-    JSON_DESERIALIZATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "JSON 문자열을 Enum 리스트로 역직렬화하는 데 실패했습니다.")
+    JSON_DESERIALIZATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "JSON 문자열을 Enum 리스트로 역직렬화하는 데 실패했습니다."),
+    AUTHENTICATION_SETTING_FAIL(HttpStatus.INTERNAL_SERVER_ERROR.value(), "인증 정보 처리에 실패했습니다")
     ;
 
 
