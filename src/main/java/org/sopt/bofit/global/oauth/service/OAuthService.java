@@ -5,7 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.bofit.global.oauth.dto.KaKaoLoginResponse;
 import org.sopt.bofit.global.oauth.dto.KaKaoTokenResponse;
 import org.sopt.bofit.global.oauth.dto.KakaoUserResponse;
+import org.sopt.bofit.global.oauth.entity.RefreshToken;
 import org.sopt.bofit.global.oauth.jwt.JwtProvider;
+import org.sopt.bofit.global.oauth.repository.RefreshTokenRepository;
 import org.sopt.bofit.global.oauth.util.OAuthUtil;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
@@ -27,6 +29,8 @@ import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
 @Service
 @RequiredArgsConstructor
 public class OAuthService {
+
+    private final RefreshTokenRepository refreshTokenRepository;
 
     private final UserRepository userRepository;
 
@@ -115,6 +119,11 @@ public class OAuthService {
                                     String accessToken = jwtProvider.generateAccessToken(user.getId());
                                     String refreshToken = jwtProvider.generateRefreshToken(user.getId());
 
+                                    refreshTokenRepository.findByUserId(user.getId())
+                                            .ifPresentOrElse(
+                                                    existing -> existing.updateToken(refreshToken),
+                                                    () -> refreshTokenRepository.save(RefreshToken.of(user.getId(), refreshToken))
+                                            );
                                     return KaKaoLoginResponse.of(
                                             user.getId(),
                                             user.isRegistered(),
