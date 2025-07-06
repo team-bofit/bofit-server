@@ -34,7 +34,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (CustomException e) {
-                log.info("토큰 검증 실패: {}", e.getMessage());
                 request.setAttribute("exception", e.getErrorCode());
                 throw e;
             }
