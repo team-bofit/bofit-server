@@ -32,9 +32,6 @@ public class User extends BaseEntity {
 
     private String nickname;
 
-    @Column(unique = true)
-    private String email;
-
     @Column(name = "profile_image")
     private String profileImage;
 
@@ -42,7 +39,7 @@ public class User extends BaseEntity {
     private Gender gender;
 
     @Column(name = "birth_day")
-    private MonthDay birthDay;
+    private int birthDay;
 
     @Column(name = "birth_year")
     private int birthYear;
@@ -65,5 +62,29 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserStatus status = UserStatus.ACTIVE;
+
+    public static User create(
+            LoginProvider loginProvider,
+            String oauthId,
+            String name,
+            String nickname,
+            String profileImage,
+            Gender gender,
+            int birthDay,
+            int birthYear
+    ) {
+        return User.builder()
+                .loginProvider(loginProvider)
+                .oauthId(oauthId)
+                .name(name)
+                .nickname(nickname)
+                .profileImage(profileImage)
+                .gender(gender)
+                .birthDay(birthDay)
+                .birthYear(birthYear)
+                .isRegistered(false)
+                .status(UserStatus.ACTIVE)
+                .build();
+    }
 
 }
