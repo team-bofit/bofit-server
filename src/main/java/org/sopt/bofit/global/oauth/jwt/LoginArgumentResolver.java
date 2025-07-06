@@ -1,6 +1,6 @@
 package org.sopt.bofit.global.oauth.jwt;
 
-import org.sopt.bofit.global.annotation.UserId;
+import org.sopt.bofit.global.annotation.LoginUserId;
 import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
 import org.sopt.bofit.global.exception.custom_exception.InternalException;
 import org.sopt.bofit.global.exception.custom_exception.UnAuthorizedException;
@@ -18,7 +18,7 @@ public class LoginArgumentResolver implements HandlerMethodArgumentResolver {
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasParameterAnnotation(UserId.class) &&
+        return parameter.hasParameterAnnotation(LoginUserId.class) &&
                parameter.getParameterType().equals(Long.class);
     }
 
