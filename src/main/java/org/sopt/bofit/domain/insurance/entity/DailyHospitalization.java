@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 @Embeddable
 public class DailyHospitalization {
+
 	@Column(name = "daily_hospitalization_disease", nullable = false,
 		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
 	private Integer disease;

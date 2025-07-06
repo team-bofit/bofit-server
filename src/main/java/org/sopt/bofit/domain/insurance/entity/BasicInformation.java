@@ -10,6 +10,7 @@ public class BasicInformation {
 
 	@Column(name = "provider", length = 30)
 	private String provider;
+
 	@Column(name = "product_type", length = 50)
 	private String productType;
 
