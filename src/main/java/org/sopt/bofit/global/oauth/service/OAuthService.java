@@ -28,7 +28,6 @@ import static org.sopt.bofit.domain.user.entity.constant.Gender.parseGender;
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.JWT_INVALID;
 import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.*;
 import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.KakaoAccount.*;
-import static org.sopt.bofit.global.oauth.util.UserAccountUtil.*;
 import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
 
 @Slf4j
@@ -167,6 +166,9 @@ public class OAuthService {
         return TokenReissueResponse.of(newAccessToken, newRefreshToken);
     }
 
+    private static int parseBirth(String birthday) {
+        return (birthday != null && birthday.matches("\\d+")) ? Integer.parseInt(birthday) : 0;
+    }
 }
 
 
