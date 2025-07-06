@@ -107,7 +107,7 @@ public class OAuthService {
                                                 account.name(),
                                                 profile.nickname(),
                                                 profile.profile_image_url(),
-                                                parseGender(account.gender()),
+                                                parseGender(account.gender()).orElse(null),
                                                 parseBirth(account.birthday()),
                                                 parseBirth(account.birthyear())
                                         );
