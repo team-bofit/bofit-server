@@ -24,7 +24,7 @@ public class BasicInformation {
 		columnDefinition = "MEDIUMINT UNSIGNED DEFAULT 0")
 	private Integer premium;
 
-	@Column(name = "matueity_age", nullable = false,
+	@Column(name = "maturity_age", nullable = false,
 		columnDefinition = "TINYINT UNSIGNED DEFAULT 0")
 	private Integer	maturityAge;
 
