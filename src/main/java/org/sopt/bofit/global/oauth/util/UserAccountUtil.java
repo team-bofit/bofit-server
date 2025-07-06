@@ -2,9 +2,7 @@ package org.sopt.bofit.global.oauth.util;
 
 import org.sopt.bofit.domain.user.entity.constant.Gender;
 
-import java.time.MonthDay;
-
-public class UserInfoUtil {
+public class UserAccountUtil {
     public static Gender parseGender(String gender) {
         if (gender == null) return null;
         return gender.equalsIgnoreCase("male") ? Gender.MALE : Gender.FEMALE;

@@ -27,7 +27,7 @@ import reactor.core.scheduler.Schedulers;
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.JWT_INVALID;
 import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.*;
 import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.KakaoAccount.*;
-import static org.sopt.bofit.global.oauth.util.UserInfoUtil.*;
+import static org.sopt.bofit.global.oauth.util.UserAccountUtil.*;
 import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
 
 @Slf4j
