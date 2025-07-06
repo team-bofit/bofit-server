@@ -24,10 +24,10 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import static org.sopt.bofit.domain.user.entity.constant.Gender.parseGender;
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.JWT_INVALID;
 import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.*;
 import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.KakaoAccount.*;
-import static org.sopt.bofit.global.oauth.util.UserAccountUtil.*;
 import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
 
 @Slf4j
@@ -107,7 +107,7 @@ public class OAuthService {
                                                 account.name(),
                                                 profile.nickname(),
                                                 profile.profile_image_url(),
-                                                parseGender(account.gender()),
+                                                parseGender(account.gender()).orElse(null),
                                                 parseBirth(account.birthday()),
                                                 parseBirth(account.birthyear())
                                         );
@@ -166,6 +166,9 @@ public class OAuthService {
         return TokenReissueResponse.of(newAccessToken, newRefreshToken);
     }
 
+    private static int parseBirth(String birthday) {
+        return (birthday != null && birthday.matches("\\d+")) ? Integer.parseInt(birthday) : 0;
+    }
 }
 
 

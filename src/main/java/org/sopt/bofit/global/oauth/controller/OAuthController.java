@@ -31,7 +31,7 @@ public class OAuthController {
     @Operation(summary = "토큰 재발급")
     @PostMapping("/reissue")
     public BaseResponse<TokenReissueResponse> reissue(@RequestHeader("Authorization") String bearerToken) {
-        String refreshToken = bearerToken.replace("Bearer ", "").trim();
+        String refreshToken = bearerToken.replace(" Bearer ", "").trim();
         return BaseResponse.ok(oAuthService.reissue(refreshToken), "토큰 재발급 성공");
     }
 
