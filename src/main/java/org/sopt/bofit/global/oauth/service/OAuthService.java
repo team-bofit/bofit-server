@@ -19,6 +19,7 @@ import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -117,6 +118,7 @@ public class OAuthService {
                 });
     }
 
+    @Transactional
     public Mono<KaKaoLoginResponse> login(String code) {
         return requestToken(code)
                 .flatMap(token ->
@@ -140,6 +142,7 @@ public class OAuthService {
                 );
     }
 
+    @Transactional
     public TokenReissueResponse reissue(String refreshToken) {
         if (!jwtUtil.isTokenValid(refreshToken)) {
             throw new UnAuthorizedException(JWT_INVALID);
