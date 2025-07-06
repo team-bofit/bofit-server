@@ -22,6 +22,9 @@ public record KakaoUserResponse(
             @Schema(description = "성별", example = "male")
             String gender,
 
+            @Schema(description = "생일", example = "1112")
+            String birthday,
+
             @Schema(description = "출생연도", example = "2000")
             String birthyear,
 

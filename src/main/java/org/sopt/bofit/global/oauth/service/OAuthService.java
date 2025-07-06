@@ -109,7 +109,8 @@ public class OAuthService {
                                                 profile.nickname(),
                                                 profile.profile_image_url(),
                                                 parseGender(account.gender()),
-                                                parseBirthYear(account.birthyear())
+                                                parseBirth(account.birthday()),
+                                                parseBirth(account.birthyear())
                                         );
                                         return Mono.fromCallable(() -> userRepository.save(newUser))
                                                 .subscribeOn(Schedulers.boundedElastic());
@@ -123,6 +124,7 @@ public class OAuthService {
         return requestToken(code)
                 .flatMap(token ->
                         registerOrLogin(token.access_token())
+                                .publishOn(Schedulers.boundedElastic())
                                 .map(user -> {
                                     String accessToken = jwtProvider.generateAccessToken(user.getId());
                                     String refreshToken = jwtProvider.generateRefreshToken(user.getId());

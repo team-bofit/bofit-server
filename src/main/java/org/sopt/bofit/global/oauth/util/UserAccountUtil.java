@@ -8,7 +8,9 @@ public class UserAccountUtil {
         return gender.equalsIgnoreCase("male") ? Gender.MALE : Gender.FEMALE;
     }
 
-    public static int parseBirthYear(String birthyear) {
-        return (birthyear != null && birthyear.matches("\\d+")) ? Integer.parseInt(birthyear) : 0;
+    public static int parseBirth(String birthday) {
+        return (birthday != null && birthday.matches("\\d+")) ? Integer.parseInt(birthday) : 0;
     }
+
+
 }
