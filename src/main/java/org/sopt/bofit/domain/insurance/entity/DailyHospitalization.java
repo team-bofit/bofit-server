@@ -10,9 +10,9 @@ public class DailyHospitalization {
 
 	@Column(name = "daily_hospitalization_disease", nullable = false,
 		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
-	private Integer disease;
+	private int disease;
 
 	@Column(name = "daily_hospitalization_injury", nullable = false,
 		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
-	private Integer injury;
+	private int injury;
 }

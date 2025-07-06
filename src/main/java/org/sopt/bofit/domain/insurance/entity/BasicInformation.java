@@ -16,21 +16,21 @@ public class BasicInformation {
 
 	@Column(name = "min_enrollment_age", nullable = false,
 		columnDefinition = "TINYINT UNSIGNED DEFAULT 0")
-	private Integer minEnrollmentAge;
+	private int minEnrollmentAge;
 	@Column(name = "max_enrollment_age", nullable = false,
 		columnDefinition = "TINYINT UNSIGNED DEFAULT 0")
-	private Integer maxEnrollmentAge;
+	private int maxEnrollmentAge;
 
 	@Column(name = "premium", nullable = false,
 		columnDefinition = "MEDIUMINT UNSIGNED DEFAULT 0")
-	private Integer premium;
+	private int premium;
 
 	@Column(name = "maturity_age", nullable = false,
 		columnDefinition = "TINYINT UNSIGNED DEFAULT 0")
-	private Integer	maturityAge;
+	private int	maturityAge;
 
 	@Column(name = "payment_period_years", nullable = false,
 		columnDefinition = "TINYINT UNSIGNED DEFAULT 0")
-	private Integer paymentPeriodYears;
+	private int paymentPeriodYears;
 
 }

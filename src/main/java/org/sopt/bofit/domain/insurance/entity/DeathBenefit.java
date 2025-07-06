@@ -10,9 +10,9 @@ public class DeathBenefit {
 
 	@Column(name = "disease_death_benefit", nullable = false,
 		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
-	private Integer disease;
+	private int disease;
 
 	@Column(name = "injury_death_benefit", nullable = false,
 		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
-	private Integer injury;
+	private int injury;
 }

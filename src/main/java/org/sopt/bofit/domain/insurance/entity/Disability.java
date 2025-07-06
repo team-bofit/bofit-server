@@ -10,9 +10,9 @@ public class Disability {
 
 	@Column(name = "disease_disability_ge_3_pct", nullable = false,
 		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
-	private Integer diseaseGE3PCT;
+	private int diseaseGE3PCT;
 
 	@Column(name = "injury_disability_ge_3_pct", nullable = false,
 		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
-	private Integer injuryGE3PCT;
+	private int injuryGE3PCT;
 }
