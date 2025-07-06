@@ -3,6 +3,7 @@ package org.sopt.bofit.domain.post.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.sopt.bofit.domain.post.entity.constant.PostStatus;
+import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.global.entity.BaseEntity;
 
 @Entity
@@ -25,5 +26,9 @@ public class Post extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PostStatus status = PostStatus.ACTIVE;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
 }
