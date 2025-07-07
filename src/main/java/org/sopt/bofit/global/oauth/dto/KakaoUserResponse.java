@@ -16,18 +16,6 @@ public record KakaoUserResponse(
 ) {
     public record KakaoAccount(
 
-            @Schema(description = "이름", example = "이정연")
-            String name,
-
-            @Schema(description = "성별", example = "male")
-            String gender,
-
-            @Schema(description = "생일", example = "1112")
-            String birthday,
-
-            @Schema(description = "출생연도", example = "2000")
-            String birthyear,
-
             @Schema(description = "유저 프로필 정보")
             UserProfile profile
     ) {

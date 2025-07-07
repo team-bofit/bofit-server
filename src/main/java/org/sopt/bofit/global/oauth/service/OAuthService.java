@@ -101,16 +101,12 @@ public class OAuthService {
                             .subscribeOn(Schedulers.boundedElastic())
                             .flatMap(optionalUser ->
                                     optionalUser.map(Mono::just).orElseGet(() -> {
-                                        User newUser = User.create(
-                                                LoginProvider.KAKAO,
-                                                String.valueOf(kakaoUser.oauthId()),
-                                                account.name(),
-                                                profile.nickname(),
-                                                profile.profile_image_url(),
-                                                parseGender(account.gender()).orElse(null),
-                                                parseBirth(account.birthday()),
-                                                parseBirth(account.birthyear())
-                                        );
+                                        User newUser = User.builder()
+                                                .loginProvider(LoginProvider.KAKAO)
+                                                .oauthId(String.valueOf(kakaoUser.oauthId()))
+                                                .nickname(profile.nickname())
+                                                .profileImage(profile.profile_image_url())
+                                                .build();
                                         return Mono.fromCallable(() -> userRepository.save(newUser))
                                                 .subscribeOn(Schedulers.boundedElastic());
                                     })
