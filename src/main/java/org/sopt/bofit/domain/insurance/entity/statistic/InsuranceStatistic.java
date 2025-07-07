@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "insurance_statistic")
-public class InsuranceBenefitStatistic extends InsuranceBenefit {
+public class InsuranceStatistic extends InsuranceBenefit {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
