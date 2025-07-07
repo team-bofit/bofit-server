@@ -4,11 +4,13 @@ import lombok.Getter;
 import org.sopt.bofit.global.exception.constant.ErrorCode;
 import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
 import org.sopt.bofit.global.exception.constant.OAuthErrorCode;
+import org.sopt.bofit.global.exception.constant.UserErrorCode;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
+import static org.sopt.bofit.global.exception.constant.UserErrorCode.*;
 
 
 @Getter
@@ -20,6 +22,9 @@ public enum SwaggerResponseDescription {
     TOKEN_REISSUE(new LinkedHashSet<>(Set.of(
             JWT_REFRESH_TOKEN_MISMATCH,
             JWT_REFRESH_NOT_FOUND
+    ))),
+    USER_INFO(new LinkedHashSet<>(Set.of(
+            USER_NOT_FOUND
     )))
     ;
     private final Set<ErrorCode> errorCodeList;
