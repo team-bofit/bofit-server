@@ -10,11 +10,14 @@ public record UserProfileResponse(
         String userName,
 
         @Schema(description = "유저 프로필 사진 url")
-        String profileImageUrl
+        String profileImageUrl,
+
+        @Schema(description = "보험 추천 받았는지 여부")
+        boolean isRecommendInsurance
 ) {
 
-    public static UserProfileResponse of(Long userId, String userName, String profileImageUrl) {
-        return new UserProfileResponse(userId, userName, profileImageUrl);
+    public static UserProfileResponse of(Long userId, String userName, String profileImageUrl, boolean isRecommendInsurance) {
+        return new UserProfileResponse(userId, userName, profileImageUrl, isRecommendInsurance);
     }
 
 }
