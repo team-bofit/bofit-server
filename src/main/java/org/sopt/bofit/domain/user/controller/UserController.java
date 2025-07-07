@@ -25,11 +25,11 @@ public class UserController {
     @Tag(name = "My Page", description = "마이페이지 관련 API")
     @CustomExceptionDescription(USER_INFO)
     @Operation(summary = "유저 정보 조회", description = "마이 페이지에서 유저의 정보를 조회합니다.")
-    @GetMapping("profile")
-    public BaseResponse<UserProfileResponse> getProfile(
+    @GetMapping("info")
+    public BaseResponse<UserProfileResponse> getInfo(
             @Parameter(hidden = true) @LoginUserId Long userId
          ) {
-        return BaseResponse.ok(userService.getUserProfile(userId), "유저 프로필 조회 성공");
+        return BaseResponse.ok(userService.getUserInfo(userId), "유저 프로필 조회 성공");
     }
 
 }

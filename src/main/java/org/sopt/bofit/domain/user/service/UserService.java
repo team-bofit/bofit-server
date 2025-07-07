@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.repository.UserRepository;
-import org.sopt.bofit.global.exception.constant.UserErrorCode;
 import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserProfileResponse getUserProfile(Long userId){
+    public UserProfileResponse getUserInfo(Long userId){
 
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
