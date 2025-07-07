@@ -5,7 +5,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
-import org.sopt.bofit.domain.user.service.UserService;
+import org.sopt.bofit.domain.user.service.UserReadService;
+import org.sopt.bofit.domain.user.service.UserWriteService;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.annotation.LoginUserId;
 import org.sopt.bofit.global.response.BaseResponse;
@@ -20,7 +21,9 @@ import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final UserReadService userReadService;
+
+    private final UserWriteService userWriteService;
 
     @Tag(name = "My Page", description = "마이페이지 관련 API")
     @CustomExceptionDescription(USER_INFO)
@@ -29,7 +32,7 @@ public class UserController {
     public BaseResponse<UserProfileResponse> getInfo(
             @Parameter(hidden = true) @LoginUserId Long userId
          ) {
-        return BaseResponse.ok(userService.getUserInfo(userId), "유저 프로필 조회 성공");
+        return BaseResponse.ok(userReadService.getUserInfo(userId), "유저 프로필 조회 성공");
     }
 
 }

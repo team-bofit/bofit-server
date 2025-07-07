@@ -11,7 +11,7 @@ import static org.sopt.bofit.global.exception.constant.UserErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserReadService {
 
     private final UserRepository userRepository;
 
