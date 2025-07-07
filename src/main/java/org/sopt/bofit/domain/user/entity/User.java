@@ -59,6 +59,9 @@ public class User extends BaseEntity {
     @Column(name = "is_registered")
     private boolean isRegistered;
 
+    @Column(name = "is_recommend_insurance")
+    private boolean isRecommendInsurance;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserStatus status = UserStatus.ACTIVE;
