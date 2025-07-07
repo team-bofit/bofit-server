@@ -1,4 +1,4 @@
-package org.sopt.bofit.domain.insurance.entity.enums;
+package org.sopt.bofit.domain.insurance.entity.product.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
