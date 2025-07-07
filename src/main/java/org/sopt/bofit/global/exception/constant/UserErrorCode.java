@@ -12,7 +12,7 @@ public enum UserErrorCode implements ErrorCode {
     private final int httpStatus;
 
     private final String message;
-    
+
     @Override
     public int getHttpStatus() {
         return httpStatus;
