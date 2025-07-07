@@ -1,12 +1,17 @@
 package org.sopt.bofit.global.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @Getter
 public class BaseResponse<T> {
+
+    @Schema(example = "200")
     private final int code;
+
     private final String message;
+
     private final T data;
 
     private BaseResponse(T data, String message) {
