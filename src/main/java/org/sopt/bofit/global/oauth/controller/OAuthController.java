@@ -1,6 +1,7 @@
 package org.sopt.bofit.global.oauth.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.global.oauth.dto.KaKaoLoginResponse;
@@ -33,8 +34,8 @@ public class OAuthController {
     @CustomExceptionDescription(TOKEN_REISSUE)
     @Operation(summary = "토큰 재발급")
     @PostMapping("/reissue")
-    public BaseResponse<TokenReissueResponse> reissue(@RequestHeader("Authorization") String bearerToken) {
-        String refreshToken = bearerToken.replace(" Bearer ", "").trim();
+    public BaseResponse<TokenReissueResponse> reissue(@Parameter(hidden = true) @RequestHeader("Authorization") String bearerToken) {
+        String refreshToken = bearerToken.replace("Bearer ", "").trim();
         return BaseResponse.ok(oAuthService.reissue(refreshToken), "토큰 재발급 성공");
     }
 
