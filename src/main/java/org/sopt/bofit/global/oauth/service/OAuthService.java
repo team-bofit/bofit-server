@@ -94,6 +94,8 @@ public class OAuthService {
                         return Mono.error(new BadRequestException(KAKAO_USER_INFO_REQUEST_FAILED));
                     }
                     UserProfile profile = account.profile();
+                    boolean isDefault = account.profile().isDefaultImage();
+                    String userProfileImage = isDefault ? null : account.profile().profileImageUrl();
 
                     return Mono.fromCallable(() ->
                                     userRepository.findByOauthId(String.valueOf(kakaoUser.oauthId()))
@@ -101,16 +103,12 @@ public class OAuthService {
                             .subscribeOn(Schedulers.boundedElastic())
                             .flatMap(optionalUser ->
                                     optionalUser.map(Mono::just).orElseGet(() -> {
-                                        User newUser = User.create(
-                                                LoginProvider.KAKAO,
-                                                String.valueOf(kakaoUser.oauthId()),
-                                                account.name(),
-                                                profile.nickname(),
-                                                profile.profile_image_url(),
-                                                parseGender(account.gender()).orElse(null),
-                                                parseBirth(account.birthday()),
-                                                parseBirth(account.birthyear())
-                                        );
+                                        User newUser = User.builder()
+                                                .loginProvider(LoginProvider.KAKAO)
+                                                .oauthId(String.valueOf(kakaoUser.oauthId()))
+                                                .nickname(profile.nickname())
+                                                .profileImage(userProfileImage)
+                                                .build();
                                         return Mono.fromCallable(() -> userRepository.save(newUser))
                                                 .subscribeOn(Schedulers.boundedElastic());
                                     })
@@ -122,7 +120,7 @@ public class OAuthService {
     public Mono<KaKaoLoginResponse> login(String code) {
         return requestToken(code)
                 .flatMap(token ->
-                        registerOrLogin(token.access_token())
+                        registerOrLogin(token.accessToken())
                                 .publishOn(Schedulers.boundedElastic())
                                 .map(user -> {
                                     String accessToken = jwtProvider.generateAccessToken(user.getId());

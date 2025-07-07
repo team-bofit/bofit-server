@@ -7,22 +7,27 @@ import lombok.Getter;
 
 public record KaKaoTokenResponse(
         @Schema(description = "액세스 토큰")
-        String access_token,
+        @JsonProperty("access_token")
+        String accessToken,
 
         @Schema(description = "토큰 타입", example = "bearer")
-        String token_type,
+        @JsonProperty("token_type")
+        String tokenType,
 
         @Schema(description = "리프레쉬 토큰")
-        String refresh_token,
+        @JsonProperty("refresh_token")
+        String refreshToken,
 
         @Schema(description = "토큰 만료일", example = "43199")
-        int expires_in,
+        @JsonProperty("expires_in")
+        int expiresIn,
 
         @Schema(description = "유저 정보 scope", example = "account_email profile")
         String scope,
 
         @Schema(description = "리프레쉬 토큰 만료일", example = "5184000")
-        int refresh_token_expires_in
+        @JsonProperty("refresh_token_expires_in")
+        int refreshTokenExpiresIn
 
 ) {
 
