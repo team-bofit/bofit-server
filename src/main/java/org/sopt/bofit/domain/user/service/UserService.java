@@ -20,7 +20,7 @@ public class UserService {
 
         User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
-        return UserProfileResponse.of(userId, user.getName(), user.getProfileImage(), user.isRecommendInsurance());
+        return UserProfileResponse.of(userId, user.getName(), user.getNickname(), user.getProfileImage(), user.isRecommendInsurance());
 
     }
 }
