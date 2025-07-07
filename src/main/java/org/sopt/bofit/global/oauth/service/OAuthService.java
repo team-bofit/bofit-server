@@ -94,6 +94,8 @@ public class OAuthService {
                         return Mono.error(new BadRequestException(KAKAO_USER_INFO_REQUEST_FAILED));
                     }
                     UserProfile profile = account.profile();
+                    boolean isDefault = account.profile().is_default_image();
+                    String userProfileImage = isDefault ? null : account.profile().profile_image_url();
 
                     return Mono.fromCallable(() ->
                                     userRepository.findByOauthId(String.valueOf(kakaoUser.oauthId()))
@@ -105,7 +107,7 @@ public class OAuthService {
                                                 .loginProvider(LoginProvider.KAKAO)
                                                 .oauthId(String.valueOf(kakaoUser.oauthId()))
                                                 .nickname(profile.nickname())
-                                                .profileImage(profile.profile_image_url())
+                                                .profileImage(userProfileImage)
                                                 .build();
                                         return Mono.fromCallable(() -> userRepository.save(newUser))
                                                 .subscribeOn(Schedulers.boundedElastic());
