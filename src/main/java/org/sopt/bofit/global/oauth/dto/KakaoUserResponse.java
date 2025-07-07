@@ -24,10 +24,12 @@ public record KakaoUserResponse(
                 String nickname,
 
                 @Schema(description = "프로필 사진 이미지 url", example = "https://")
-                String profile_image_url,
+                @JsonProperty("profile_image_url")
+                String profileImageUrl,
 
                 @Schema(description = "유저 기본 프로필 여부")
-                boolean is_default_image
+                @JsonProperty("is_default_image")
+                boolean isDefaultImage
         ) {}
     }
 }
