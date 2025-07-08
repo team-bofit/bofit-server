@@ -2,7 +2,7 @@ package org.sopt.bofit.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.sopt.bofit.domain.user.entity.constant.ConveragePreference;
+import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
 import org.sopt.bofit.global.converter.CoveragePreferenceMapConverter;
 import org.sopt.bofit.global.converter.DiseaseEnumListJsonConverter;
@@ -42,5 +42,5 @@ public class UserInfo extends BaseEntity {
 
     @Convert(converter = CoveragePreferenceMapConverter.class)
     @Column(name = "coverage_preference", columnDefinition = "JSON")
-    private Map<ConveragePreference, Integer> coveragePreferences = new LinkedHashMap<>();
+    private Map<CoveragePreference, Integer> coveragePreferences = new LinkedHashMap<>();
 }

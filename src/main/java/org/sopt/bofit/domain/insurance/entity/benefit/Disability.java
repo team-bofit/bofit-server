@@ -1,4 +1,4 @@
-package org.sopt.bofit.domain.insurance.entity;
+package org.sopt.bofit.domain.insurance.entity.benefit;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

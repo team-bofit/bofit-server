@@ -1,4 +1,4 @@
-package org.sopt.bofit.domain.insurance.entity;
+package org.sopt.bofit.domain.insurance.entity.benefit;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -6,41 +6,37 @@ import lombok.Getter;
 
 @Getter
 @Embeddable
-public class MajorSurgeryBenefit {
+public class Heart {
 
-	@Column(name = "general_cancer_surgery", nullable = false,
+	@Column(name = "acute_myocardial_infarction_diagnosis", nullable = false,
 		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
-	private int generalCancer;
+	private int acuteMyocardialInfarctionDiagnosis;
 
-	@Column(name = "atypical_cancer_surgery", nullable = false,
+	@Column(name = "ischemic_heart_disease_diagnosis", nullable = false,
 		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
-	private int atypicalCancer;
+	private int ischemicDiagnosis;
 
-	@Column(name = "cerebral_hemorrhage_surgery", nullable = false,
+	@Column(name = "extended_heart_diagnosis", nullable = false,
 		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
-	private int cerebralHemorrhage;
+	private int extendedDiagnosis;
 
-	@Column(name = "cerebral_infarction_surgery", nullable = false,
+	@Column(name = "arrhythmia_heart_failure_diagnosis", nullable = false,
 		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
-	private int cerebralInfarction;
-
-	@Column(name = "other_cerebrovascular_surgery", nullable = false,
-		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
-	private int otherCerebrovascular;
+	private int arrhythmiaDiagnosis;
 
 	@Column(name = "acute_myocardial_infarction_surgery", nullable = false,
 		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
-	private int acuteMyocardialInfarction;
+	private int acuteMyocardialInfarctionSurgery;
 
 	@Column(name = "ischemic_heart_disease_surgery", nullable = false,
 		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
-	private int ischemicHeartDisease;
+	private int ischemicSurgery;
 
 	@Column(name = "extended_heart_disease_surgery", nullable = false,
 		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
-	private int extendedHeartDisease;
+	private int extendedSurgery;
 
 	@Column(name = "arrhythmia_heart_failure_surgery", nullable = false,
 		columnDefinition = "SMALLINT UNSIGNED DEFAULT 0")
-	private int arrhythmiaHeartFailure;
+	private int arrhythmiaSurgery;
 }
