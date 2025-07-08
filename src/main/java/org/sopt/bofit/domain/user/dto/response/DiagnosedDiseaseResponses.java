@@ -19,10 +19,14 @@ public record DiagnosedDiseaseResponses(
 
 	private record DiagnosedDiseaseResponse(
 		DiagnosedDisease diagnosedDisease,
-		String displayName
+		String displayName,
+		String description
 	 ){
 		private static DiagnosedDiseaseResponse create(DiagnosedDisease diagnosedDisease){
-			return new DiagnosedDiseaseResponse(diagnosedDisease, diagnosedDisease.getDiseaseName());
+			return new DiagnosedDiseaseResponse(
+				diagnosedDisease,
+				diagnosedDisease.getDiseaseName(),
+				diagnosedDisease.getDescription());
 		}
 	}
 }
