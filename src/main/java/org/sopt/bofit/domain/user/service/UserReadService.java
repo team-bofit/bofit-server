@@ -21,20 +21,25 @@ public class UserReadService {
     private final UserRepository userRepository;
 
     private final PostCustomRepositoryImpl postCustomRepositoryImpl;
-
-
+    
     public UserProfileResponse getUserInfo(Long userId){
 
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        User user = getUser(userId);
 
         return UserProfileResponse.of(userId, user.getName(), user.getNickname(), user.getProfileImage(), user.isRecommendInsurance());
 
     }
 
     public SliceResponse<MyPostsResponse> getMyPosts(Long userId, Pageable pageable) {
-        
+
+        User user = getUser(userId);
+
         Slice<MyPostsResponse> posts = postCustomRepositoryImpl.findMyPosts(userId, pageable);
 
         return SliceResponse.of(posts);
+    }
+
+    private User getUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
     }
 }
