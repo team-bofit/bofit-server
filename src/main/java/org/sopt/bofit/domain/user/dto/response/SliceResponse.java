@@ -7,7 +7,6 @@ import java.util.List;
 
 public record SliceResponse<T>(
         @Schema(description = "데이터 목록") List<T> content,
-        @Schema(description = "정렬 정보") SortResponse sort,
         @Schema(description = "현재 페이지 번호") int currentPage,
         @Schema(description = "페이지당 데이터 수") int size,
         @Schema(description = "첫 페이지 여부") boolean first,
@@ -17,7 +16,6 @@ public record SliceResponse<T>(
     public static <T> SliceResponse<T> of(Slice<T> slice) {
         return new SliceResponse<>(
                 slice.getContent(),
-                SortResponse.of(slice.getSort()),
                 slice.getNumber(),
                 slice.getSize(),
                 slice.isFirst(),
