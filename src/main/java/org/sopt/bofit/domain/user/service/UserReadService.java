@@ -21,7 +21,7 @@ public class UserReadService {
     private final UserRepository userRepository;
 
     private final PostCustomRepositoryImpl postCustomRepositoryImpl;
-    
+
     public UserProfileResponse getUserInfo(Long userId){
 
         User user = getUser(userId);
