@@ -8,7 +8,6 @@ import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.repository.UserRepository;
 import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
@@ -24,22 +23,22 @@ public class UserReadService {
 
     public UserProfileResponse getUserInfo(Long userId){
 
-        User user = getUser(userId);
+        User user = findUserById(userId);
 
         return UserProfileResponse.of(userId, user.getName(), user.getNickname(), user.getProfileImage(), user.isRecommendInsurance());
 
     }
 
-    public SliceResponse<MyPostsResponse> getMyPosts(Long userId, Pageable pageable) {
+    public SliceResponse<MyPostsResponse> getMyPosts(Long userId, Long cursorId, int size) {
 
-        User user = getUser(userId);
+        findUserById(userId);
 
-        Slice<MyPostsResponse> posts = postCustomRepositoryImpl.findMyPosts(userId, pageable);
+        Slice<MyPostsResponse> posts = postCustomRepositoryImpl.findMyPostsByCursor(userId, cursorId, size);
 
         return SliceResponse.of(posts);
     }
 
-    private User getUser(Long userId) {
+    private User findUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
     }
 }

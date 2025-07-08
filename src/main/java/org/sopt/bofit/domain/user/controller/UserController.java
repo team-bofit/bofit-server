@@ -15,6 +15,7 @@ import org.sopt.bofit.global.response.BaseResponse;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
@@ -44,9 +45,10 @@ public class UserController {
     @GetMapping("posts")
     public BaseResponse<SliceResponse<MyPostsResponse>> getMyPosts(
             @Parameter(hidden = true) @LoginUserId Long userId,
-            Pageable pageable
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue = "10") int size
     ){
-        return BaseResponse.ok(userReadService.getMyPosts(userId, pageable), "내가 쓴 글 조회 성공");
+        return BaseResponse.ok(userReadService.getMyPosts(userId, cursorId, size), "내가 쓴 글 조회 성공");
     }
 
 }

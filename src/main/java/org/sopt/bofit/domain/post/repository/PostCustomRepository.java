@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 public interface PostCustomRepository {
-    Slice<MyPostsResponse> findMyPosts(Long userId, Pageable pageable);
+    Slice<MyPostsResponse> findMyPostsByCursor(Long userId, Long cursorId, int size);
 }

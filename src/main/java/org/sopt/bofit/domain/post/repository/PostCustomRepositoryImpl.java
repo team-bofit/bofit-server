@@ -9,6 +9,7 @@ import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.entity.QPost;
 import org.sopt.bofit.domain.post.entity.constant.PostStatus;
 import org.sopt.bofit.domain.user.dto.response.MyPostsResponse;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -26,8 +27,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<MyPostsResponse> findMyPosts(Long userId, Pageable pageable) {
-
+    public Slice<MyPostsResponse> findMyPostsByCursor(Long userId, Long cursorId, int size) {
         QPost post = QPost.post;
         QComment comment = QComment.comment;
 
@@ -41,18 +41,20 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                 ))
                 .from(post)
                 .leftJoin(comment).on(comment.post.eq(post), comment.status.eq(CommentStatus.ACTIVE))
-                .where(post.user.id.eq(userId),
-                        post.status.eq(PostStatus.ACTIVE))
+                .where(
+                        post.user.id.eq(userId),
+                        post.status.eq(PostStatus.ACTIVE),
+                        cursorId != null ? post.id.lt(cursorId) : null
+                )
                 .groupBy(post.id)
                 .orderBy(post.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize() + 1)
+                .limit(size + 1)
                 .fetch();
 
-        boolean hasNext = content.size() > pageable.getPageSize();
-        if (hasNext) content.remove(pageable.getPageSize());
+        boolean hasNext = content.size() > size;
+        if (hasNext) content.remove(size);
 
-        return new SliceImpl<>(content, pageable, hasNext);
+        return new SliceImpl<>(content, PageRequest.of(0, size), hasNext);
     }
 }
 
