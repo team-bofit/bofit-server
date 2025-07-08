@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 
 public record MyPostsResponse<T>(
 
+        @Schema(description = "게시글 ID")
+        Long postId,
+
         @Schema(description = "제목", example = "string")
         String title,
 
@@ -19,7 +22,7 @@ public record MyPostsResponse<T>(
         LocalDateTime createdAt
 ){
 
-    public MyPostsResponse<T> of(String title, String content, int commentCount, LocalDateTime createdAt){
-        return new MyPostsResponse<>(title, content, commentCount, createdAt);
+    public MyPostsResponse<T> of(Long postId, String title, String content, int commentCount, LocalDateTime createdAt){
+        return new MyPostsResponse<>(postId, title, content, commentCount, createdAt);
     }
 }
