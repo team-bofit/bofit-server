@@ -15,10 +15,5 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    private final PostCustomRepositoryImpl postCustomRepositoryImpl;
 
-    public SliceResponse<MyPostsResponse> getMyPosts(Long userId, Pageable pageable) {
-        Slice<MyPostsResponse> posts = postCustomRepositoryImpl.findMyPosts(userId, pageable);
-        return SliceResponse.of(posts);
-    }
 }
