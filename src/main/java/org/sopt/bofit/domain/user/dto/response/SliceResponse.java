@@ -7,19 +7,20 @@ import java.util.List;
 
 public record SliceResponse<T>(
         @Schema(description = "데이터 목록") List<T> content,
-        @Schema(description = "현재 페이지 번호") int currentPage,
-        @Schema(description = "페이지당 데이터 수") int size,
-        @Schema(description = "첫 페이지 여부") boolean first,
-        @Schema(description = "마지막 페이지 여부") boolean last
+        @Schema(description = "다음 커서 ID") Long nextCursorId,
+        @Schema(description = "마지막 페이지 여부") boolean isLast
 ) {
-
     public static <T> SliceResponse<T> of(Slice<T> slice) {
-        return new SliceResponse<>(
-                slice.getContent(),
-                slice.getNumber(),
-                slice.getSize(),
-                slice.isFirst(),
-                slice.isLast()
-        );
+        List<T> content = slice.getContent();
+        Long nextCursorId = null;
+
+        if (!slice.isLast() && !content.isEmpty()) {
+            Object lastElement = content.get(content.size() - 1);
+            if (lastElement instanceof MyPostsResponse lastPost) {
+                nextCursorId = lastPost.postId();
+            }
+        }
+
+        return new SliceResponse<>(content, nextCursorId, slice.isLast());
     }
 }
