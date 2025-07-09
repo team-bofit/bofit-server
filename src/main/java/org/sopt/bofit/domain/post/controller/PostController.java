@@ -34,4 +34,16 @@ public class PostController {
         return BaseResponse.ok(postService.createPost(userId, request.title(), request.content()),"게시물 생성 완료");
     }
 
+    @Tag(name = "Community", description = "커뮤니티 관련 API")
+    @Operation(summary = "게시물 수정", description = "커뮤니티에서 글을 수정합니다.")
+    @CustomExceptionDescription(UPDATE_POST)
+    @PutMapping("{postId}")
+    public BaseResponse<PostResponse> updatePost(
+            @RequestBody @Valid PostRequest request,
+            @Parameter(hidden = true) @LoginUserId Long userId,
+            @PathVariable Long postId
+    ){
+        return BaseResponse.ok(postService.updatePost(userId,postId,request.title(), request.content()),"게시물 수정 완료");
+    }
+
 }
