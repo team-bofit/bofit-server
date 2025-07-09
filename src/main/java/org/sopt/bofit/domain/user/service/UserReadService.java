@@ -1,7 +1,9 @@
 package org.sopt.bofit.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.sopt.bofit.domain.comment.repository.CommentCustomRepositoryImpl;
 import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
+import org.sopt.bofit.domain.user.dto.response.MyCommentsResponse;
 import org.sopt.bofit.domain.user.dto.response.MyPostsResponse;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
@@ -20,6 +22,8 @@ public class UserReadService {
     private final UserRepository userRepository;
 
     private final PostCustomRepositoryImpl postCustomRepositoryImpl;
+
+    private final CommentCustomRepositoryImpl commentCustomRepositoryImpl;
 
     public UserProfileResponse getUserInfo(Long userId){
 
@@ -40,5 +44,14 @@ public class UserReadService {
 
     private User findUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+    }
+
+    public SliceResponse<MyCommentsResponse> getMyComments(Long userId, Long cursorId, int size) {
+
+        findUserById(userId);
+
+        Slice<MyCommentsResponse> comments = commentCustomRepositoryImpl.findCommentsByCursorId(userId, cursorId, size);
+
+        return SliceResponse.of(comments);
     }
 }
