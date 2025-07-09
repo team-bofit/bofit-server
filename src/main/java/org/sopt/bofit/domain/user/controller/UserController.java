@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.sopt.bofit.domain.user.dto.response.MyCommentsResponse;
 import org.sopt.bofit.domain.user.dto.response.MyPostsResponse;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
@@ -49,6 +50,18 @@ public class UserController {
             @RequestParam(defaultValue = "10") int size
     ){
         return BaseResponse.ok(userReadService.getMyPosts(userId, cursorId, size), "내가 쓴 글 조회 성공");
+    }
+
+    @Tag(name = "My Page", description = "마이페이지 관련 API")
+    @CustomExceptionDescription(MY_COMMENTS)
+    @Operation(summary = "내가 쓴 댓글 조회", description = "마이페이지에서 내가 쓴 댓글을 조회합니다.")
+    @GetMapping("me/comments")
+    public BaseResponse<SliceResponse<MyCommentsResponse>> getMyComments(
+            @Parameter(hidden = true) @LoginUserId Long userId,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam(defaultValue = "10") int size
+    ){
+        return BaseResponse.ok(userReadService.getMyComments(userId, cursorId, size), "내가 쓴 댓글 조회 성공");
     }
 
 }
