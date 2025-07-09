@@ -1,5 +1,6 @@
 package org.sopt.bofit.domain.post.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -23,6 +24,7 @@ public class PostController {
     private final PostService postService;
 
     @Tag(name = "Community", description = "커뮤니티 관련 API")
+    @Operation(summary = "게시물 작성", description = "커뮤니티에 글을 작성합니다.")
     @CustomExceptionDescription(CREATE_POST)
     @PostMapping("post")
     public BaseResponse<PostResponse> createPost(
