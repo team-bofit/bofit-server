@@ -23,4 +23,8 @@ public class BaseResponse<T> {
     public static <T> BaseResponse<T> ok(T data, String message) {
         return new BaseResponse<>(data, message);
     }
+
+    public static <T> BaseResponse<T> ok(String message){
+        return new BaseResponse<>(null, message);
+    }
 }
