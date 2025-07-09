@@ -26,6 +26,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
         List<MyCommentsResponse> content = queryFactory
                 .select(Projections.constructor(MyCommentsResponse.class,
                         comment.id,
+                        comment.post.id,
                         comment.content,
                         comment.createdAt
                 ))

@@ -9,13 +9,16 @@ public record MyCommentsResponse(
         @Schema(description = "댓글 ID")
         Long commentId,
 
+        @Schema(description = "댓글을 작성한 게시글 ID")
+        Long postId,
+
         @Schema(description = "댓글 내용", example = "저도요")
         String content,
 
         @Schema(description = "작성 시간")
         LocalDateTime createdAt
 ) {
-    public static MyCommentsResponse of(Long commentId, String content, LocalDateTime createdAt) {
-        return new MyCommentsResponse(commentId, content, createdAt);
+    public static MyCommentsResponse of(Long commentId, Long postId, String content, LocalDateTime createdAt) {
+        return new MyCommentsResponse(commentId, postId, content, createdAt);
     }
 }
