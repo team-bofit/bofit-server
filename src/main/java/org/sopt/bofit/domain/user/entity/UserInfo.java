@@ -33,8 +33,8 @@ public class UserInfo extends BaseEntity {
     private int maxPrice;
 
     @Convert(converter = DiseaseEnumListJsonConverter.class)
-    @Column(name = "diseases_history", columnDefinition = "JSON")
-    private List<DiagnosedDisease> diseasesHistory = new ArrayList<>();
+    @Column(name = "disease_history", columnDefinition = "JSON")
+    private List<DiagnosedDisease> diseaseHistory = new ArrayList<>();
 
     @Convert(converter = DiseaseEnumListJsonConverter.class)
     @Column(name = "family_history", columnDefinition = "JSON")

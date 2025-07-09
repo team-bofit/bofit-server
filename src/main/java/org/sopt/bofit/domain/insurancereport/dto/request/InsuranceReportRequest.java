@@ -84,19 +84,19 @@ public record InsuranceReportRequest(
 	@Schema(description = "희망 최대 가격", example = "150000")
 	int maxPremium
 ) {
-	public UserUpdate toUserUpdate(){
-		return new UserUpdate(name, gender, birthDate, job,
-			isMarried, isDriver, hasChild);
-	}
+		public UserUpdate toUserUpdate(){
+			return new UserUpdate(name, gender, birthDate, job,
+				isMarried, isDriver, hasChild);
+		}
 
-	public UserInfo toUserInfo(User user){
-		return UserInfo.builder()
-			.user(user)
-			.minPrice(minPremium)
-			.maxPrice(maxPremium)
-			.diagnosedDiseases(diseaseHistory)
-			.familyHistory(familyHistory)
-			.coveragePreferences(coveragePreferences)
-			.build();
+		public UserInfo toUserInfo(User user){
+			return UserInfo.builder()
+				.user(user)
+				.minPrice(minPremium)
+				.maxPrice(maxPremium)
+				.diseaseHistory(diseaseHistory)
+				.familyHistory(familyHistory)
+				.coveragePreferences(coveragePreferences)
+				.build();
 	}
 }
