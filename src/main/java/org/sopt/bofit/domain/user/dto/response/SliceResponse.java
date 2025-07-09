@@ -19,6 +19,9 @@ public record SliceResponse<T>(
             if (lastElement instanceof MyPostsResponse lastPost) {
                 nextCursorId = lastPost.postId();
             }
+            else if (lastElement instanceof MyCommentsResponse lastComment) {
+                nextCursorId = lastComment.commentId();
+            }
         }
 
         return new SliceResponse<>(content, nextCursorId, slice.isLast());
