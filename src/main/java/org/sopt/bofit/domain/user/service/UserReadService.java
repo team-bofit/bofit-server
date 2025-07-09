@@ -42,7 +42,7 @@ public class UserReadService {
         return SliceResponse.of(posts);
     }
 
-    private User findUserById(Long userId) {
+    public User findUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
     }
 

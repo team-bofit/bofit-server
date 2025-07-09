@@ -6,6 +6,7 @@ import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.repository.PostRepository;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.repository.UserRepository;
+import org.sopt.bofit.domain.user.service.UserReadService;
 import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -17,10 +18,10 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    private final UserRepository userRepository;
+    private final UserReadService userReadService;
 
     public PostResponse createPost(Long userId, String title, String content) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+        User user = userReadService.findUserById(userId);
         Post newPost = Post.create(title, content);
         newPost.setUser(user);
 
