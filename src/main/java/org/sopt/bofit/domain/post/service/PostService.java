@@ -3,6 +3,7 @@ package org.sopt.bofit.domain.post.service;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.post.dto.response.PostResponse;
 import org.sopt.bofit.domain.post.entity.Post;
+import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
 import org.sopt.bofit.domain.post.repository.PostRepository;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReadService;
@@ -20,6 +21,8 @@ public class PostService {
     private final PostRepository postRepository;
 
     private final UserReadService userReadService;
+
+    private final PostCustomRepositoryImpl postCustomRepositoryImpl;
 
     public PostResponse createPost(Long userId, String title, String content) {
         User user = userReadService.findUserById(userId);
@@ -41,6 +44,18 @@ public class PostService {
 
         post.updatePost(title, content);
         return PostResponse.from(post.getId());
+    }
+
+    @Transactional
+    public void deletePost(Long userId, Long postId) {
+        User user = userReadService.findUserById(userId);
+        Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
+
+        if(!post.getUser().getId().equals(userId)) {
+            throw new ForbiddenException(POST_UNAUTHORIZED);
+        }
+        
+        postCustomRepositoryImpl.deletePostByPostId(postId);
     }
 
 
