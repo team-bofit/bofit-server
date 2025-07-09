@@ -36,6 +36,15 @@ public enum SwaggerResponseDescription {
             POST_TITLE_BLANK,
             POST_CONTENT_LONG,
             POST_TITLE_LONG
+    ))),
+    UPDATE_POST(new LinkedHashSet<>(Set.of(
+            USER_NOT_FOUND,
+            POST_NOT_FOUND,
+            POST_UNAUTHORIZED,
+            POST_CONTENT_BLANK,
+            POST_TITLE_BLANK,
+            POST_CONTENT_LONG,
+            POST_TITLE_LONG
     )))
     ;
     private final Set<ErrorCode> errorCodeList;

@@ -41,4 +41,9 @@ public class Post extends BaseEntity {
                 .build();
     }
 
+    public void updatePost(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
+
 }
