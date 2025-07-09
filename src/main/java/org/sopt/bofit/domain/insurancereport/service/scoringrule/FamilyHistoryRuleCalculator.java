@@ -15,13 +15,13 @@ public class FamilyHistoryRuleCalculator {
 
 	private final ScoringRuleProvider scoringRuleProvider;
 
-	public double calculate(List<DiagnosedDisease> diseaseHistory, InsuranceProduct product){
+	public double calculate(List<DiagnosedDisease> familyHistory, InsuranceProduct product){
 
-		if(diseaseHistory.isEmpty() || diseaseHistory.contains(DiagnosedDisease.NONE)) {
+		if(familyHistory.isEmpty() || familyHistory.contains(DiagnosedDisease.NONE)) {
 			return 0;
 		}
 
-		return diseaseHistory.stream()
+		return familyHistory.stream()
 			.flatMap(diagnosedDisease -> scoringRuleProvider.findAllFamilyHistory(diagnosedDisease).stream())
 			.mapToDouble(rule -> ScoringRuleUtil.getPoint(rule, product))
 			.sum();

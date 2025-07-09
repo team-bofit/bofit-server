@@ -3,6 +3,7 @@ package org.sopt.bofit.domain.insurancereport.service.scoringrule;
 import java.util.List;
 
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.diseasehistory.DiseaseHistoryScoringRule;
+import org.sopt.bofit.domain.insurancereport.entity.scoringrule.familyhistory.FamilyHistoryScoringRule;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.select.SelectedScoringRule;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.userinfo.UserInfoRuleType;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.userinfo.UserInfoScoringRule;
@@ -32,7 +33,7 @@ public class ScoringRuleProvider {
 		return diseaseHistoryScoringRuleRepository.findAllByDiagnosedDisease(diagnosedDisease);
 	}
 
-	public List<DiseaseHistoryScoringRule> findAllFamilyHistory(DiagnosedDisease diagnosedDisease){
+	public List<FamilyHistoryScoringRule> findAllFamilyHistory(DiagnosedDisease diagnosedDisease){
 		return familyHistoryScoringRuleRepository.findAllByDiagnosedDisease(diagnosedDisease);
 	}
 

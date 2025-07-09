@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FamilyHistoryScoringRuleRepository extends JpaRepository<FamilyHistoryScoringRule, Long> {
-	List<DiseaseHistoryScoringRule> findAllByDiagnosedDisease(DiagnosedDisease diagnosedDisease);
+	List<FamilyHistoryScoringRule> findAllByDiagnosedDisease(DiagnosedDisease diagnosedDisease);
 }
