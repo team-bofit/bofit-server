@@ -1,13 +1,11 @@
 package org.sopt.bofit.domain.post.service;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.bofit.domain.post.dto.request.PostRequest;
 import org.sopt.bofit.domain.post.dto.response.PostResponse;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.repository.PostRepository;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.repository.UserRepository;
-import org.sopt.bofit.global.exception.constant.UserErrorCode;
 import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +25,7 @@ public class PostService {
         newPost.setUser(user);
 
         postRepository.save(newPost);
-        return PostResponse.of(newPost.getId());
+        return PostResponse.from(newPost.getId());
     }
 
 }

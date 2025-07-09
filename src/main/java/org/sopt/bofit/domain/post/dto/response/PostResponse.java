@@ -6,7 +6,7 @@ public record PostResponse(
         @Schema(description = "게시글 ID")
         Long postId
 ) {
-    public static PostResponse of(Long postId){
+    public static PostResponse from(Long postId){
         return new PostResponse(postId);
     }
 }

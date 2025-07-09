@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.Length;
 public record PostRequest(
         @Schema(description = "글 제목", example = "아니")
         @NotBlank(message = "제목은 비어있을 수 없습니다.")
-        @Length(max = 30, message = "제목은 30자 미만으로 입력해주세요.")
+        @Length(max = 30)
         String title,
 
         @Schema(description = "내용", example = "저희 대상타면 어떡하나요 ㅈㅉ로?")
