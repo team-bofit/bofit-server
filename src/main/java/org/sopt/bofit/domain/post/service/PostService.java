@@ -36,7 +36,7 @@ public class PostService {
     public PostResponse updatePost (Long userId, Long postId, String title, String content) {
         User user = userReadService.findUserById(userId);
         Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
-        
+
         post.updatePost(title, content);
         return PostResponse.from(post.getId());
     }
