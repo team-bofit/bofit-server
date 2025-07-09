@@ -46,4 +46,15 @@ public class PostController {
         return BaseResponse.ok(postService.updatePost(userId,postId,request.title(), request.content()),"게시물 수정 완료");
     }
 
+    @Tag(name = "Community", description = "커뮤니티 관련 API")
+    @Operation(summary = "게시물 삭제", description = "커뮤니티에서 글을 삭제합니다.(소프트 딜리트)")
+    @CustomExceptionDescription(DELETE_POST)
+    @DeleteMapping("{postId}")
+    public BaseResponse<Void> deletePost(
+            @Parameter(hidden = true) @LoginUserId Long userId,
+            @PathVariable Long postId
+    ){
+        postService.deletePost(userId,postId);
+        return BaseResponse.ok("게시물 삭제 완료");
+    }
 }

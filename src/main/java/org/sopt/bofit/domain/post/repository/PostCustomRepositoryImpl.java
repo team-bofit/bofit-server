@@ -52,5 +52,16 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 
         return new SliceImpl<>(content, PageRequest.of(0, size), hasNext);
     }
+
+    @Override
+    public void deletePostByPostId(Long postId) {
+        QPost post = QPost.post;
+
+        queryFactory
+                .update(post)
+                .set(post.status,PostStatus.INACTIVE)
+                .where(post.id.eq(postId))
+                .execute();
+    }
 }
 
