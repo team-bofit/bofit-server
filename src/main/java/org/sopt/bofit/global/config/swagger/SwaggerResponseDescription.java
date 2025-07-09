@@ -25,6 +25,9 @@ public enum SwaggerResponseDescription {
     ))),
     USER_INFO(new LinkedHashSet<>(Set.of(
             USER_NOT_FOUND
+    ))),
+    MY_POSTS(new LinkedHashSet<>(Set.of(
+            USER_NOT_FOUND
     )))
     ;
     private final Set<ErrorCode> errorCodeList;
