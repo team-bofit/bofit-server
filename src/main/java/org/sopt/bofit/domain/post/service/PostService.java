@@ -47,15 +47,16 @@ public class PostService {
     }
 
     @Transactional
-    public void deletePost(Long userId, Long postId) {
+    public Void deletePost(Long userId, Long postId) {
         User user = userReadService.findUserById(userId);
         Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
 
         if(!post.getUser().getId().equals(userId)) {
             throw new ForbiddenException(POST_UNAUTHORIZED);
         }
-        
+
         postCustomRepositoryImpl.deletePostByPostId(postId);
+        return null;
     }
 
 
