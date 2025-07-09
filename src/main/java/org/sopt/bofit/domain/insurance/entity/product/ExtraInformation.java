@@ -14,6 +14,6 @@ public class ExtraInformation {
 	@Column(name = "external_uri")
 	private String externalUri;
 
-	@Column(name = "informaion_source")
+	@Column(name = "information_source")
 	private String source;
 }
