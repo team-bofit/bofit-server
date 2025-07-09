@@ -33,7 +33,7 @@ public class UserReadService {
 
         findUserById(userId);
 
-        Slice<MyPostsResponse> posts = postCustomRepositoryImpl.findMyPostsByCursor(userId, cursorId, size);
+        Slice<MyPostsResponse> posts = postCustomRepositoryImpl.findPostsByCursorId(userId, cursorId, size);
 
         return SliceResponse.of(posts);
     }

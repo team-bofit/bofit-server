@@ -27,7 +27,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<MyPostsResponse> findMyPostsByCursor(Long userId, Long cursorId, int size) {
+    public Slice<MyPostsResponse> findPostsByCursorId(Long userId, Long cursorId, int size) {
         QPost post = QPost.post;
         QComment comment = QComment.comment;
 
