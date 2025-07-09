@@ -54,6 +54,7 @@ public class PostController {
             @Parameter(hidden = true) @LoginUserId Long userId,
             @PathVariable Long postId
     ){
-        return BaseResponse.ok(postService.deletePost(userId,postId), "게시물 삭제 완료");
+        postService.deletePost(userId,postId);
+        return BaseResponse.ok("게시물 삭제 완료");
     }
 }
