@@ -31,6 +31,9 @@ public enum SwaggerResponseDescription {
     ))),
     MY_COMMENTS(new LinkedHashSet<>(Set.of(
             USER_NOT_FOUND
+    ))),
+    CREATE_POST(new LinkedHashSet<>(Set.of(
+            USER_NOT_FOUND
     )))
     ;
     private final Set<ErrorCode> errorCodeList;
