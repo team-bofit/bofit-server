@@ -73,7 +73,7 @@ public enum ConditionCoverage {
 	INJURY_TYPE_4_SURGERY("상해 4종 수술비", product -> product.getSurgery().getInjuryType4()),
 	INJURY_TYPE_5_SURGERY("상해 5종 수술비", product -> product.getSurgery().getInjuryType5()),
 
-	PRICE("보험료", product -> product.getBasicInformation().getPremium())
+	PREMIUM("보험료", product -> product.getBasicInformation().getPremium())
 	;
 	private final String description;
 	private final Function<InsuranceProduct, Object> fieldAccessor;
