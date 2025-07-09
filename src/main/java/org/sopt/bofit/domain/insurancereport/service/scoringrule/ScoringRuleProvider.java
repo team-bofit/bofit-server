@@ -27,6 +27,12 @@ public class ScoringRuleProvider {
 		return userInfoScoringRuleRepository.findAllByUserInfoRuleType(userInfoRuleType);
 	}
 
+	public List<DiseaseHistoryScoringRule> findAllDiseaseHistory(DiagnosedDisease diagnosedDisease){
+		return diseaseHistoryScoringRuleRepository.findAllByDiagnosedDisease(diagnosedDisease);
+	}
 
+	public List<DiseaseHistoryScoringRule> findAllFamilyHistory(DiagnosedDisease diagnosedDisease){
+		return familyHistoryScoringRuleRepository.findAllByDiagnosedDisease(diagnosedDisease);
+	}
 
 }
