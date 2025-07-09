@@ -1,4 +1,4 @@
-package org.sopt.bofit.global.util;
+package org.sopt.bofit.domain.user.util;
 
 import java.time.LocalDate;
 import java.time.Period;
