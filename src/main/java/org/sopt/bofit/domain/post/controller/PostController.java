@@ -1,12 +1,37 @@
 package org.sopt.bofit.domain.post.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.sopt.bofit.domain.post.dto.request.PostRequest;
+import org.sopt.bofit.domain.post.dto.response.PostResponse;
 import org.sopt.bofit.domain.post.service.PostService;
-import org.springframework.web.bind.annotation.RestController;
+import org.sopt.bofit.global.annotation.CustomExceptionDescription;
+import org.sopt.bofit.global.annotation.LoginUserId;
+import org.sopt.bofit.global.config.swagger.SwaggerResponseDescription;
+import org.sopt.bofit.global.response.BaseResponse;
+import org.springframework.web.bind.annotation.*;
+
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("posts")
 public class PostController {
 
     private final PostService postService;
+
+    @Tag(name = "Community", description = "커뮤니티 관련 API")
+    @Operation(summary = "게시물 작성", description = "커뮤니티에 글을 작성합니다.")
+    @CustomExceptionDescription(CREATE_POST)
+    @PostMapping("post")
+    public BaseResponse<PostResponse> createPost(
+            @RequestBody @Valid PostRequest request,
+            @Parameter(hidden = true) @LoginUserId Long userId
+    ){
+        return BaseResponse.ok(postService.createPost(userId, request.title(), request.content()),"게시물 생성 완료");
+    }
+
 }

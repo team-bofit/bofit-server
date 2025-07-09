@@ -1,15 +1,13 @@
 package org.sopt.bofit.global.config.swagger;
 
 import lombok.Getter;
-import org.sopt.bofit.global.exception.constant.ErrorCode;
-import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
-import org.sopt.bofit.global.exception.constant.OAuthErrorCode;
-import org.sopt.bofit.global.exception.constant.UserErrorCode;
+import org.sopt.bofit.global.exception.constant.*;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.*;
 import static org.sopt.bofit.global.exception.constant.UserErrorCode.*;
 
 
@@ -31,6 +29,13 @@ public enum SwaggerResponseDescription {
     ))),
     MY_COMMENTS(new LinkedHashSet<>(Set.of(
             USER_NOT_FOUND
+    ))),
+    CREATE_POST(new LinkedHashSet<>(Set.of(
+            USER_NOT_FOUND,
+            POST_CONTENT_BLANK,
+            POST_TITLE_BLANK,
+            POST_CONTENT_LONG,
+            POST_TITLE_LONG
     )))
     ;
     private final Set<ErrorCode> errorCodeList;

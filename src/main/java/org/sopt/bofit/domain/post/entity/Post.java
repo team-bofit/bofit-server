@@ -11,6 +11,7 @@ import org.sopt.bofit.global.entity.BaseEntity;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
+@Setter
 public class Post extends BaseEntity {
 
     @Id
@@ -31,5 +32,13 @@ public class Post extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public static Post create(String title, String content) {
+        return Post.builder()
+                .title(title)
+                .content(content)
+                .status(PostStatus.ACTIVE)
+                .build();
+    }
 
 }
