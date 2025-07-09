@@ -24,7 +24,7 @@ public class ScoringRuleProvider {
 	private final FamilyHistoryScoringRuleRepository familyHistoryScoringRuleRepository;
 	private final SelectedScoringRuleRepository selectedScoringRuleRepository;
 
-	public List<UserInfoScoringRule> findAll(UserInfoRuleType userInfoRuleType){
+	public List<UserInfoScoringRule> findAllUserInfoRuleType(UserInfoRuleType userInfoRuleType){
 		return userInfoScoringRuleRepository.findAllByUserInfoRuleType(userInfoRuleType);
 	}
 

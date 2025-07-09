@@ -49,7 +49,7 @@ public class UserInfoRuleCalculator {
 	}
 
 	private double pointFromRule (InsuranceProduct product, UserInfoRuleType type){
-		List<UserInfoScoringRule> rules = scoringRuleProvider.findAll(type);
+		List<UserInfoScoringRule> rules = scoringRuleProvider.findAllUserInfoRuleType(type);
 		return rules.stream()
 			.mapToDouble(rule -> ScoringRuleUtil.getPoint(rule, product))
 			.sum();
