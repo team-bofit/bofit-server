@@ -42,7 +42,7 @@ public class UserController {
     @Tag(name = "My Page", description = "마이페이지 관련 API")
     @CustomExceptionDescription(MY_POSTS)
     @Operation(summary = "내가 쓴 글 조회", description = "마이페이지에서 내가 쓴 글을 조회합니다.")
-    @GetMapping("posts")
+    @GetMapping("me/posts")
     public BaseResponse<SliceResponse<MyPostsResponse>> getMyPosts(
             @Parameter(hidden = true) @LoginUserId Long userId,
             @RequestParam(required = false) Long cursorId,
