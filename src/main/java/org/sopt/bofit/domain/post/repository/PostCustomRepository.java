@@ -5,4 +5,6 @@ import org.springframework.data.domain.Slice;
 
 public interface PostCustomRepository {
     Slice<PostSummaryResponse> findPostsByCursorId(Long userId, Long cursorId, int size);
+
+    void deletePostByPostId(Long postId);
 }
