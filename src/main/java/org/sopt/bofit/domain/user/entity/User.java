@@ -61,5 +61,39 @@ public class User extends BaseEntity {
     @Builder.Default
     private UserStatus status = UserStatus.ACTIVE;
 
+    public void updateName(String name) {
+        this.name = name;
+    }
 
+    public void updateGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public void updateBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public void updateJob(Job job) {
+        this.job = job;
+    }
+
+    public void updateMarried(boolean married) {
+        isMarried = married;
+    }
+
+    public void updateDriver(boolean driver) {
+        isDriver = driver;
+    }
+
+    public void updateHasChild(boolean hasChild) {
+        this.hasChild = hasChild;
+    }
+
+    public void register(){
+        this.isRegistered = true;
+    }
+
+    public void recommendedInsurance(){
+        this.isRecommendInsurance = true;
+    }
 }
