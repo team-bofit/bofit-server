@@ -167,7 +167,7 @@ public class InsuranceReportFactorConstant {
 	public static final int PONT_MAJOR_DISEASE_GENERAL_CANCER_SURGERY = 10;
 
 	// 보장 상황 - 2
-	public static final int VALID_COVERAGE_SURGERY_COVERAGE
+	// public static final int VALID_COVERAGE_SURGERY_COVERAGE
 
 
 
