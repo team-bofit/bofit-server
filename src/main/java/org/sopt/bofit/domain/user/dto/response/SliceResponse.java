@@ -16,10 +16,10 @@ public record SliceResponse<T>(
 
         if (!slice.isLast() && !content.isEmpty()) {
             Object lastElement = content.get(content.size() - 1);
-            if (lastElement instanceof MyPostsResponse lastPost) {
+            if (lastElement instanceof PostSummaryResponse lastPost) {
                 nextCursorId = lastPost.postId();
             }
-            else if (lastElement instanceof MyCommentsResponse lastComment) {
+            else if (lastElement instanceof CommentSummaryResponse lastComment) {
                 nextCursorId = lastComment.commentId();
             }
         }

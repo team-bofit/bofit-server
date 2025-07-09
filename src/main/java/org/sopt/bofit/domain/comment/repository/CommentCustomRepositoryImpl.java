@@ -4,7 +4,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.CommentStatus;
-import org.sopt.bofit.domain.user.dto.response.MyCommentsResponse;
+import org.sopt.bofit.domain.user.dto.response.CommentSummaryResponse;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -20,11 +20,11 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<MyCommentsResponse> findCommentsByCursorId(Long userId, Long cursorId, int size) {
+    public Slice<CommentSummaryResponse> findCommentsByCursorId(Long userId, Long cursorId, int size) {
         QComment comment = QComment.comment;
 
-        List<MyCommentsResponse> content = queryFactory
-                .select(Projections.constructor(MyCommentsResponse.class,
+        List<CommentSummaryResponse> content = queryFactory
+                .select(Projections.constructor(CommentSummaryResponse.class,
                         comment.id,
                         comment.post.id,
                         comment.content,

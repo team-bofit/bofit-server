@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 
-public record MyCommentsResponse(
+public record CommentSummaryResponse(
 
         @Schema(description = "댓글 ID")
         Long commentId,
@@ -18,7 +18,7 @@ public record MyCommentsResponse(
         @Schema(description = "작성 시간")
         LocalDateTime createdAt
 ) {
-    public static MyCommentsResponse of(Long commentId, Long postId, String content, LocalDateTime createdAt) {
-        return new MyCommentsResponse(commentId, postId, content, createdAt);
+    public static CommentSummaryResponse of(Long commentId, Long postId, String content, LocalDateTime createdAt) {
+        return new CommentSummaryResponse(commentId, postId, content, createdAt);
     }
 }

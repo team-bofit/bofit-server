@@ -3,8 +3,8 @@ package org.sopt.bofit.domain.user.service;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.repository.CommentCustomRepositoryImpl;
 import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
-import org.sopt.bofit.domain.user.dto.response.MyCommentsResponse;
-import org.sopt.bofit.domain.user.dto.response.MyPostsResponse;
+import org.sopt.bofit.domain.user.dto.response.CommentSummaryResponse;
+import org.sopt.bofit.domain.user.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
 import org.sopt.bofit.domain.user.entity.User;
@@ -33,11 +33,11 @@ public class UserReadService {
 
     }
 
-    public SliceResponse<MyPostsResponse> getMyPosts(Long userId, Long cursorId, int size) {
+    public SliceResponse<PostSummaryResponse> getMyPosts(Long userId, Long cursorId, int size) {
 
         findUserById(userId);
 
-        Slice<MyPostsResponse> posts = postCustomRepositoryImpl.findPostsByCursorId(userId, cursorId, size);
+        Slice<PostSummaryResponse> posts = postCustomRepositoryImpl.findPostsByCursorId(userId, cursorId, size);
 
         return SliceResponse.of(posts);
     }
@@ -46,11 +46,11 @@ public class UserReadService {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
     }
 
-    public SliceResponse<MyCommentsResponse> getMyComments(Long userId, Long cursorId, int size) {
+    public SliceResponse<CommentSummaryResponse> getMyComments(Long userId, Long cursorId, int size) {
 
         findUserById(userId);
 
-        Slice<MyCommentsResponse> comments = commentCustomRepositoryImpl.findCommentsByCursorId(userId, cursorId, size);
+        Slice<CommentSummaryResponse> comments = commentCustomRepositoryImpl.findCommentsByCursorId(userId, cursorId, size);
 
         return SliceResponse.of(comments);
     }
