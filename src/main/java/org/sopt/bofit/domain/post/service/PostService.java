@@ -5,15 +5,13 @@ import org.sopt.bofit.domain.post.dto.response.PostResponse;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.repository.PostRepository;
 import org.sopt.bofit.domain.user.entity.User;
-import org.sopt.bofit.domain.user.repository.UserRepository;
 import org.sopt.bofit.domain.user.service.UserReadService;
-import org.sopt.bofit.global.exception.constant.PostErrorCode;
+import org.sopt.bofit.global.exception.custom_exception.ForbiddenException;
 import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.sopt.bofit.global.exception.constant.PostErrorCode.*;
-import static org.sopt.bofit.global.exception.constant.UserErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +34,10 @@ public class PostService {
     public PostResponse updatePost (Long userId, Long postId, String title, String content) {
         User user = userReadService.findUserById(userId);
         Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
+
+        if(!post.getUser().getId().equals(userId)) {
+            throw new ForbiddenException(POST_UNAUTHORIZED);
+        }
 
         post.updatePost(title, content);
         return PostResponse.from(post.getId());
