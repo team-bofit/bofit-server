@@ -71,7 +71,15 @@ dependencies {
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 }
 
+def generated = "build/generated/querydsl"
 
+sourceSets {
+	main.java.srcDirs += [generated]
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.annotationProcessorGeneratedSourcesDirectory = file(generated)
+}
 
 
 tasks.named('test') {
