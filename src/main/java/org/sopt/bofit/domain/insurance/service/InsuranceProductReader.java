@@ -19,6 +19,15 @@ public class InsuranceProductReader {
 
 	private final InsuranceProductRepository insuranceProductRepository;
 
+
+	public List<InsuranceProduct> getAgeAndPremiumFilteredProducts(
+		int age,
+		int minPremium,
+		int maxPremium
+	){
+		return insuranceProductRepository.findAllByAgeAndPremium(age, minPremium, maxPremium);
+	}
+
 	public InsuranceProduct getRecommendedStatusProducts(){
 		return insuranceProductRepository.findFirstByStatus(InsuranceStatus.RECOMMENDED).orElseThrow(() ->
 				new InternalException(InsuranceErrorCode.NOT_FOUND_RECOMMENDED_STATUS_INSURANCE));
