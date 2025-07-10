@@ -4,10 +4,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+
+import org.sopt.bofit.domain.user.dto.response.JobNameResponse;
 import org.sopt.bofit.domain.user.dto.response.CommentSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
+import org.sopt.bofit.domain.user.service.UserReader;
+import org.sopt.bofit.domain.user.service.UserWriter;
 import org.sopt.bofit.domain.user.service.UserService;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.annotation.LoginUserId;
@@ -23,6 +27,10 @@ import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
+
+    private final UserReader userReader;
+
+    private final UserWriter userWriter;
     private final UserService userService;
 
     @Tag(name = "My Page", description = "마이페이지 관련 API")
@@ -32,6 +40,14 @@ public class UserController {
     public BaseResponse<UserProfileResponse> getInfo(
             @Parameter(hidden = true) @LoginUserId Long userId
          ) {
+        return BaseResponse.ok(userReader.getUserInfo(userId), "유저 프로필 조회 성공");
+    }
+
+    @Tag(name = "Users", description = "유저 관련 API")
+    @Operation(summary = "직업 목록 조회", description = "선택 가능한 직업 목록을 조회합니다.")
+    @GetMapping("/jobs")
+    public BaseResponse<JobNameResponse> getJobs() {
+        return BaseResponse.ok(userReader.getJobs(), "선택 가능한 직업 목록 조회 성공");
         return BaseResponse.ok(userService.getUserInfo(userId), "유저 프로필 조회 성공");
     }
 

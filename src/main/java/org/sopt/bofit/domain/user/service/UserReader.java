@@ -43,6 +43,10 @@ public class UserReader {
         return SliceResponse.of(posts);
     }
 
+    }
+
+    public JobNameResponse getJobs(){
+        return JobNameResponse.create(Job.values());
     public User findUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
     }
