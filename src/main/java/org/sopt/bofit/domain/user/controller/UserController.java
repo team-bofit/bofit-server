@@ -32,9 +32,8 @@ public class UserController {
 
     private final UserReader userReader;
 
-    private final UserWriter userWriter;
     private final UserService userService;
-    private final UserService userService;
+
 
     @Tag(name = "My Page", description = "마이페이지 관련 API")
     @CustomExceptionDescription(USER_INFO)
