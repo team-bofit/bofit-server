@@ -19,17 +19,35 @@ public class ScoringRuleCalculator {
 
 	private final UserInfoRuleCalculator userInfoRuleCalculator;
 	private final DiseaseHistoryRuleCalculator diseaseHistoryRuleCalculator;
+	private final FamilyHistoryRuleCalculator familyHistoryRuleCalculator;
+	private final SelectedRuleCalculator selectedRuleCalculator;
 
-	public double calculatorScoringRule(User user, UserInfo userInfo, InsuranceProduct product){
-		return 0;
+	public double calculatorScoringRule(
+		User user,
+		UserInfo userInfo,
+		InsuranceProduct product,
+		int age
+	){
+		return calculateUserInfoRule(user, product, age) +
+			calculateDiseaseHistoryRule(userInfo, product) +
+			calculateFamilyHistoryRule(userInfo, product) +
+			calculateSelectedRule(userInfo, product);
 	}
 
-	public double calculateUserInfoRule(User user, InsuranceProduct product){
-		return userInfoRuleCalculator.calculate(user, product);
+	public double calculateUserInfoRule(User user, InsuranceProduct product, int age){
+		return userInfoRuleCalculator.calculate(user, product, age);
 	}
 
 	public double calculateDiseaseHistoryRule(UserInfo userInfo, InsuranceProduct product){
-		return diseaseHistoryRuleCalculator.calculate(userInfo.getDiseasesHistory(), product);
+		return diseaseHistoryRuleCalculator.calculate(userInfo.getDiseaseHistory(), product);
+	}
+
+	public double calculateFamilyHistoryRule(UserInfo userInfo, InsuranceProduct product){
+		return familyHistoryRuleCalculator.calculate(userInfo.getFamilyHistory(), product);
+	}
+
+	public double calculateSelectedRule(UserInfo userInfo, InsuranceProduct product){
+		return selectedRuleCalculator.calculate(userInfo.getCoveragePreferences(), product);
 	}
 
 }
