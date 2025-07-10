@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserWriteService {
+public class UserWriter {
 
     private final UserRepository userRepository;
 

@@ -8,6 +8,7 @@ import org.sopt.bofit.domain.user.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
 import org.sopt.bofit.domain.user.entity.User;
+import org.sopt.bofit.domain.user.entity.constant.Job;
 import org.sopt.bofit.domain.user.repository.UserRepository;
 import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
 import org.springframework.data.domain.Slice;
@@ -17,7 +18,7 @@ import static org.sopt.bofit.global.exception.constant.UserErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
-public class UserReadService {
+public class UserReader {
 
     private final UserRepository userRepository;
 
