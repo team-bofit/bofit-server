@@ -133,7 +133,6 @@ public class OAuthService {
                                             );
                                     return KaKaoLoginResponse.of(
                                             user.getId(),
-                                            user.isRegistered(),
                                             accessToken,
                                             refreshToken
                                     );

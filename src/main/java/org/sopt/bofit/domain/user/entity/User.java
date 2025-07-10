@@ -56,9 +56,6 @@ public class User extends BaseEntity {
     @Column(name = "has_child")
     private boolean hasChild;
 
-    @Column(name = "is_registered")
-    private boolean isRegistered;
-
     @Column(name = "is_recommend_insurance")
     private boolean isRecommendInsurance;
 

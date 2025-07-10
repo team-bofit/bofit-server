@@ -7,9 +7,6 @@ public record KaKaoLoginResponse(
         @Schema(description = "유저 PK", example = "1")
         Long userId,
 
-        @Schema(description = "첫 접속 여부(서비스 고지사항 노출용)", example = "true")
-        boolean isRegistered,
-
         @Schema(description = "액세스 토큰")
         String accessToken,
 
@@ -17,7 +14,7 @@ public record KaKaoLoginResponse(
         String refreshToken
 )
 {
-    public static KaKaoLoginResponse of(Long userId, boolean isRegistered, String accessToken, String refreshToken) {
-        return new KaKaoLoginResponse(userId, isRegistered, accessToken, refreshToken);
+    public static KaKaoLoginResponse of(Long userId, String accessToken, String refreshToken) {
+        return new KaKaoLoginResponse(userId, accessToken, refreshToken);
     }
 }
