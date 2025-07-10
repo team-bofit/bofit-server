@@ -48,7 +48,7 @@ public class DiseaseHistoryFilter {
 
 	private boolean isSurgeryCovered(InsuranceProduct product) {
 		var surgery = product.getSurgery();
-		return surgery.getDisease() > 0 || surgery.getDiseaseType5() > 0;
+		return surgery.getDiseaseSurgery().getGeneral() > 0 || surgery.getDiseaseSurgery().getType5() > 0;
 	}
 
 }
