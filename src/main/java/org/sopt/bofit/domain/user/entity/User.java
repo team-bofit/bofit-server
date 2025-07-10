@@ -89,10 +89,6 @@ public class User extends BaseEntity {
         this.hasChild = hasChild;
     }
 
-    public void register(){
-        this.isRegistered = true;
-    }
-
     public void recommendedInsurance(){
         this.isRecommendInsurance = true;
     }

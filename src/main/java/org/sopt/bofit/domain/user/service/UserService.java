@@ -35,14 +35,9 @@ public class UserService {
 		return userReader.getDiagnosedDiseaseNames();
 	}
 
-	public User findById(Long userId){
-		return userReader.findById(userId);
-	}
-
 	@Transactional
 	public User userUpdate(Long userId, UserUpdate userUpdate){
 		User user = userReader.findById(userId);
-		user.register();
 
 		return userWriter.updateUser(
 			user,

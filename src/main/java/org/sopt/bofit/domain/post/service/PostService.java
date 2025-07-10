@@ -6,7 +6,7 @@ import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
 import org.sopt.bofit.domain.post.repository.PostRepository;
 import org.sopt.bofit.domain.user.entity.User;
-import org.sopt.bofit.domain.user.service.UserReadService;
+import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.global.exception.custom_exception.ForbiddenException;
 import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -20,12 +20,12 @@ public class PostService {
 
     private final PostRepository postRepository;
 
-    private final UserReadService userReadService;
+    private final UserReader userReader;
 
     private final PostCustomRepositoryImpl postCustomRepositoryImpl;
 
     public PostResponse createPost(Long userId, String title, String content) {
-        User user = userReadService.findUserById(userId);
+        User user = userReader.findById(userId);
         Post newPost = Post.create(title, content);
         newPost.setUser(user);
 
@@ -35,7 +35,7 @@ public class PostService {
 
     @Transactional
     public PostResponse updatePost (Long userId, Long postId, String title, String content) {
-        User user = userReadService.findUserById(userId);
+        User user = userReader.findById(userId);
         Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
 
         if(!post.getUser().getId().equals(userId)) {
@@ -48,7 +48,7 @@ public class PostService {
 
     @Transactional
     public void deletePost(Long userId, Long postId) {
-        User user = userReadService.findUserById(userId);
+        User user = userReader.findById(userId);
         Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
 
         if(!post.getUser().getId().equals(userId)) {
