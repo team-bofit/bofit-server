@@ -1,5 +1,6 @@
 package org.sopt.bofit.domain.insurancereport.service.scoringrule;
 
+import static org.sopt.bofit.domain.insurancereport.constant.ScoringRuleConstant.*;
 import static org.sopt.bofit.domain.user.entity.constant.Job.*;
 
 import java.util.List;
@@ -13,7 +14,6 @@ import org.sopt.bofit.domain.insurancereport.util.ScoringRuleUtil;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.Gender;
 import org.sopt.bofit.domain.user.entity.constant.Job;
-import org.sopt.bofit.domain.user.util.UserUtil;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -24,18 +24,8 @@ public class UserInfoRuleCalculator {
 
 	private final ScoringRuleProvider scoringRuleProvider;
 
-	private final static Map<UserInfoRuleType, Predicate<User>> USER_INFO_RULE_MAP = Map.of(
-		UserInfoRuleType.OLDER_THAN_50, user -> UserUtil.convertInternationalAge(user.getBirthDate()) > 50,
-		UserInfoRuleType.FEMALE, user -> user.getGender().equals(Gender.FEMALE),
-		UserInfoRuleType.PRODUCTION_SITE, user -> user.getJob().equals(Job.PRODUCTION_SITE),
-		UserInfoRuleType.DRIVER_DELIVERY, user -> user.getJob().equals(DRIVER_DELIVERY),
-		UserInfoRuleType.MARRIED, User::isMarried,
-		UserInfoRuleType.HAS_CHILD, User::isHasChild,
-		UserInfoRuleType.DRIVER, User::isDriver
-	);
-
-	public double calculate(User user, InsuranceProduct product){
-		return USER_INFO_RULE_MAP.entrySet().stream()
+	public double calculate(User user, InsuranceProduct product, int age){
+		return getUserInfoRuleMap(age).entrySet().stream()
 			.mapToDouble(entry ->  considerUserInfo(entry.getValue(), user, product, entry.getKey()))
 			.sum();
 	}
@@ -46,6 +36,18 @@ public class UserInfoRuleCalculator {
 			additional += pointFromRule(product, ruleType);
 		}
 		return additional;
+	}
+
+	private Map<UserInfoRuleType, Predicate<User>> getUserInfoRuleMap(int age){
+		return Map.of(
+			UserInfoRuleType.AT_RISK_OF_MAJOR_DISEASE, user -> age > MAJOR_DISEASE_RISKED_AGE,
+			UserInfoRuleType.FEMALE, user -> user.getGender().equals(Gender.FEMALE),
+			UserInfoRuleType.PRODUCTION_SITE, user -> user.getJob().equals(Job.PRODUCTION_SITE),
+			UserInfoRuleType.DRIVER_DELIVERY, user -> user.getJob().equals(DRIVER_DELIVERY),
+			UserInfoRuleType.MARRIED, User::isMarried,
+			UserInfoRuleType.HAS_CHILD, User::isHasChild,
+			UserInfoRuleType.DRIVER, User::isDriver
+		);
 	}
 
 	private double pointFromRule (InsuranceProduct product, UserInfoRuleType type){

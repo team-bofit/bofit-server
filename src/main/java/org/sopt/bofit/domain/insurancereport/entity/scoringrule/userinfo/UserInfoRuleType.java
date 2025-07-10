@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum UserInfoRuleType {
 
-	OLDER_THAN_50("50세 이상"),
+	AT_RISK_OF_MAJOR_DISEASE("주요 질병 위험 연령"),
 
 	FEMALE("여성"),
 
