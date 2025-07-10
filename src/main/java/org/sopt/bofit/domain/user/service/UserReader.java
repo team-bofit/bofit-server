@@ -2,9 +2,7 @@ package org.sopt.bofit.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 
-import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseNameResponse;
 import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;
-import org.sopt.bofit.domain.user.dto.response.JobNameResponse;
 import org.sopt.bofit.domain.comment.repository.CommentCustomRepositoryImpl;
 import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
 import org.sopt.bofit.domain.user.dto.response.CommentSummaryResponse;
@@ -16,7 +14,6 @@ import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
 import org.sopt.bofit.domain.user.entity.constant.Job;
 import org.sopt.bofit.domain.user.repository.UserRepository;
-import org.sopt.bofit.global.exception.constant.UserErrorCode;
 import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -35,7 +32,7 @@ public class UserReader {
     
     public UserProfileResponse getUserInfo(Long userId){
 
-        User user = findUserById(userId);
+        User user = findById(userId);
 
         return UserProfileResponse.of(userId, user.getNickname(), user.getProfileImage(), user.isRecommendInsurance());
 
@@ -43,7 +40,7 @@ public class UserReader {
 
     public SliceResponse<PostSummaryResponse> getMyPosts(Long userId, Long cursorId, int size) {
 
-        findUserById(userId);
+        findById(userId);
 
         Slice<PostSummaryResponse> posts = postCustomRepositoryImpl.findPostsByCursorId(userId, cursorId, size);
 
@@ -55,13 +52,13 @@ public class UserReader {
         return JobResponses.create(Job.values());
     }
 
-    public User findUserById(Long userId) {
+    public User findById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
     }
 
     public SliceResponse<CommentSummaryResponse> getMyComments(Long userId, Long cursorId, int size) {
 
-        findUserById(userId);
+        findById(userId);
 
         Slice<CommentSummaryResponse> comments = commentCustomRepositoryImpl.findCommentsByCursorId(userId, cursorId, size);
 
