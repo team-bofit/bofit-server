@@ -39,14 +39,14 @@ public class CoveragePreferenceFilter {
 	}
 
 	private boolean isDiseaseAndInjuryType5Covered(InsuranceProduct product){
-		var diseaseType5 = product.getSurgery().getDiseaseType5();
-		var injuryType5 = product.getSurgery().getInjuryType5();
+		var diseaseType5 = product.getSurgery().getDiseaseSurgery().getType5();
+		var injuryType5 = product.getSurgery().getInjurySurgery().getType5();
 
 		return diseaseType5 > 0 && injuryType5 > 0;
 	}
 
 	private boolean isInjuryType5Covered(InsuranceProduct product) {
-		var injuryType5 = product.getSurgery().getInjuryType5();
+		var injuryType5 = product.getSurgery().getInjurySurgery().getType5();
 		return injuryType5 > 0;
 	}
 

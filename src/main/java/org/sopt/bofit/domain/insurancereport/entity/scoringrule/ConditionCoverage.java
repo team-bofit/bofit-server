@@ -57,21 +57,22 @@ public enum ConditionCoverage {
 	ISCHEMIC_HEART_DISEASE_SURGERY("허혈성 심장 질환 수술", product -> product.getMajorDisease().getHeart().getIschemicSurgery()),
 
 
-	DISEASE_SURGERY("질병 수술비", product -> product.getSurgery().getDisease()),
-	DISEASE_TYPE_1_SURGERY("질병 1종 수술비", product -> product.getSurgery().getDiseaseType1()),
-	DISEASE_TYPE_2_SURGERY("질병 2종 수술비", product -> product.getSurgery().getDiseaseType2()),
-	DISEASE_TYPE_3_SURGERY("질병 3종 수술비", product -> product.getSurgery().getDiseaseType3()),
-	DISEASE_TYPE_4_SURGERY("질병 4종 수술비", product -> product.getSurgery().getDiseaseType4()),
-	DISEASE_TYPE_5_SURGERY("질병 5종 수술비", product -> product.getSurgery().getDiseaseType5()),
-	ALL_DISEASE_SURGERY("질병 수술비 및 질병 종 수술비 전부", product -> List.of(product.getSurgery().getDisease(), product.getSurgery().getDiseaseType5())),
+	DISEASE_SURGERY("질병 수술비", product -> product.getSurgery().getDiseaseSurgery().getGeneral()),
+	DISEASE_TYPE_1_SURGERY("질병 1종 수술비", product -> product.getSurgery().getDiseaseSurgery().getType1()),
+	DISEASE_TYPE_2_SURGERY("질병 2종 수술비", product -> product.getSurgery().getDiseaseSurgery().getType2()),
+	DISEASE_TYPE_3_SURGERY("질병 3종 수술비", product -> product.getSurgery().getDiseaseSurgery().getType3()),
+	DISEASE_TYPE_4_SURGERY("질병 4종 수술비", product -> product.getSurgery().getDiseaseSurgery().getType4()),
+	DISEASE_TYPE_5_SURGERY("질병 5종 수술비", product -> product.getSurgery().getDiseaseSurgery().getType5()),
+	ALL_DISEASE_SURGERY("질병 수술비 및 질병 종 수술비 전부",
+		product -> List.of(product.getSurgery().getDiseaseSurgery().getGeneral(), product.getSurgery().getDiseaseSurgery().getType5())), // 기능적 요구사항에 맞춰 일반과 5종을 고려함.
 
 
-	INJURY_SURGERY("상해 수술", product -> product.getSurgery().getInjury()),
-	INJURY_TYPE_1_SURGERY("상해 1종 수술비", product -> product.getSurgery().getInjuryType1()),
-	INJURY_TYPE_2_SURGERY("상해 2종 수술비", product -> product.getSurgery().getInjuryType2()),
-	INJURY_TYPE_3_SURGERY("상해 3종 수술비", product -> product.getSurgery().getInjuryType3()),
-	INJURY_TYPE_4_SURGERY("상해 4종 수술비", product -> product.getSurgery().getInjuryType4()),
-	INJURY_TYPE_5_SURGERY("상해 5종 수술비", product -> product.getSurgery().getInjuryType5()),
+	INJURY_SURGERY("상해 수술", product -> product.getSurgery().getInjurySurgery().getGeneral()),
+	INJURY_TYPE_1_SURGERY("상해 1종 수술비", product -> product.getSurgery().getInjurySurgery().getType1()),
+	INJURY_TYPE_2_SURGERY("상해 2종 수술비", product -> product.getSurgery().getInjurySurgery().getType2()),
+	INJURY_TYPE_3_SURGERY("상해 3종 수술비", product -> product.getSurgery().getInjurySurgery().getType3()),
+	INJURY_TYPE_4_SURGERY("상해 4종 수술비", product -> product.getSurgery().getInjurySurgery().getType4()),
+	INJURY_TYPE_5_SURGERY("상해 5종 수술비", product -> product.getSurgery().getInjurySurgery().getType5()),
 
 	PREMIUM("보험료", product -> product.getBasicInformation().getPremium())
 	;
