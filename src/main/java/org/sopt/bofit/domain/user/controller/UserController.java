@@ -5,12 +5,14 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseNameResponse;
 import org.sopt.bofit.domain.user.dto.response.JobNameResponse;
 import org.sopt.bofit.domain.user.dto.response.CommentSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
 import org.sopt.bofit.domain.user.service.UserReader;
+import org.sopt.bofit.domain.user.service.UserService;
 import org.sopt.bofit.domain.user.service.UserWriter;
 import org.sopt.bofit.domain.user.service.UserService;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
@@ -32,6 +34,7 @@ public class UserController {
 
     private final UserWriter userWriter;
     private final UserService userService;
+    private final UserService userService;
 
     @Tag(name = "My Page", description = "마이페이지 관련 API")
     @CustomExceptionDescription(USER_INFO)
@@ -48,7 +51,6 @@ public class UserController {
     @GetMapping("/jobs")
     public BaseResponse<JobNameResponse> getJobs() {
         return BaseResponse.ok(userReader.getJobs(), "선택 가능한 직업 목록 조회 성공");
-        return BaseResponse.ok(userService.getUserInfo(userId), "유저 프로필 조회 성공");
     }
 
     @Tag(name = "My Page", description = "마이페이지 관련 API")
@@ -74,5 +76,13 @@ public class UserController {
     ){
         return BaseResponse.ok(userService.getMyComments(userId, cursorId, size), "내가 쓴 댓글 조회 성공");
     }
+
+    @Tag(name = "UserInfo", description = "유저 정보 관련 API")
+    @Operation(summary = "진단 받은 질병 목록 조회", description = "선택 가능한 진단 받았던 질병 목록을 조회합니다.")
+    @GetMapping("/diagnosed-disease")
+    public BaseResponse<DiagnosedDiseaseNameResponse> getDiagnosedDisease() {
+        return BaseResponse.ok(userService.getDiagnosedDiseaseNames(), "진단 받은 질병 목록 조회 성공");
+    }
+
 
 }
