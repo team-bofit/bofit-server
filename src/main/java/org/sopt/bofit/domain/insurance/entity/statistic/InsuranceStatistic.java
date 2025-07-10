@@ -4,6 +4,8 @@ import org.sopt.bofit.domain.insurance.entity.benefit.InsuranceBenefit;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -24,5 +26,7 @@ public class InsuranceStatistic extends InsuranceBenefit {
 	@Column(name = "insurance_statistic_id")
 	private Long id;
 
-	// 연령대 추가 고려중
+	@Column(unique = true)
+	@Enumerated(EnumType.STRING)
+	private StatisticRange statisticRange;
 }
