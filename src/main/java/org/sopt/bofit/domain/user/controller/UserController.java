@@ -5,13 +5,12 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
-import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseNameResponse;
-import org.sopt.bofit.domain.user.dto.response.JobNameResponse;
+import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;
+import org.sopt.bofit.domain.user.dto.response.JobResponses;
 import org.sopt.bofit.domain.user.dto.response.CommentSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
-import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.domain.user.service.UserService;
 import org.sopt.bofit.domain.user.service.UserWriter;
 import org.sopt.bofit.domain.user.service.UserService;
@@ -30,8 +29,6 @@ import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserReader userReader;
-
     private final UserService userService;
 
 
@@ -42,14 +39,14 @@ public class UserController {
     public BaseResponse<UserProfileResponse> getInfo(
             @Parameter(hidden = true) @LoginUserId Long userId
          ) {
-        return BaseResponse.ok(userReader.getUserInfo(userId), "유저 프로필 조회 성공");
+        return BaseResponse.ok(userService.getUserInfo(userId), "유저 프로필 조회 성공");
     }
 
     @Tag(name = "Users", description = "유저 관련 API")
     @Operation(summary = "직업 목록 조회", description = "선택 가능한 직업 목록을 조회합니다.")
     @GetMapping("/jobs")
-    public BaseResponse<JobNameResponse> getJobs() {
-        return BaseResponse.ok(userReader.getJobs(), "선택 가능한 직업 목록 조회 성공");
+    public BaseResponse<JobResponses> getJobs() {
+        return BaseResponse.ok(userService.getJobs(), "선택 가능한 직업 목록 조회 성공");
     }
 
     @Tag(name = "My Page", description = "마이페이지 관련 API")
@@ -79,7 +76,7 @@ public class UserController {
     @Tag(name = "UserInfo", description = "유저 정보 관련 API")
     @Operation(summary = "진단 받은 질병 목록 조회", description = "선택 가능한 진단 받았던 질병 목록을 조회합니다.")
     @GetMapping("/diagnosed-disease")
-    public BaseResponse<DiagnosedDiseaseNameResponse> getDiagnosedDisease() {
+    public BaseResponse<DiagnosedDiseaseResponses> getDiagnosedDisease() {
         return BaseResponse.ok(userService.getDiagnosedDiseaseNames(), "진단 받은 질병 목록 조회 성공");
     }
 

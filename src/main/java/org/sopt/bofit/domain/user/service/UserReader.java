@@ -3,10 +3,12 @@ package org.sopt.bofit.domain.user.service;
 import lombok.RequiredArgsConstructor;
 
 import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseNameResponse;
+import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;
 import org.sopt.bofit.domain.user.dto.response.JobNameResponse;
 import org.sopt.bofit.domain.comment.repository.CommentCustomRepositoryImpl;
 import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
 import org.sopt.bofit.domain.user.dto.response.CommentSummaryResponse;
+import org.sopt.bofit.domain.user.dto.response.JobResponses;
 import org.sopt.bofit.domain.user.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
@@ -49,9 +51,8 @@ public class UserReader {
     }
 
 
-
-    public JobNameResponse getJobs() {
-        return JobNameResponse.create(Job.values());
+    public JobResponses getJobs() {
+        return JobResponses.create(Job.values());
     }
 
     public User findUserById(Long userId) {
@@ -67,7 +68,7 @@ public class UserReader {
         return SliceResponse.of(comments);
     }
 
-    public DiagnosedDiseaseNameResponse getDiagnosedDiseaseNames(){
-        return DiagnosedDiseaseNameResponse.create(DiagnosedDisease.values());
+    public DiagnosedDiseaseResponses getDiagnosedDiseaseNames(){
+        return DiagnosedDiseaseResponses.create(DiagnosedDisease.values());
     }
 }

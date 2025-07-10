@@ -7,6 +7,8 @@ import org.sopt.bofit.domain.user.dto.response.CommentSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.JobNameResponse;
 import org.sopt.bofit.domain.user.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
+import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;
+import org.sopt.bofit.domain.user.dto.response.JobResponses;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
 
 import org.springframework.stereotype.Service;
@@ -23,11 +25,11 @@ public class UserService {
 		return userReader.getUserInfo(userId);
 	}
 
-	public JobNameResponse getJobs(){
+	public JobResponses getJobs(){
 		return userReader.getJobs();
 	}
 
-	public DiagnosedDiseaseNameResponse getDiagnosedDiseaseNames(){
+	public DiagnosedDiseaseResponses getDiagnosedDiseaseNames(){
 		return userReader.getDiagnosedDiseaseNames();
 	}
 
