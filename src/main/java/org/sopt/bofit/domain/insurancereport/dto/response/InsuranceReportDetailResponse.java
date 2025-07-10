@@ -1,5 +1,8 @@
 package org.sopt.bofit.domain.insurancereport.dto.response;
 
+import java.util.UUID;
+
+import org.sopt.bofit.domain.insurance.entity.product.BasicInformation;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurancereport.dto.response.dailyHospitalization.DailyHospitalizationTotalSection;
@@ -12,6 +15,9 @@ import org.sopt.bofit.domain.insurancereport.dto.response.surgery.SurgeryTotalSe
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 
 public record InsuranceReportDetailResponse (
+ 	UUID reportId,
+	Long productId,
+	BasicInformation basicInformation,
 	MajorDiseaseTotalSection majorDiseaseTotalSection,
 	SurgeryTotalSection surgeryTotalSection,
 	DailyHospitalizationTotalSection dailyHospitalizationTotalSection,
@@ -21,6 +27,9 @@ public record InsuranceReportDetailResponse (
 
 	public static InsuranceReportDetailResponse of(InsuranceReport report, InsuranceProduct product, InsuranceStatistic average){
 		return new InsuranceReportDetailResponse(
+			report.getId(),
+			product.getId(),
+			product.getBasicInformation(),
 			MajorDiseaseTotalSection.of(report, product, average),
 			SurgeryTotalSection.of(report, product, average),
 			DailyHospitalizationTotalSection.of(report, product, average),
