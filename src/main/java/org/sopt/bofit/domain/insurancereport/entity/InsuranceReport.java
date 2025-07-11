@@ -185,4 +185,31 @@ public class InsuranceReport extends BaseEntity {
 		this.diseaseDeath = diseaseDeath;
 		this.injuryDeath = injuryDeath;
 	}
+
+	public void updateRationale(ReportRationale reportRationale) {
+		this.reportRationale = reportRationale;
+	}
+
+	public String toReportSummaryString() {
+		return "InsuranceReport{" +
+			", majorDisease=" + majorDisease +
+			", cancer=" + cancer +
+			", cerebrovascular=" + cerebrovascular +
+			", heartDisease=" + heartDisease +
+
+			", diseaseSurgery=" + diseaseSurgery +
+			", diseaseTypeSurgery=" + diseaseTypeSurgery +
+			", injurySurgery=" + injurySurgery +
+			", injuryTypeSurgery=" + injuryTypeSurgery +
+
+			", diseaseDailyHospitalization=" + diseaseDailyHospitalization +
+			", injuryDailyHospitalization=" + injuryDailyHospitalization +
+
+			", diseaseDisability=" + diseaseDisability +
+			", injuryDisability=" + injuryDisability +
+
+			", diseaseDeath=" + diseaseDeath +
+			", injuryDeath=" + injuryDeath +
+			'}';
+	}
 }
