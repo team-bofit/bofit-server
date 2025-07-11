@@ -33,16 +33,14 @@ public class InsuranceController {
 	@Tag(name = "Insurance", description = "보험 관련 API")
 	@CustomExceptionDescription(INSURANCE_REPORT)
 	@Operation(summary = "보험 상품 추천", description = "보험 상품을 추천 받습니다.")
-	@PostMapping("/report")
+	@PostMapping("/reports")
 	public BaseResponse<InsuranceReportDetailResponse> report(
 		@Parameter(hidden = true) @LoginUserId Long userId,
 		@Valid @RequestBody InsuranceReportRequest request){
-
 		User user = userService.userUpdate(userId, request.toUserUpdate());
 
 		InsuranceReportDetailResponse response = insuranceReportService.recommend(user, request.toUserInfo(user));
-
-		return BaseResponse.ok(response, "보험 추천 리포트 성공");
+		return BaseResponse.ok(response, "보험 추천 리포트 발급 성공");
 	}
 
 }
