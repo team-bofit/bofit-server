@@ -7,6 +7,7 @@ import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurance.service.InsuranceProductReader;
 import org.sopt.bofit.domain.insurance.service.InsuranceStatisticReader;
 import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportDetailResponse;
+import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
 import org.sopt.bofit.domain.user.util.UserUtil;
@@ -33,6 +34,12 @@ public class InsuranceReportService {
 
 		InsuranceStatistic totalAverage = insuranceStatisticReader.getTotalAverage();
 
-		return insuranceReportWriter.recommendBestInsurance(totalAverage, products, user, userInfo, age);
+		InsuranceProduct recommendedProduct = insuranceReportWriter.recommendBestInsurance(
+			products, user, userInfo, age);
+
+		InsuranceReport insuranceReport = insuranceReportWriter.writeReport(
+			totalAverage, recommendedProduct, user, userInfo, age);
+
+		return InsuranceReportDetailResponse.of(insuranceReport, recommendedProduct, totalAverage);
 	}
 }

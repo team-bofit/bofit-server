@@ -13,11 +13,13 @@ import org.sopt.bofit.domain.insurancereport.dto.response.disability.DisabilityT
 import org.sopt.bofit.domain.insurancereport.dto.response.majordisease.MajorDiseaseTotalSection;
 import org.sopt.bofit.domain.insurancereport.dto.response.surgery.SurgeryTotalSection;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
+import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
 
 public record InsuranceReportDetailResponse (
  	UUID reportId,
 	Long productId,
 	BasicInformation basicInformation,
+	ReportRationale rationale,
 	MajorDiseaseTotalSection majorDiseaseTotalSection,
 	SurgeryTotalSection surgeryTotalSection,
 	DailyHospitalizationTotalSection dailyHospitalizationTotalSection,
@@ -25,11 +27,16 @@ public record InsuranceReportDetailResponse (
 	DeathTotalSection deathTotalSection
 ) {
 
-	public static InsuranceReportDetailResponse of(InsuranceReport report, InsuranceProduct product, InsuranceStatistic average){
+	public static InsuranceReportDetailResponse of(
+		InsuranceReport report,
+		InsuranceProduct product,
+		InsuranceStatistic average
+	){
 		return new InsuranceReportDetailResponse(
 			report.getId(),
 			product.getId(),
 			product.getBasicInformation(),
+			report.getReportRationale(),
 			MajorDiseaseTotalSection.of(report, product, average),
 			SurgeryTotalSection.of(report, product, average),
 			DailyHospitalizationTotalSection.of(report, product, average),
