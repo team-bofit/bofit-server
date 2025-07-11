@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum InsuranceStatus {
 
+	RECOMMENDED("추천 상품"),
 	SELLING("판매중"),
 	EXPIRED("만료됨")
 	;

@@ -1,13 +1,13 @@
 package org.sopt.bofit.global.exception.custom_exception;
 
-import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
+import org.sopt.bofit.global.exception.constant.ErrorCode;
 
 public class InternalException extends CustomException {
-    public InternalException(GlobalErrorCode errorCode) {
+    public InternalException(ErrorCode errorCode) {
         super(errorCode);
     }
 
-    public InternalException(GlobalErrorCode errorCode, String messageDetail) {
+    public InternalException(ErrorCode errorCode, String messageDetail) {
         super(errorCode, messageDetail);
     }
 }

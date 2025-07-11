@@ -8,6 +8,7 @@ import org.sopt.bofit.domain.insurancereport.entity.constant.CoverageStatus;
 import org.sopt.bofit.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -20,12 +21,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "insurance_report")
+@Getter
 public class InsuranceReport extends BaseEntity {
 
 	@Id
@@ -41,6 +45,8 @@ public class InsuranceReport extends BaseEntity {
 	@JoinColumn(name = "insurance_statistic_id")
 	private InsuranceStatistic statistic;
 
+	@Embedded
+	private ReportRationale reportRationale;
 	/**
 	 * 큰 병
 	 */
@@ -72,16 +78,16 @@ public class InsuranceReport extends BaseEntity {
 	private CoverageStatus diseaseSurgery;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "disesase_surgery_type", nullable = false)
-	private CoverageStatus diseaseSurgeryType;
+	@Column(name = "disesase_type_surgery", nullable = false)
+	private CoverageStatus diseaseTypeSurgery;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "injury_surgery", nullable = false)
 	private CoverageStatus injurySurgery;
 
 	@Enumerated(EnumType.STRING)
-	@Column(name = "injury_surgery_typ", nullable = false)
-	private CoverageStatus injurySurgeryType;
+	@Column(name = "injury_type_surgery", nullable = false)
+	private CoverageStatus injuryTypeSurgery;
 
 	/**
 	 * 입원비
@@ -128,4 +134,82 @@ public class InsuranceReport extends BaseEntity {
 	@Column(name = "injury_death", nullable = false)
 	private CoverageStatus injuryDeath;
 
+	@Builder
+	private InsuranceReport(
+		InsuranceProduct product,
+		InsuranceStatistic statistic,
+		CoverageStatus majorDisease,
+		CoverageStatus cancer,
+		CoverageStatus cerebrovascular,
+		CoverageStatus heartDisease,
+		CoverageStatus surgery,
+		CoverageStatus diseaseSurgery,
+		CoverageStatus diseaseTypeSurgery,
+		CoverageStatus injurySurgery,
+		CoverageStatus injuryTypeSurgery,
+		CoverageStatus dailyHospitalization,
+		CoverageStatus diseaseDailyHospitalization,
+		CoverageStatus injuryDailyHospitalization,
+		CoverageStatus disability,
+		CoverageStatus diseaseDisability,
+		CoverageStatus injuryDisability,
+		CoverageStatus death,
+		CoverageStatus diseaseDeath,
+		CoverageStatus injuryDeath
+	) {
+		this.product = product;
+		this.statistic = statistic;
+
+		this.majorDisease = majorDisease;
+		this.cancer = cancer;
+		this.cerebrovascular = cerebrovascular;
+		this.heartDisease = heartDisease;
+
+		this.surgery = surgery;
+
+		this.diseaseSurgery = diseaseSurgery;
+		this.diseaseTypeSurgery = diseaseTypeSurgery;
+
+		this.injurySurgery = injurySurgery;
+		this.injuryTypeSurgery = injuryTypeSurgery;
+
+		this.dailyHospitalization = dailyHospitalization;
+		this.diseaseDailyHospitalization = diseaseDailyHospitalization;
+		this.injuryDailyHospitalization = injuryDailyHospitalization;
+
+		this.disability = disability;
+		this.diseaseDisability = diseaseDisability;
+		this.injuryDisability = injuryDisability;
+
+		this.death = death;
+		this.diseaseDeath = diseaseDeath;
+		this.injuryDeath = injuryDeath;
+	}
+
+	public void updateRationale(ReportRationale reportRationale) {
+		this.reportRationale = reportRationale;
+	}
+
+	public String toReportSummaryString() {
+		return "InsuranceReport{" +
+			", majorDisease=" + majorDisease +
+			", cancer=" + cancer +
+			", cerebrovascular=" + cerebrovascular +
+			", heartDisease=" + heartDisease +
+
+			", diseaseSurgery=" + diseaseSurgery +
+			", diseaseTypeSurgery=" + diseaseTypeSurgery +
+			", injurySurgery=" + injurySurgery +
+			", injuryTypeSurgery=" + injuryTypeSurgery +
+
+			", diseaseDailyHospitalization=" + diseaseDailyHospitalization +
+			", injuryDailyHospitalization=" + injuryDailyHospitalization +
+
+			", diseaseDisability=" + diseaseDisability +
+			", injuryDisability=" + injuryDisability +
+
+			", diseaseDeath=" + diseaseDeath +
+			", injuryDeath=" + injuryDeath +
+			'}';
+	}
 }

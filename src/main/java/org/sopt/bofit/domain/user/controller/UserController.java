@@ -4,12 +4,16 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+
+import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;
+import org.sopt.bofit.domain.user.dto.response.JobResponses;
 import org.sopt.bofit.domain.user.dto.response.CommentSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
-import org.sopt.bofit.domain.user.service.UserReadService;
-import org.sopt.bofit.domain.user.service.UserWriteService;
+import org.sopt.bofit.domain.user.service.UserService;
+import org.sopt.bofit.domain.user.service.UserWriter;
+import org.sopt.bofit.domain.user.service.UserService;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.annotation.LoginUserId;
 import org.sopt.bofit.global.response.BaseResponse;
@@ -25,9 +29,8 @@ import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserReadService userReadService;
+    private final UserService userService;
 
-    private final UserWriteService userWriteService;
 
     @Tag(name = "My Page", description = "마이페이지 관련 API")
     @CustomExceptionDescription(USER_INFO)
@@ -36,7 +39,14 @@ public class UserController {
     public BaseResponse<UserProfileResponse> getInfo(
             @Parameter(hidden = true) @LoginUserId Long userId
          ) {
-        return BaseResponse.ok(userReadService.getUserInfo(userId), "유저 프로필 조회 성공");
+        return BaseResponse.ok(userService.getUserInfo(userId), "유저 프로필 조회 성공");
+    }
+
+    @Tag(name = "Users", description = "유저 관련 API")
+    @Operation(summary = "직업 목록 조회", description = "선택 가능한 직업 목록을 조회합니다.")
+    @GetMapping("/jobs")
+    public BaseResponse<JobResponses> getJobs() {
+        return BaseResponse.ok(userService.getJobs(), "선택 가능한 직업 목록 조회 성공");
     }
 
     @Tag(name = "My Page", description = "마이페이지 관련 API")
@@ -48,7 +58,7 @@ public class UserController {
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue = "10") int size
     ){
-        return BaseResponse.ok(userReadService.getMyPosts(userId, cursorId, size), "내가 쓴 글 조회 성공");
+        return BaseResponse.ok(userService.getMyPosts(userId, cursorId, size), "내가 쓴 글 조회 성공");
     }
 
     @Tag(name = "My Page", description = "마이페이지 관련 API")
@@ -60,7 +70,15 @@ public class UserController {
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue = "10") int size
     ){
-        return BaseResponse.ok(userReadService.getMyComments(userId, cursorId, size), "내가 쓴 댓글 조회 성공");
+        return BaseResponse.ok(userService.getMyComments(userId, cursorId, size), "내가 쓴 댓글 조회 성공");
     }
+
+    @Tag(name = "UserInfo", description = "유저 정보 관련 API")
+    @Operation(summary = "진단 받은 질병 목록 조회", description = "선택 가능한 진단 받았던 질병 목록을 조회합니다.")
+    @GetMapping("/diagnosed-disease")
+    public BaseResponse<DiagnosedDiseaseResponses> getDiagnosedDisease() {
+        return BaseResponse.ok(userService.getDiagnosedDiseaseNames(), "진단 받은 질병 목록 조회 성공");
+    }
+
 
 }

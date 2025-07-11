@@ -8,7 +8,10 @@ import lombok.Getter;
 @Embeddable
 public class BasicInformation {
 
-	@Column(name = "company", length = 30)
+	@Column(name = "product_name", length = 50, nullable = false)
+	private String name;
+
+	@Column(name = "company", length = 30, nullable = false)
 	private String company;
 
 	@Column(name = "product_type", length = 50)

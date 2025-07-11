@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.bofit.global.exception.custom_exception.CustomException;
 import org.sopt.bofit.global.response.BaseErrorResponse;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,11 +15,14 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.server.MethodNotAllowedException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
+
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 @Slf4j
@@ -31,13 +35,23 @@ public class GlobalExceptionHandler {
         return BaseErrorResponse.of(INTERNAL_SERVER_ERROR);
     }
 
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public BaseErrorResponse  HandlerMethodValidationException(HandlerMethodValidationException e){
+        log.error(e.getMessage());
+        String message = e.getAllErrors().stream()
+            .map(MessageSourceResolvable::getDefaultMessage)
+            .collect(Collectors.joining());
+
+        return BaseErrorResponse.of(INVALID_REQUEST, message);
+    }
+
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public BaseErrorResponse handleNoHandlerFoundException(NoHandlerFoundException e) {
         log.warn("No handler found for URI: {}", e.getRequestURL());
         return BaseErrorResponse.of(NOT_FOUND_PATH);
     }
-
 
     @ExceptionHandler(MethodNotAllowedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)

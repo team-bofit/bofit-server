@@ -30,6 +30,12 @@ jwt:
   secret: ${JWT_SECRET}
   accessTokenExpiration: ${ACCESS_EXPIRED_AT}
   refreshTokenExpiration: ${REFRESH_EXPIRED_AT}
+openai:
+  secret-key: ${OPEN_AI_KEY}
+  model: ${OPEN_AI_MODEL}
+  max-tokens: ${OPEN_AI_MAX_TOKEN}
+  temperature: ${OPEN_AI_TEMPERATURE}
+  base-url: https://api.openai.com/v1
 server:
   forward-headers-strategy: FRAMEWORK
 

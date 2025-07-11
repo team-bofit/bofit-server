@@ -8,7 +8,7 @@ import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.entity.constant.UserStatus;
 import org.sopt.bofit.global.entity.BaseEntity;
 
-import java.time.MonthDay;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -38,11 +38,8 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(name = "birth_day")
-    private int birthDay;
-
-    @Column(name = "birth_year")
-    private int birthYear;
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     private Job job;
@@ -64,5 +61,35 @@ public class User extends BaseEntity {
     @Builder.Default
     private UserStatus status = UserStatus.ACTIVE;
 
+    public void updateName(String name) {
+        this.name = name;
+    }
 
+    public void updateGender(Gender gender) {
+        this.gender = gender;
+    }
+
+    public void updateBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public void updateJob(Job job) {
+        this.job = job;
+    }
+
+    public void updateMarried(boolean married) {
+        isMarried = married;
+    }
+
+    public void updateDriver(boolean driver) {
+        isDriver = driver;
+    }
+
+    public void updateHasChild(boolean hasChild) {
+        this.hasChild = hasChild;
+    }
+
+    public void recommendedInsurance(){
+        this.isRecommendInsurance = true;
+    }
 }
