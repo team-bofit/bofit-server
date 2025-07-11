@@ -1,13 +1,14 @@
 package org.sopt.bofit.global.config.swagger;
 
 import lombok.Getter;
-import org.sopt.bofit.global.exception.constant.*;
+
 import org.sopt.bofit.global.exception.constant.ErrorCode;
 import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import static org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErrorCode.*;
 import static org.sopt.bofit.global.exception.constant.InsuranceErrorCode.*;
 import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
 import static org.sopt.bofit.global.exception.constant.PostErrorCode.*;
@@ -54,9 +55,12 @@ public enum SwaggerResponseDescription {
             POST_NOT_FOUND,
             POST_UNAUTHORIZED
     ))),
-    INSURANCE_REPORT(new LinkedHashSet<>(Set.of(
+    ISSUE_INSURANCE_REPORT(new LinkedHashSet<>(Set.of(
         NOT_FOUND_INSURANCE_TOTAL_AVERAGE,
         NOT_FOUND_RECOMMENDED_STATUS_INSURANCE
+    ))),
+    GET_INSURANCE_REPORT(new LinkedHashSet<>(Set.of(
+        NOT_FOUND_INSURANCE_REPORT
     )))
     ;
     private final Set<ErrorCode> errorCodeList;
