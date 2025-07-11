@@ -1,7 +1,7 @@
 package org.sopt.bofit.domain.post.service;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.bofit.domain.post.dto.response.PostResponse;
+import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
 import org.sopt.bofit.domain.post.repository.PostRepository;
@@ -24,17 +24,17 @@ public class PostService {
 
     private final PostCustomRepositoryImpl postCustomRepositoryImpl;
 
-    public PostResponse createPost(Long userId, String title, String content) {
+    public PostCreateResponse createPost(Long userId, String title, String content) {
         User user = userReader.findById(userId);
         Post newPost = Post.create(title, content);
         newPost.setUser(user);
 
         postRepository.save(newPost);
-        return PostResponse.from(newPost.getId());
+        return PostCreateResponse.from(newPost.getId());
     }
 
     @Transactional
-    public PostResponse updatePost (Long userId, Long postId, String title, String content) {
+    public PostCreateResponse updatePost (Long userId, Long postId, String title, String content) {
         User user = userReader.findById(userId);
         Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
 
@@ -43,7 +43,7 @@ public class PostService {
         }
 
         post.updatePost(title, content);
-        return PostResponse.from(post.getId());
+        return PostCreateResponse.from(post.getId());
     }
 
     @Transactional

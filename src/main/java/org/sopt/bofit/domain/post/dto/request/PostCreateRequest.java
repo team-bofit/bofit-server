@@ -2,11 +2,10 @@ package org.sopt.bofit.domain.post.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.Length;
 import org.sopt.bofit.domain.post.entity.constant.PostInfoConstant;
 
-public record PostRequest(
+public record PostCreateRequest(
         @Schema(description = "글 제목", example = "아니")
         @NotBlank(message = "제목은 비어있을 수 없습니다.")
         @Length(max = PostInfoConstant.MAX_TITLE_LENGTH)
