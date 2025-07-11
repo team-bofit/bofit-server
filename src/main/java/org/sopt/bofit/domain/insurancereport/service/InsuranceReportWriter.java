@@ -28,6 +28,7 @@ import org.sopt.bofit.global.external.openai.dto.request.ChatRequestMessage;
 import org.sopt.bofit.global.external.openai.template.OpenAiPromptManager;
 import org.sopt.bofit.global.oauth.util.JsonUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -61,6 +62,7 @@ public class InsuranceReportWriter {
 		return scoringRuledProduct.orElseGet(insuranceProductReader::getRecommendedStatusProducts);
 	}
 
+	@Transactional
 	public InsuranceReport writeReport(
 		InsuranceStatistic average,
 		InsuranceProduct product,
@@ -126,6 +128,7 @@ public class InsuranceReportWriter {
 			.build();
 
 		report.updateRationale(generateRationale(user, userInfo, report, age));
+		user.recommendedInsurance();
 		return insuranceReportRepository.save(report);
 	}
 
@@ -140,7 +143,6 @@ public class InsuranceReportWriter {
 				new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportSystemMessage()),
 				new ChatRequestMessage(USER.getValue(), openAiPromptManager.generateReportRationale(user, userInfo, report, age))
 			));
-
 		return JsonUtil.parseClass(ReportRationale.class, content);
 	}
 

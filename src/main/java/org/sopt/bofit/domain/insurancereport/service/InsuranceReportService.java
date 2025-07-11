@@ -39,6 +39,7 @@ public class InsuranceReportService {
 
 		InsuranceReport insuranceReport = insuranceReportWriter.writeReport(
 			totalAverage, recommendedProduct, user, userInfo, age);
+		user.recommendedInsurance();
 
 		return InsuranceReportDetailResponse.of(insuranceReport, recommendedProduct, totalAverage);
 	}
