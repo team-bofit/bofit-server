@@ -1,7 +1,9 @@
 package org.sopt.bofit.domain.insurancereport.constant;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public enum AdditionalInfo {
 
