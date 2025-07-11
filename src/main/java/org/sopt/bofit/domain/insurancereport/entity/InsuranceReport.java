@@ -8,6 +8,7 @@ import org.sopt.bofit.domain.insurancereport.entity.constant.CoverageStatus;
 import org.sopt.bofit.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -44,6 +45,8 @@ public class InsuranceReport extends BaseEntity {
 	@JoinColumn(name = "insurance_statistic_id")
 	private InsuranceStatistic statistic;
 
+	@Embedded
+	private ReportRationale reportRationale;
 	/**
 	 * 큰 병
 	 */
