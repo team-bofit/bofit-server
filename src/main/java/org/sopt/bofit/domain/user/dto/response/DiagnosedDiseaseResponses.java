@@ -9,10 +9,10 @@ import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
 public record DiagnosedDiseaseResponses(
 	List<DiagnosedDiseaseResponse> diagnosedDiseases
 ){
-	public static DiagnosedDiseaseResponses create(DiagnosedDisease[] diagnosedDiseases){
+	public static DiagnosedDiseaseResponses from(DiagnosedDisease[] diagnosedDiseases){
 		return new DiagnosedDiseaseResponses(
 			Stream.of(diagnosedDiseases)
-				.map(DiagnosedDiseaseResponse::create)
+				.map(DiagnosedDiseaseResponse::from)
 				.toList()
 		);
 	}
@@ -22,7 +22,7 @@ public record DiagnosedDiseaseResponses(
 		String displayName,
 		String description
 	 ){
-		private static DiagnosedDiseaseResponse create(DiagnosedDisease diagnosedDisease){
+		private static DiagnosedDiseaseResponse from(DiagnosedDisease diagnosedDisease){
 			return new DiagnosedDiseaseResponse(
 				diagnosedDisease,
 				diagnosedDisease.getDiseaseName(),

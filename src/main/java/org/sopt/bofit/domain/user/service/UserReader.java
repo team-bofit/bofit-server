@@ -66,6 +66,6 @@ public class UserReader {
     }
 
     public DiagnosedDiseaseResponses getDiagnosedDiseaseNames(){
-        return DiagnosedDiseaseResponses.create(DiagnosedDisease.values());
+        return DiagnosedDiseaseResponses.from(DiagnosedDisease.values());
     }
 }
