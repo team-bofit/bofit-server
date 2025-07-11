@@ -15,19 +15,19 @@ public record SurgeryTotalSection(
 ) {
 	public static SurgeryTotalSection of(InsuranceReport report, InsuranceProduct product, InsuranceStatistic average){
 		Surgery productSurgery = product.getSurgery();
-		Surgery averagesurgery = average.getSurgery();
+		Surgery averageSurgery = average.getSurgery();
 
 		return new SurgeryTotalSection(
 			report.getSurgery().getDescription(),
 			SurgerySection.of(report.getDiseaseSurgery(),
-				productSurgery.getDiseaseSurgery(), averagesurgery.getInjurySurgery()),
+				productSurgery.getDiseaseSurgery(), averageSurgery.getInjurySurgery()),
 			SurgeryTypeSection.of(report.getDiseaseSurgery(),
-				productSurgery.getDiseaseSurgery(), averagesurgery.getDiseaseSurgery()),
+				productSurgery.getDiseaseSurgery(), averageSurgery.getDiseaseSurgery()),
 
 			SurgerySection.of(report.getInjurySurgery(),
-				productSurgery.getInjurySurgery(), productSurgery.getInjurySurgery()),
+				productSurgery.getInjurySurgery(), averageSurgery.getInjurySurgery()),
 			SurgeryTypeSection.of(report.getInjuryTypeSurgery(),
-				productSurgery.getInjurySurgery(), averagesurgery.getInjurySurgery())
+				productSurgery.getInjurySurgery(), averageSurgery.getInjurySurgery())
 		);
 	}
 
