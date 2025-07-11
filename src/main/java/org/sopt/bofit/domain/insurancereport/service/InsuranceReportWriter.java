@@ -140,7 +140,7 @@ public class InsuranceReportWriter {
 				new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportSystemMessage()),
 				new ChatRequestMessage(USER.getValue(), openAiPromptManager.generateReportRationale(user, userInfo, report, age))
 			));
-		System.out.println(content);
+
 		return JsonUtil.parseClass(ReportRationale.class, content);
 	}
 
