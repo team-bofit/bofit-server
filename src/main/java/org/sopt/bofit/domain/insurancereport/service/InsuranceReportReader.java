@@ -23,7 +23,7 @@ public class InsuranceReportReader {
 	}
 
 	public InsuranceReport findByIdWithRelatedEntity(UUID insuranceReportId){
-		return insuranceReportRepository.findById(insuranceReportId).orElseThrow(() ->
+		return insuranceReportRepository.findByIdWithProductAndStatistic(insuranceReportId).orElseThrow(() ->
 			new NotFoundException(InsuranceReportErrorCode.NOT_FOUND_INSURANCE_REPORT));
 	}
 }

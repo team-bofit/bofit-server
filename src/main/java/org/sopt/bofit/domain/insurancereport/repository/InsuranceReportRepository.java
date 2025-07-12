@@ -14,10 +14,9 @@ public interface InsuranceReportRepository extends JpaRepository<InsuranceReport
 
 	@Query("select ir "
 		+ "from InsuranceReport ir "
-		+ "left join fetch InsuranceProduct "
-		+ "left join fetch InsuranceStatistic "
+		+ "left join fetch ir.product ip "
+		+ "left join fetch ir.statistic is "
 		+ "where ir.id = :id")
 	Optional<InsuranceReport> findByIdWithProductAndStatistic(@Param("id") UUID id);
-
 
 }
