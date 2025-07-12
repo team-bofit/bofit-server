@@ -1,0 +1,67 @@
+package org.sopt.bofit.domain.post.service;
+
+import lombok.RequiredArgsConstructor;
+import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
+import org.sopt.bofit.domain.post.entity.Post;
+import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
+import org.sopt.bofit.domain.post.repository.PostRepository;
+import org.sopt.bofit.domain.user.entity.User;
+import org.sopt.bofit.domain.user.service.UserReader;
+import org.sopt.bofit.global.exception.custom_exception.ForbiddenException;
+import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_NOT_FOUND;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
+
+@Service
+@RequiredArgsConstructor
+public class PostWriter {
+
+    private final UserReader userReader;
+
+    private final PostRepository postRepository;
+
+    private final PostCustomRepositoryImpl postCustomRepositoryImpl;
+
+    public PostCreateResponse createPost(Long userId, String title, String content) {
+        User user = userReader.findById(userId);
+        Post newPost = Post.create(title, content);
+        newPost.setUser(user);
+
+        postRepository.save(newPost);
+        return PostCreateResponse.from(newPost.getId());
+    }
+
+    @Transactional
+    public PostCreateResponse updatePost (Long userId, Long postId, String title, String content) {
+        User user = userReader.findById(userId);
+        Post post = findById(postId);
+
+        checkUserIsOwner(userId, post);
+
+        post.updatePost(title, content);
+        return PostCreateResponse.from(post.getId());
+    }
+
+    private void checkUserIsOwner(Long userId, Post post) {
+        if(!post.getUser().getId().equals(userId)) {
+            throw new ForbiddenException(POST_UNAUTHORIZED);
+        }
+    }
+
+    private Post findById(Long postId) {
+        return postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
+    }
+
+    @Transactional
+    public void deletePost(Long userId, Long postId) {
+        User user = userReader.findById(userId);
+        Post post = findById(postId);
+
+        checkUserIsOwner(userId, post);
+
+        postCustomRepositoryImpl.deletePostByPostId(postId);
+    }
+}

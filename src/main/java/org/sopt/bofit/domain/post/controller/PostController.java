@@ -5,12 +5,13 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.sopt.bofit.domain.post.dto.request.PostRequest;
-import org.sopt.bofit.domain.post.dto.response.PostResponse;
+import org.sopt.bofit.domain.post.dto.request.PostCreateRequest;
+import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
+import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.service.PostService;
+import org.sopt.bofit.domain.user.dto.response.SliceResponse;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.annotation.LoginUserId;
-import org.sopt.bofit.global.config.swagger.SwaggerResponseDescription;
 import org.sopt.bofit.global.response.BaseResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +28,8 @@ public class PostController {
     @Operation(summary = "게시물 작성", description = "커뮤니티에 글을 작성합니다.")
     @CustomExceptionDescription(CREATE_POST)
     @PostMapping("post")
-    public BaseResponse<PostResponse> createPost(
-            @RequestBody @Valid PostRequest request,
+    public BaseResponse<PostCreateResponse> createPost(
+            @RequestBody @Valid PostCreateRequest request,
             @Parameter(hidden = true) @LoginUserId Long userId
     ){
         return BaseResponse.ok(postService.createPost(userId, request.title(), request.content()),"게시물 생성 완료");
@@ -38,8 +39,8 @@ public class PostController {
     @Operation(summary = "게시물 수정", description = "커뮤니티에서 글을 수정합니다.")
     @CustomExceptionDescription(UPDATE_POST)
     @PutMapping("{postId}")
-    public BaseResponse<PostResponse> updatePost(
-            @RequestBody @Valid PostRequest request,
+    public BaseResponse<PostCreateResponse> updatePost(
+            @RequestBody @Valid PostCreateRequest request,
             @Parameter(hidden = true) @LoginUserId Long userId,
             @PathVariable Long postId
     ){
@@ -57,4 +58,15 @@ public class PostController {
         postService.deletePost(userId,postId);
         return BaseResponse.ok("게시물 삭제 완료");
     }
+
+    @Tag(name = "Community", description = "커뮤니티 관련 API")
+    @Operation(summary = "게시물 전체 조회", description = "커뮤니티에서 모든 글을 조회합니다.")
+    @GetMapping("")
+    public BaseResponse<SliceResponse<PostSummaryResponse>> getAllPosts(
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam int size){
+        return BaseResponse.ok(postService.getAllPosts(cursorId, size), "게시물 전체 조회 성공");
+    }
+
+
 }
