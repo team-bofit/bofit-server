@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum InsuranceReportErrorCode implements ErrorCode {
 
+	INVALID_REPORT_SECTION(HttpStatus.BAD_REQUEST.value(), "존재하지 않는 리포트 섹션입니다."),
 	NOT_FOUND_INSURANCE_REPORT(HttpStatus.NOT_FOUND.value(), "보험 추천 리포트를 찾을 수 없습니다.")
 	;
 
