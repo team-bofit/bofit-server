@@ -27,18 +27,18 @@ public record SurgerySection(
 		InsuranceStatistic statistic = report.getStatistic();
 
 		if (DISEASE_SURGERY.getHyphenCase().equalsIgnoreCase(hyphenCase))
-			return createDiseaseSurgery(product, statistic);
+			return createDiseaseSection(product, statistic);
 		if (INJURY_SURGERY.getHyphenCase().equalsIgnoreCase(hyphenCase))
-			return createInjurySurgery(product, statistic);
+			return createInjurySection(product, statistic);
 		if (DISEASE_TYPE_SURGERY.getHyphenCase().equalsIgnoreCase(hyphenCase))
-			return createDiseaseTypeSurgery(product, statistic);
+			return createDiseaseTypeSection(product, statistic);
 		if (INJURY_TYPE_SURGERY.getHyphenCase().equalsIgnoreCase(hyphenCase))
-			return createInjuryTypeSurgery(product, statistic);
+			return createInjuryTypeSection(product, statistic);
 
 		throw new BadRequestException(INVALID_REPORT_SECTION);
 	}
 
-	public static SurgerySection createDiseaseSurgery(
+	public static SurgerySection createDiseaseSection(
 		InsuranceProduct product,
 		InsuranceStatistic average
 	){
@@ -51,7 +51,7 @@ public record SurgerySection(
 			);
 	}
 
-	public static SurgerySection createInjurySurgery(
+	public static SurgerySection createInjurySection(
 		InsuranceProduct product,
 		InsuranceStatistic average
 	){
@@ -64,7 +64,7 @@ public record SurgerySection(
 		);
 	}
 
-	public static SurgerySection createDiseaseTypeSurgery(
+	public static SurgerySection createDiseaseTypeSection(
 		InsuranceProduct product,
 		InsuranceStatistic average
 	){
@@ -77,7 +77,7 @@ public record SurgerySection(
 		);
 	}
 
-	public static SurgerySection createInjuryTypeSurgery(
+	public static SurgerySection createInjuryTypeSection(
 		InsuranceProduct product,
 		InsuranceStatistic average
 	){

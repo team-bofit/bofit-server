@@ -6,7 +6,6 @@ import static org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErr
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurancereport.dto.response.CompareCoverage;
-import org.sopt.bofit.domain.insurancereport.entity.Disease;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.entity.constant.CoverageStatus;
 import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
@@ -20,14 +19,14 @@ public record DisabilitySection (
 		InsuranceStatistic statistic = report.getStatistic();
 
 		if (DISEASE_DISABILITY.getHyphenCase().equalsIgnoreCase(hyphenCase))
-			return createDisease(product, statistic);
+			return createDiseaseSection(product, statistic);
 		if (INJURY_DISABILITY.getHyphenCase().equalsIgnoreCase(hyphenCase))
-			return createInjury(product, statistic);
+			return createInjurySection(product, statistic);
 
 		throw new BadRequestException(INVALID_REPORT_SECTION);
 	}
 
-	private static DisabilitySection createDisease (
+	private static DisabilitySection createDiseaseSection(
 		InsuranceProduct product, InsuranceStatistic statistic){
 
 		int productDiseaseGE3PCT = product.getDisability().getDiseaseGE3PCT();
@@ -38,7 +37,7 @@ public record DisabilitySection (
 			CompareCoverage.of(productDiseaseGE3PCT, statisticDiseaseGE3PCT));
 	}
 
-	private static DisabilitySection createInjury (
+	private static DisabilitySection createInjurySection(
 		InsuranceProduct product, InsuranceStatistic statistic){
 
 		int productInjuryGE3PCT = product.getDisability().getInjuryGE3PCT();

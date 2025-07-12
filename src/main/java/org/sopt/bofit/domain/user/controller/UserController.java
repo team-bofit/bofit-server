@@ -29,7 +29,6 @@ public class UserController {
 
     private final UserService userService;
 
-
     @Tag(name = "My Page", description = "마이페이지 관련 API")
     @CustomExceptionDescription(USER_INFO)
     @Operation(summary = "유저 정보 조회", description = "마이 페이지에서 유저의 정보를 조회합니다.")

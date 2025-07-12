@@ -6,10 +6,8 @@ import static org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErr
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurancereport.dto.response.CompareCoverage;
-import org.sopt.bofit.domain.insurancereport.dto.response.majordisease.MajorDiseaseSection;
 import org.sopt.bofit.domain.insurancereport.entity.Disease;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
-import org.sopt.bofit.domain.insurancereport.entity.constant.CoverageStatus;
 import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
 
 public record DailyHospitalizationSection (
@@ -22,14 +20,14 @@ public record DailyHospitalizationSection (
 		InsuranceStatistic statistic = report.getStatistic();
 
 		if(DISEASE_DAILY_HOSPITALIZATION.getHyphenCase().equalsIgnoreCase(hyphenCase))
-			return createDisease(product, statistic);
+			return createDiseaseSection(product, statistic);
 		if (INJURY_DAILY_HOSPITALIZATION.getHyphenCase().equalsIgnoreCase(hyphenCase))
-			return createInjury(product, statistic);
+			return createInjurySection(product, statistic);
 
 		throw new BadRequestException(INVALID_REPORT_SECTION);
 	}
 
-	private static DailyHospitalizationSection createDisease(
+	private static DailyHospitalizationSection createDiseaseSection(
 		InsuranceProduct product,
 		InsuranceStatistic average
 	){
@@ -39,7 +37,7 @@ public record DailyHospitalizationSection (
 				average.getDailyHospitalization().getDisease()));
 	}
 
-	private static DailyHospitalizationSection createInjury(
+	private static DailyHospitalizationSection createInjurySection(
 		InsuranceProduct product,
 		InsuranceStatistic average
 	){
