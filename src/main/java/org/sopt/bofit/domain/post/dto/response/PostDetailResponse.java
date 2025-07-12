@@ -1,10 +1,12 @@
 package org.sopt.bofit.domain.post.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Builder
 public record PostDetailResponse(
         @Schema(description = "작성자 ID")
         Long writerId,
@@ -26,7 +28,8 @@ public record PostDetailResponse(
 
         List<CommentDetail> comments
 ) {
-        private record CommentDetail(
+        @Builder
+        public static record CommentDetail(
                 @Schema(description = "댓글 ID")
                 Long commentId,
 
