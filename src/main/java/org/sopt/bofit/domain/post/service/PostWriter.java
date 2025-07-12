@@ -39,12 +39,16 @@ public class PostWriter {
         User user = userReader.findById(userId);
         Post post = findById(postId);
 
-        if(!post.getUser().getId().equals(userId)) {
-            throw new ForbiddenException(POST_UNAUTHORIZED);
-        }
+        checkUserIsOwner(userId, post);
 
         post.updatePost(title, content);
         return PostCreateResponse.from(post.getId());
+    }
+
+    private void checkUserIsOwner(Long userId, Post post) {
+        if(!post.getUser().getId().equals(userId)) {
+            throw new ForbiddenException(POST_UNAUTHORIZED);
+        }
     }
 
     private Post findById(Long postId) {
@@ -56,9 +60,7 @@ public class PostWriter {
         User user = userReader.findById(userId);
         Post post = findById(postId);
 
-        if(!post.getUser().getId().equals(userId)) {
-            throw new ForbiddenException(POST_UNAUTHORIZED);
-        }
+        checkUserIsOwner(userId, post);
 
         postCustomRepositoryImpl.deletePostByPostId(postId);
     }
