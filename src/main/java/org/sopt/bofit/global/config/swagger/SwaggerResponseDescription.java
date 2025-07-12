@@ -60,7 +60,8 @@ public enum SwaggerResponseDescription {
         NOT_FOUND_RECOMMENDED_STATUS_INSURANCE
     ))),
     GET_INSURANCE_REPORT(new LinkedHashSet<>(Set.of(
-        NOT_FOUND_INSURANCE_REPORT
+        NOT_FOUND_INSURANCE_REPORT,
+        INVALID_REPORT_SECTION
     ))),
     POST_DETAIL(new LinkedHashSet<>(Set.of(
             POST_NOT_FOUND

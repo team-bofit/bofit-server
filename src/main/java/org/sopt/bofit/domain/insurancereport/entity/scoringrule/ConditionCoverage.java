@@ -34,8 +34,8 @@ public enum ConditionCoverage {
 	GENERAL_CANCER_SURGERY("일반암 수술", product -> product.getMajorDisease().getCancer().getGeneralSurgery()),
 
 
-	CEREBRAL_HEMORRHAGE_DIAGNOSIS("뇌혈관 질환 진단", product -> product.getMajorDisease().getCerebrovascular().getHemorrhageDiagnosis()),
-	CEREBRAL_HEMORRHAGE_SURGERY("뇌혈관 질환 수술", product -> product.getMajorDisease().getCerebrovascular().getHemorrhageSurgery()),
+	CEREBRAL_HEMORRHAGE_DIAGNOSIS("뇌출혈 진단", product -> product.getMajorDisease().getCerebrovascular().getHemorrhageDiagnosis()),
+	CEREBRAL_HEMORRHAGE_SURGERY("뇌출혈 수술", product -> product.getMajorDisease().getCerebrovascular().getHemorrhageSurgery()),
 
 	CEREBRAL_INFARCTION_DIAGNOSIS("뇌경색 진단", product -> product.getMajorDisease().getCerebrovascular().getInfarctionDiagnosis()),
 	CEREBRAL_INFARCTION_SURGERY("뇌경색 수술", product -> product.getMajorDisease().getCerebrovascular().getInfarctionSurgery()),
