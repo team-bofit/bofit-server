@@ -48,6 +48,7 @@ public class PostReader {
                     User commenter = comment.getUser();
                     return CommentDetail.builder()
                             .commentId(comment.getId())
+                            .writerId(commenter.getId())
                             .nickname(commenter.getNickname())
                             .profileImageUrl(commenter.getProfileImage())
                             .content(comment.getContent())
