@@ -37,7 +37,7 @@ public class PostWriter {
     @Transactional
     public PostCreateResponse updatePost (Long userId, Long postId, String title, String content) {
         User user = userReader.findById(userId);
-        Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
+        Post post = findById(postId);
 
         if(!post.getUser().getId().equals(userId)) {
             throw new ForbiddenException(POST_UNAUTHORIZED);
@@ -47,10 +47,14 @@ public class PostWriter {
         return PostCreateResponse.from(post.getId());
     }
 
+    private Post findById(Long postId) {
+        return postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
+    }
+
     @Transactional
     public void deletePost(Long userId, Long postId) {
         User user = userReader.findById(userId);
-        Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
+        Post post = findById(postId);
 
         if(!post.getUser().getId().equals(userId)) {
             throw new ForbiddenException(POST_UNAUTHORIZED);
