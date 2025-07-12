@@ -8,11 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;
 import org.sopt.bofit.domain.user.dto.response.JobResponses;
 import org.sopt.bofit.domain.user.dto.response.CommentSummaryResponse;
-import org.sopt.bofit.domain.user.dto.response.PostSummaryResponse;
+import org.sopt.bofit.domain.user.dto.response.MyPostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
-import org.sopt.bofit.domain.user.service.UserService;
-import org.sopt.bofit.domain.user.service.UserWriter;
 import org.sopt.bofit.domain.user.service.UserService;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.annotation.LoginUserId;
@@ -53,7 +51,7 @@ public class UserController {
     @CustomExceptionDescription(MY_POSTS)
     @Operation(summary = "내가 쓴 글 조회", description = "마이페이지에서 내가 쓴 글을 조회합니다.")
     @GetMapping("me/posts")
-    public BaseResponse<SliceResponse<PostSummaryResponse>> getMyPosts(
+    public BaseResponse<SliceResponse<MyPostSummaryResponse>> getMyPosts(
             @Parameter(hidden = true) @LoginUserId Long userId,
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue = "10") int size

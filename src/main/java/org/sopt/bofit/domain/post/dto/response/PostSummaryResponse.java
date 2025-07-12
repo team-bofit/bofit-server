@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.time.LocalDateTime;
 
-public record PostListResponse(
+public record PostSummaryResponse(
         @Schema(description = "게시글 ID")
         Long postId,
 
@@ -30,7 +30,7 @@ public record PostListResponse(
         LocalDateTime createdAt
 
 ) {
-    public static PostListResponse of(Long postId, Long writerId, String title, String content, String nickname, String profileImageUrl, int commentCount, LocalDateTime createdAt) {
-        return new PostListResponse(postId, writerId, title, content, nickname, profileImageUrl, commentCount, createdAt);
+    public static PostSummaryResponse of(Long postId, Long writerId, String title, String content, String nickname, String profileImageUrl, int commentCount, LocalDateTime createdAt) {
+        return new PostSummaryResponse(postId, writerId, title, content, nickname, profileImageUrl, commentCount, createdAt);
     }
 }

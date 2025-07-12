@@ -1,7 +1,7 @@
 package org.sopt.bofit.domain.post.service;
 
 import lombok.RequiredArgsConstructor;
-import org.sopt.bofit.domain.post.dto.response.PostListResponse;
+import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
 import org.sopt.bofit.domain.post.repository.PostRepository;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
@@ -15,9 +15,9 @@ public class PostReader {
 
     private final PostCustomRepositoryImpl postCustomRepositoryImpl;
 
-    public SliceResponse<PostListResponse> getAllPosts(Long cursorId, int size){
+    public SliceResponse<PostSummaryResponse> getAllPosts(Long cursorId, int size){
 
-        Slice<PostListResponse> postList = postCustomRepositoryImpl.findAllByCursorId(cursorId, size);
+        Slice<PostSummaryResponse> postList = postCustomRepositoryImpl.findAllByCursorId(cursorId, size);
 
         return SliceResponse.of(postList);
     }

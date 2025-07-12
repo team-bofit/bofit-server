@@ -7,7 +7,7 @@ import org.sopt.bofit.domain.comment.repository.CommentCustomRepositoryImpl;
 import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
 import org.sopt.bofit.domain.user.dto.response.CommentSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.JobResponses;
-import org.sopt.bofit.domain.user.dto.response.PostSummaryResponse;
+import org.sopt.bofit.domain.user.dto.response.MyPostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
 import org.sopt.bofit.domain.user.entity.User;
@@ -38,11 +38,11 @@ public class UserReader {
 
     }
 
-    public SliceResponse<PostSummaryResponse> getMyPosts(Long userId, Long cursorId, int size) {
+    public SliceResponse<MyPostSummaryResponse> getMyPosts(Long userId, Long cursorId, int size) {
 
         findById(userId);
 
-        Slice<PostSummaryResponse> posts = postCustomRepositoryImpl.findPostsByCursorId(userId, cursorId, size);
+        Slice<MyPostSummaryResponse> posts = postCustomRepositoryImpl.findPostsByCursorId(userId, cursorId, size);
 
         return SliceResponse.of(posts);
     }

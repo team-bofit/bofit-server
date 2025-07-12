@@ -7,7 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.post.dto.request.PostCreateRequest;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
-import org.sopt.bofit.domain.post.dto.response.PostListResponse;
+import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.service.PostService;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
@@ -62,7 +62,7 @@ public class PostController {
     @Tag(name = "Community", description = "커뮤니티 관련 API")
     @Operation(summary = "게시물 전체 조회", description = "커뮤니티에서 모든 글을 조회합니다.")
     @GetMapping("")
-    public BaseResponse<SliceResponse<PostListResponse>> getAllPosts(
+    public BaseResponse<SliceResponse<PostSummaryResponse>> getAllPosts(
             @RequestParam(required = false) Long cursorId,
             @RequestParam int size){
         return BaseResponse.ok(postService.getAllPosts(cursorId, size), "게시물 전체 조회 성공");
