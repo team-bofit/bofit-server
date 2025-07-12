@@ -45,4 +45,23 @@ public record InsuranceReportDetailResponse (
 		);
 	}
 
+	public static InsuranceReportDetailResponse from(
+		InsuranceReport report
+	){
+		InsuranceProduct product = report.getProduct();
+		InsuranceStatistic statistic = report.getStatistic();
+		return new InsuranceReportDetailResponse(
+			report.getId(),
+			product.getId(),
+			product.getBasicInformation(),
+			report.getReportRationale(),
+			MajorDiseaseTotalSection.of(report, product, statistic),
+			SurgeryTotalSection.of(report, product, statistic),
+			DailyHospitalizationTotalSection.of(report, product, statistic),
+			DisabilityTotalSection.of(report, product, statistic),
+			DeathTotalSection.of(report, product, statistic)
+		);
+	}
+
+
 }

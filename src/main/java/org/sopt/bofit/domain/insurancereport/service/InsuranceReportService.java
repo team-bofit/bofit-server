@@ -1,12 +1,14 @@
 package org.sopt.bofit.domain.insurancereport.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurance.service.InsuranceProductReader;
 import org.sopt.bofit.domain.insurance.service.InsuranceStatisticReader;
 import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportDetailResponse;
+import org.sopt.bofit.domain.insurancereport.dto.response.IssueInsuranceReportResponse;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
@@ -25,8 +27,7 @@ public class InsuranceReportService {
 
 	private final InsuranceStatisticReader insuranceStatisticReader;
 
-
-	public InsuranceReportDetailResponse recommend(User user, UserInfo userInfo){
+	public IssueInsuranceReportResponse recommend(User user, UserInfo userInfo){
 		int age = UserUtil.convertInternationalAge(user.getBirthDate());
 
 		List<InsuranceProduct> products
@@ -41,6 +42,11 @@ public class InsuranceReportService {
 			totalAverage, recommendedProduct, user, userInfo, age);
 		user.recommendedInsurance();
 
-		return InsuranceReportDetailResponse.of(insuranceReport, recommendedProduct, totalAverage);
+		return new IssueInsuranceReportResponse(insuranceReport.getId());
+	}
+
+	public InsuranceReportDetailResponse findInsuranceReportDetailById(UUID insuranceReportId){
+		return InsuranceReportDetailResponse.from(
+			insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId));
 	}
 }
