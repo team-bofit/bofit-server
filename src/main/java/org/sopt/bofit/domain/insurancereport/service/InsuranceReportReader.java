@@ -6,6 +6,7 @@ import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErrorCode;
 import org.sopt.bofit.domain.insurancereport.repository.InsuranceReportRepository;
+import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.global.exception.constant.InsuranceErrorCode;
 import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,11 @@ public class InsuranceReportReader {
 
 	public InsuranceReport findByIdWithRelatedEntity(UUID insuranceReportId){
 		return insuranceReportRepository.findByIdWithProductAndStatistic(insuranceReportId).orElseThrow(() ->
+			new NotFoundException(InsuranceReportErrorCode.NOT_FOUND_INSURANCE_REPORT));
+	}
+
+	public InsuranceReport findLastByUser(User user){
+		return insuranceReportRepository.findFirstByUserOrderByCreatedAtDesc(user).orElseThrow(()->
 			new NotFoundException(InsuranceReportErrorCode.NOT_FOUND_INSURANCE_REPORT));
 	}
 }
