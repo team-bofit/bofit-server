@@ -5,6 +5,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.CommentStatus;
 import org.sopt.bofit.domain.comment.entity.QComment;
+import org.sopt.bofit.domain.post.dto.response.PostListResponse;
 import org.sopt.bofit.domain.post.entity.QPost;
 import org.sopt.bofit.domain.post.entity.constant.PostStatus;
 import org.sopt.bofit.domain.user.dto.response.PostSummaryResponse;
@@ -62,6 +63,42 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                 .set(post.status,PostStatus.INACTIVE)
                 .where(post.id.eq(postId))
                 .execute();
+    }
+
+    @Override
+    public Slice<PostListResponse> findAllByCursorId(Long cursorId, int size) {
+        QPost post = QPost.post;
+        QComment comment = QComment.comment;
+
+        List<PostListResponse> content = queryFactory
+                .select(Projections.constructor(PostListResponse.class,
+                        post.id,
+                        post.user.id,
+                        post.title,
+                        post.content,
+                        post.user.nickname,
+                        post.user.profileImage,
+                        comment.id.count().intValue(),
+                        post.createdAt
+                ))
+                .from(post)
+                .leftJoin(comment).on(comment.post.eq(post), comment.status.eq(CommentStatus.ACTIVE))
+                .where(
+                        post.status.eq(PostStatus.ACTIVE),
+                        cursorId != null ? post.id.lt(cursorId) : null
+                )
+                .groupBy(post.id)
+                .orderBy(post.id.desc())
+                .limit(size + 1)
+                .fetch();
+
+        boolean hasNext = content.size() > size;
+        if (hasNext) content.remove(size);
+
+        return new SliceImpl<>(content, PageRequest.of(0, size), hasNext);
+
+
+
     }
 }
 
