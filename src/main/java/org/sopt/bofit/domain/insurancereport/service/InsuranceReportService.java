@@ -9,6 +9,11 @@ import org.sopt.bofit.domain.insurance.service.InsuranceProductReader;
 import org.sopt.bofit.domain.insurance.service.InsuranceStatisticReader;
 import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportDetailResponse;
 import org.sopt.bofit.domain.insurancereport.dto.response.IssueInsuranceReportResponse;
+import org.sopt.bofit.domain.insurancereport.dto.response.dailyHospitalization.DailyHospitalizationSection;
+import org.sopt.bofit.domain.insurancereport.dto.response.death.DeathSection;
+import org.sopt.bofit.domain.insurancereport.dto.response.disability.DisabilitySection;
+import org.sopt.bofit.domain.insurancereport.dto.response.majordisease.MajorDiseaseSection;
+import org.sopt.bofit.domain.insurancereport.dto.response.surgery.SurgerySection;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
@@ -48,5 +53,30 @@ public class InsuranceReportService {
 	public InsuranceReportDetailResponse findInsuranceReportDetailById(UUID insuranceReportId){
 		return InsuranceReportDetailResponse.from(
 			insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId));
+	}
+
+	public MajorDiseaseSection findMajorDiseaseSection(UUID insuranceReportId, String hyphenSection){
+		InsuranceReport report = insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId);
+		return MajorDiseaseSection.getMajorDiseaseSection(hyphenSection, report);
+	}
+
+	public SurgerySection findSurgerySection(UUID insuranceReportId, String hyphenSection){
+		InsuranceReport report = insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId);
+		return SurgerySection.getSurgerySection(hyphenSection, report);
+	}
+
+	public DailyHospitalizationSection findHospitalizationSection(UUID insuranceReportId, String hyphenSection){
+		InsuranceReport report = insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId);
+		return DailyHospitalizationSection.getHospitalizationSection(hyphenSection, report);
+	}
+
+	public DisabilitySection findDisabilitySection(UUID insuranceReportId, String hyphenSection){
+		InsuranceReport report = insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId);
+		return DisabilitySection.getDisabilitySection(hyphenSection, report);
+	}
+
+	public DeathSection findDeathSection(UUID insuranceReportId, String hyphenSection){
+		InsuranceReport report = insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId);
+		return DeathSection.getDeathSection(hyphenSection, report);
 	}
 }
