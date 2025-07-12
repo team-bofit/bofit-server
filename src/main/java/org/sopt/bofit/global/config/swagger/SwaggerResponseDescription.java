@@ -61,6 +61,9 @@ public enum SwaggerResponseDescription {
     ))),
     GET_INSURANCE_REPORT(new LinkedHashSet<>(Set.of(
         NOT_FOUND_INSURANCE_REPORT
+    ))),
+    POST_DETAIL(new LinkedHashSet<>(Set.of(
+            POST_NOT_FOUND
     )))
     ;
     private final Set<ErrorCode> errorCodeList;
