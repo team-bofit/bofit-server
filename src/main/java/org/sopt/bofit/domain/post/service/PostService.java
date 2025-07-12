@@ -18,44 +18,22 @@ import static org.sopt.bofit.global.exception.constant.PostErrorCode.*;
 @RequiredArgsConstructor
 public class PostService {
 
-    private final PostRepository postRepository;
+    private final PostReader postReader;
 
-    private final UserReader userReader;
-
-    private final PostCustomRepositoryImpl postCustomRepositoryImpl;
+    private final PostWriter postWriter;
 
     public PostCreateResponse createPost(Long userId, String title, String content) {
-        User user = userReader.findById(userId);
-        Post newPost = Post.create(title, content);
-        newPost.setUser(user);
-
-        postRepository.save(newPost);
-        return PostCreateResponse.from(newPost.getId());
+        return postWriter.createPost(userId, title, content);
     }
 
     @Transactional
     public PostCreateResponse updatePost (Long userId, Long postId, String title, String content) {
-        User user = userReader.findById(userId);
-        Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
-
-        if(!post.getUser().getId().equals(userId)) {
-            throw new ForbiddenException(POST_UNAUTHORIZED);
-        }
-
-        post.updatePost(title, content);
-        return PostCreateResponse.from(post.getId());
+        return postWriter.updatePost(userId, postId, title, content);
     }
 
     @Transactional
     public void deletePost(Long userId, Long postId) {
-        User user = userReader.findById(userId);
-        Post post = postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
-
-        if(!post.getUser().getId().equals(userId)) {
-            throw new ForbiddenException(POST_UNAUTHORIZED);
-        }
-
-        postCustomRepositoryImpl.deletePostByPostId(postId);
+        postWriter.deletePost(userId, postId);
     }
 
 
