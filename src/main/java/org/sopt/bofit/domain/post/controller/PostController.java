@@ -73,7 +73,7 @@ public class PostController {
     @Operation(summary = "게시물 상세 조회", description = "커뮤니티에서 글을 상세 조회합니다.")
     @CustomExceptionDescription(POST_DETAIL)
     @GetMapping("{postId}")
-    public BaseResponse<PostDetailResponse> getPostDetai(
+    public BaseResponse<PostDetailResponse> getPostDetail(
             @PathVariable Long postId
     ){
         return BaseResponse.ok(postService.getPostDetail(postId),"글 상세 조회 성공");
