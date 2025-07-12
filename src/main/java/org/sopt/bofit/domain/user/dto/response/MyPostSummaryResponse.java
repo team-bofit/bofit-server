@@ -20,9 +20,4 @@ public record MyPostSummaryResponse(
 
         @Schema(description = "작성 시간")
         LocalDateTime createdAt
-){
-
-    public static MyPostSummaryResponse of(Long postId, String title, String content, int commentCount, LocalDateTime createdAt){
-        return new MyPostSummaryResponse(postId, title, content, commentCount, createdAt);
-    }
-}
+){}

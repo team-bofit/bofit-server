@@ -29,8 +29,4 @@ public record PostSummaryResponse(
         @Schema(description = "게시물 작성 시각")
         LocalDateTime createdAt
 
-) {
-    public static PostSummaryResponse of(Long postId, Long writerId, String title, String content, String nickname, String profileImageUrl, int commentCount, LocalDateTime createdAt) {
-        return new PostSummaryResponse(postId, writerId, title, content, nickname, profileImageUrl, commentCount, createdAt);
-    }
-}
+) {}

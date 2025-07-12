@@ -17,8 +17,4 @@ public record CommentSummaryResponse(
 
         @Schema(description = "작성 시간")
         LocalDateTime createdAt
-) {
-    public static CommentSummaryResponse of(Long commentId, Long postId, String content, LocalDateTime createdAt) {
-        return new CommentSummaryResponse(commentId, postId, content, createdAt);
-    }
-}
+) {}
