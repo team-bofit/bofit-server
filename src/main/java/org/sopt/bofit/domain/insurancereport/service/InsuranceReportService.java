@@ -8,6 +8,7 @@ import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurance.service.InsuranceProductReader;
 import org.sopt.bofit.domain.insurance.service.InsuranceStatisticReader;
 import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportResponse;
+import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportSummaryResponse;
 import org.sopt.bofit.domain.insurancereport.dto.response.IssueInsuranceReportResponse;
 import org.sopt.bofit.domain.insurancereport.dto.response.dailyHospitalization.DailyHospitalizationSection;
 import org.sopt.bofit.domain.insurancereport.dto.response.death.DeathSection;
@@ -17,8 +18,10 @@ import org.sopt.bofit.domain.insurancereport.dto.response.surgery.SurgerySection
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
+import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.domain.user.util.UserUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +34,8 @@ public class InsuranceReportService {
 	private final InsuranceProductReader insuranceProductReader;
 
 	private final InsuranceStatisticReader insuranceStatisticReader;
+
+	private final UserReader userReader;
 
 	public IssueInsuranceReportResponse recommend(User user, UserInfo userInfo){
 		int age = UserUtil.convertInternationalAge(user.getBirthDate());
@@ -79,5 +84,12 @@ public class InsuranceReportService {
 		InsuranceReport report = insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId);
 
 		return InsuranceReportResponse.from(report);
+	}
+
+	@Transactional(readOnly = true)
+	public InsuranceReportSummaryResponse findUsersLastReportSummary(Long userId){
+		User user = userReader.findById(userId);
+		InsuranceReport report = insuranceReportReader.findLastByUser(user);
+		return InsuranceReportSummaryResponse.from(report);
 	}
 }

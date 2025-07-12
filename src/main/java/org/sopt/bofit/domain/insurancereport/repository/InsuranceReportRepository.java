@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
+import org.sopt.bofit.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,5 +19,7 @@ public interface InsuranceReportRepository extends JpaRepository<InsuranceReport
 		+ "left join fetch ir.statistic is "
 		+ "where ir.id = :id")
 	Optional<InsuranceReport> findByIdWithProductAndStatistic(@Param("id") UUID id);
+
+	Optional<InsuranceReport> findFirstByUserOrderByCreatedAtDesc(User user);
 
 }

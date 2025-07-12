@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportSummaryResponse;
+import org.sopt.bofit.domain.insurancereport.service.InsuranceReportService;
 import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;
 import org.sopt.bofit.domain.user.dto.response.JobResponses;
 import org.sopt.bofit.domain.user.dto.response.MyCommentSummaryResponse;
@@ -28,6 +30,7 @@ import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
 public class UserController {
 
     private final UserService userService;
+    private final InsuranceReportService insuranceReportService;
 
     @Tag(name = "My Page", description = "마이페이지 관련 API")
     @CustomExceptionDescription(USER_INFO)
@@ -75,6 +78,18 @@ public class UserController {
     @GetMapping("/diagnosed-disease")
     public BaseResponse<DiagnosedDiseaseResponses> getDiagnosedDisease() {
         return BaseResponse.ok(userService.getDiagnosedDiseaseNames(), "진단 받은 질병 목록 조회 성공");
+    }
+
+    @Tag(name = "Insurance", description = "보험 관련 API")
+    @CustomExceptionDescription(GET_MY_LAST_INSURANCE_REPORT_SUMMARY)
+    @Operation(summary = "최근 추천 리포트 요약 조회", description = "가장 최근에 추천 받은 보험 리포트의 요약 내용을 조회합니다.")
+    @GetMapping("/me/report-summary")
+    public BaseResponse<InsuranceReportSummaryResponse> getMyLastInsuranceReportSummary(
+        @Parameter(hidden = true) @LoginUserId Long userId
+    ){
+        InsuranceReportSummaryResponse response
+            = insuranceReportService.findUsersLastReportSummary(userId);
+        return BaseResponse.ok(response, "최근 추천 리포트 요약 조회");
     }
 
 
