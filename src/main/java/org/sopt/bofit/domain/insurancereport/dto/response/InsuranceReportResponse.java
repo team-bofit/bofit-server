@@ -96,9 +96,4 @@ public record InsuranceReportResponse (
 		}
 
 	}
-	private record ShowCoverageStatus(
-		String target,
-		String status
-	){
-	}
 }
