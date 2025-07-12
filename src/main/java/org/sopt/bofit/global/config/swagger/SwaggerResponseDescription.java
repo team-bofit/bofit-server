@@ -2,6 +2,7 @@ package org.sopt.bofit.global.config.swagger;
 
 import lombok.Getter;
 
+import org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErrorCode;
 import org.sopt.bofit.global.exception.constant.ErrorCode;
 import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
 
@@ -65,6 +66,9 @@ public enum SwaggerResponseDescription {
     ))),
     POST_DETAIL(new LinkedHashSet<>(Set.of(
             POST_NOT_FOUND
+    ))),
+    GET_MY_LAST_INSURANCE_REPORT_SUMMARY(new LinkedHashSet<>(Set.of(
+        NOT_FOUND_INSURANCE_REPORT
     )))
     ;
     private final Set<ErrorCode> errorCodeList;
