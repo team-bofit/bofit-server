@@ -13,7 +13,6 @@ import org.sopt.bofit.domain.insurance.entity.benefit.InsuranceBenefit;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurance.service.InsuranceProductReader;
-import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportDetailResponse;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
 import org.sopt.bofit.domain.insurancereport.entity.constant.CoverageStatus;
