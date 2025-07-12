@@ -23,6 +23,8 @@ public class PostWriter {
 
     private final PostRepository postRepository;
 
+    private final PostReader postReader;
+
     private final PostCustomRepositoryImpl postCustomRepositoryImpl;
 
     public PostCreateResponse createPost(Long userId, String title, String content) {
@@ -37,7 +39,7 @@ public class PostWriter {
     @Transactional
     public PostCreateResponse updatePost (Long userId, Long postId, String title, String content) {
         User user = userReader.findById(userId);
-        Post post = findById(postId);
+        Post post = postReader.findById(postId);
 
         checkUserIsOwner(userId, post);
 
@@ -51,15 +53,12 @@ public class PostWriter {
         }
     }
 
-    private Post findById(Long postId) {
-        return postRepository.findById(postId).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
-    }
+
 
     @Transactional
     public void deletePost(Long userId, Long postId) {
         User user = userReader.findById(userId);
-        Post post = findById(postId);
-
+        Post post = postReader.findById(postId);
         checkUserIsOwner(userId, post);
 
         postCustomRepositoryImpl.deletePostByPostId(postId);

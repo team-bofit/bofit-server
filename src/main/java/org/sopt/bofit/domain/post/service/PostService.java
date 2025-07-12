@@ -2,6 +2,7 @@ package org.sopt.bofit.domain.post.service;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
+import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,10 @@ public class PostService {
 
     public SliceResponse<PostSummaryResponse> getAllPosts(Long cursorId, int size){
         return postReader.getAllPosts(cursorId, size);
+    }
+
+    public PostDetailResponse getPostDetail(Long postId){
+        return postReader.getPostById(postId);
     }
 
 

@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.post.dto.request.PostCreateRequest;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
+import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.service.PostService;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
@@ -68,5 +69,13 @@ public class PostController {
         return BaseResponse.ok(postService.getAllPosts(cursorId, size), "게시물 전체 조회 성공");
     }
 
-
+    @Tag(name = "Community", description = "커뮤니티 관련 API")
+    @Operation(summary = "게시물 상세 조회", description = "커뮤니티에서 글을 상세 조회합니다.")
+    @CustomExceptionDescription(POST_DETAIL)
+    @GetMapping("{postId}")
+    public BaseResponse<PostDetailResponse> getPostDetail(
+            @PathVariable Long postId
+    ){
+        return BaseResponse.ok(postService.getPostDetail(postId),"글 상세 조회 성공");
+    }
 }
