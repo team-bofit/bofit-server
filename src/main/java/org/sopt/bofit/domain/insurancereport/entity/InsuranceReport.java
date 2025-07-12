@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurancereport.entity.constant.CoverageStatus;
+import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.global.entity.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -44,6 +45,10 @@ public class InsuranceReport extends BaseEntity {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "insurance_statistic_id")
 	private InsuranceStatistic statistic;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private User user;
 
 	@Embedded
 	private ReportRationale reportRationale;
