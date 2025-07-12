@@ -7,6 +7,11 @@ import java.util.UUID;
 import org.sopt.bofit.domain.insurancereport.dto.request.InsuranceReportRequest;
 import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportDetailResponse;
 import org.sopt.bofit.domain.insurancereport.dto.response.IssueInsuranceReportResponse;
+import org.sopt.bofit.domain.insurancereport.dto.response.dailyHospitalization.DailyHospitalizationSection;
+import org.sopt.bofit.domain.insurancereport.dto.response.death.DeathSection;
+import org.sopt.bofit.domain.insurancereport.dto.response.disability.DisabilitySection;
+import org.sopt.bofit.domain.insurancereport.dto.response.majordisease.MajorDiseaseSection;
+import org.sopt.bofit.domain.insurancereport.dto.response.surgery.SurgerySection;
 import org.sopt.bofit.domain.insurancereport.service.InsuranceReportService;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserService;
@@ -18,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,4 +64,72 @@ public class InsuranceController {
 		return BaseResponse.ok(response, "보험 추천 리포트 상세 조회 성공");
 	}
 
+	@Tag(name = "Insurance", description = "보험 관련 API")
+	@CustomExceptionDescription(GET_INSURANCE_REPORT)
+	@Operation(summary = "보험 추천 리포트 큰병 섹션 조회", description = "보험 추천 리포트 큰병 섹션 조회합니다.")
+	@GetMapping("/reports/{insurance-report-id}/major-disease")
+	public BaseResponse<MajorDiseaseSection > getReportMajorSection(
+		@Parameter(hidden = true) @LoginUserId Long userId,
+		@RequestParam(name = "section") String section,
+		@PathVariable(name = "insurance-report-id") UUID insuranceReportId){
+
+		MajorDiseaseSection response =
+			insuranceReportService.findMajorDiseaseSection(insuranceReportId, section);
+		return BaseResponse.ok(response, "보험 추천 리포트 큰병 섹션 조회 성공");
+	}
+
+	@Tag(name = "Insurance", description = "보험 관련 API")
+	@CustomExceptionDescription(GET_INSURANCE_REPORT)
+	@Operation(summary = "보험 추천 리포트 수술 섹션 조회", description = "보험 추천 리포트 수술 섹션을 조회합니다.")
+	@GetMapping("/reports/{insurance-report-id}/surgery")
+	public BaseResponse<SurgerySection> getReportSurgerySection(
+		@Parameter(hidden = true) @LoginUserId Long userId,
+		@RequestParam(name = "section") String section,
+		@PathVariable(name = "insurance-report-id") UUID insuranceReportId){
+
+		SurgerySection response = insuranceReportService.findSurgerySection(insuranceReportId, section);
+
+		return BaseResponse.ok(response, "보험 추천 리포트 수술 섹션 조회 성공");
+	}
+
+	@Tag(name = "Insurance", description = "보험 관련 API")
+	@CustomExceptionDescription(GET_INSURANCE_REPORT)
+	@Operation(summary = "보험 추천 리포트 일당입원비 상세 조회", description = "보험 추천 리포트 일당입원비를 상세 조회합니다.")
+	@GetMapping("/reports/{insurance-report-id}/hospitalization")
+	public BaseResponse<DailyHospitalizationSection> getHospitalizationSection(
+		@Parameter(hidden = true) @LoginUserId Long userId,
+		@RequestParam(name = "section") String section,
+		@PathVariable(name = "insurance-report-id") UUID insuranceReportId){
+
+		DailyHospitalizationSection response = insuranceReportService.findHospitalizationSection(
+			insuranceReportId, section);
+		return BaseResponse.ok(response, "보험 추천 리포트 일당입원비 섹션 조회 성공");
+	}
+
+	@Tag(name = "Insurance", description = "보험 관련 API")
+	@CustomExceptionDescription(GET_INSURANCE_REPORT)
+	@Operation(summary = "보험 추천 리포트 장해 섹션 조회", description = "보험 추천 리포트 장해 섹션을 조회합니다.")
+	@GetMapping("/reports/{insurance-report-id}/disability")
+	public BaseResponse<DisabilitySection> getDisabilitySection(
+		@Parameter(hidden = true) @LoginUserId Long userId,
+		@RequestParam(name = "section") String section,
+		@PathVariable(name = "insurance-report-id") UUID insuranceReportId){
+
+		DisabilitySection response = insuranceReportService.findDisabilitySection(
+			insuranceReportId, section);
+		return BaseResponse.ok(response, "보험 추천 리포트 장해 섹션 조회 성공");
+	}
+
+	@Tag(name = "Insurance", description = "보험 관련 API")
+	@CustomExceptionDescription(GET_INSURANCE_REPORT)
+	@Operation(summary = "보험 추천 리포트 사망 섹션 조회", description = "보험 추천 리포트 사망 섹션을 조회합니다.")
+	@GetMapping("/reports/{insurance-report-id}/death")
+	public BaseResponse<DeathSection> getDeathSection(
+		@Parameter(hidden = true) @LoginUserId Long userId,
+		@RequestParam(name = "section") String section,
+		@PathVariable(name = "insurance-report-id") UUID insuranceReportId){
+
+		DeathSection response = insuranceReportService.findDeathSection(insuranceReportId, section);
+		return BaseResponse.ok(response, "보험 추천 리포트 사망 섹션 조회 성공");
+	}
 }
