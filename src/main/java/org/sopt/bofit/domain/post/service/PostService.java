@@ -2,9 +2,11 @@ package org.sopt.bofit.domain.post.service;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
+import org.sopt.bofit.domain.post.dto.response.PostListResponse;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
 import org.sopt.bofit.domain.post.repository.PostRepository;
+import org.sopt.bofit.domain.user.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.global.exception.custom_exception.ForbiddenException;
@@ -34,6 +36,10 @@ public class PostService {
     @Transactional
     public void deletePost(Long userId, Long postId) {
         postWriter.deletePost(userId, postId);
+    }
+
+    public SliceResponse<PostListResponse> getAllPosts(Long cursorId, int size){
+        return postReader.getAllPosts(cursorId, size);
     }
 
 
