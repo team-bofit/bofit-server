@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;
 import org.sopt.bofit.domain.comment.repository.CommentCustomRepositoryImpl;
 import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
-import org.sopt.bofit.domain.user.dto.response.CommentSummaryResponse;
+import org.sopt.bofit.domain.user.dto.response.MyCommentSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.JobResponses;
 import org.sopt.bofit.domain.user.dto.response.MyPostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
@@ -56,11 +56,11 @@ public class UserReader {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
     }
 
-    public SliceResponse<CommentSummaryResponse> getMyComments(Long userId, Long cursorId, int size) {
+    public SliceResponse<MyCommentSummaryResponse> getMyComments(Long userId, Long cursorId, int size) {
 
         findById(userId);
 
-        Slice<CommentSummaryResponse> comments = commentCustomRepositoryImpl.findCommentsByCursorId(userId, cursorId, size);
+        Slice<MyCommentSummaryResponse> comments = commentCustomRepositoryImpl.findCommentsByCursorId(userId, cursorId, size);
 
         return SliceResponse.of(comments);
     }

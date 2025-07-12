@@ -1,6 +1,6 @@
 package org.sopt.bofit.domain.user.service;
 
-import org.sopt.bofit.domain.user.dto.response.CommentSummaryResponse;
+import org.sopt.bofit.domain.user.dto.response.MyCommentSummaryResponse;
 
 import org.sopt.bofit.domain.user.dto.response.MyPostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.SliceResponse;
@@ -53,7 +53,7 @@ public class UserService {
 		return userReader.getMyPosts(userId, cursorId, size);
 	}
 
-	public SliceResponse<CommentSummaryResponse> getMyComments(Long userId, Long cursorId, int size) {
+	public SliceResponse<MyCommentSummaryResponse> getMyComments(Long userId, Long cursorId, int size) {
 		return userReader.getMyComments(userId, cursorId, size);
 	}
 }
