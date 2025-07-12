@@ -7,7 +7,7 @@ import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurance.service.InsuranceProductReader;
 import org.sopt.bofit.domain.insurance.service.InsuranceStatisticReader;
-import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportDetailResponse;
+import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportResponse;
 import org.sopt.bofit.domain.insurancereport.dto.response.IssueInsuranceReportResponse;
 import org.sopt.bofit.domain.insurancereport.dto.response.dailyHospitalization.DailyHospitalizationSection;
 import org.sopt.bofit.domain.insurancereport.dto.response.death.DeathSection;
@@ -50,11 +50,6 @@ public class InsuranceReportService {
 		return new IssueInsuranceReportResponse(insuranceReport.getId());
 	}
 
-	public InsuranceReportDetailResponse findInsuranceReportDetailById(UUID insuranceReportId){
-		return InsuranceReportDetailResponse.from(
-			insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId));
-	}
-
 	public MajorDiseaseSection findMajorDiseaseSection(UUID insuranceReportId, String hyphenSection){
 		InsuranceReport report = insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId);
 		return MajorDiseaseSection.getMajorDiseaseSection(hyphenSection, report);
@@ -78,5 +73,11 @@ public class InsuranceReportService {
 	public DeathSection findDeathSection(UUID insuranceReportId, String hyphenSection){
 		InsuranceReport report = insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId);
 		return DeathSection.getDeathSection(hyphenSection, report);
+	}
+
+	public InsuranceReportResponse findReportResponse(UUID insuranceReportId){
+		InsuranceReport report = insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId);
+
+		return InsuranceReportResponse.from(report);
 	}
 }

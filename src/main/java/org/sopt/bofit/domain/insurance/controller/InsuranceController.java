@@ -5,7 +5,7 @@ import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
 import java.util.UUID;
 
 import org.sopt.bofit.domain.insurancereport.dto.request.InsuranceReportRequest;
-import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportDetailResponse;
+import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportResponse;
 import org.sopt.bofit.domain.insurancereport.dto.response.IssueInsuranceReportResponse;
 import org.sopt.bofit.domain.insurancereport.dto.response.dailyHospitalization.DailyHospitalizationSection;
 import org.sopt.bofit.domain.insurancereport.dto.response.death.DeathSection;
@@ -54,14 +54,14 @@ public class InsuranceController {
 
 	@Tag(name = "Insurance", description = "보험 관련 API")
 	@CustomExceptionDescription(GET_INSURANCE_REPORT)
-	@Operation(summary = "보험 상품 상세 조회", description = "보험 상품을 상세 조회합니다.")
+	@Operation(summary = "보험 추천 리포트 조회", description = "보험 추천 리포트를 조회합니다.")
 	@GetMapping("/reports/{insurance-report-id}")
-	public BaseResponse<InsuranceReportDetailResponse> getReport(
+	public BaseResponse<InsuranceReportResponse > getReport(
 		@Parameter(hidden = true) @LoginUserId Long userId,
 		@PathVariable(name = "insurance-report-id") UUID insuranceReportId){
-		InsuranceReportDetailResponse response =
-			insuranceReportService.findInsuranceReportDetailById(insuranceReportId);
-		return BaseResponse.ok(response, "보험 추천 리포트 상세 조회 성공");
+		InsuranceReportResponse response =
+			insuranceReportService.findReportResponse(insuranceReportId);
+		return BaseResponse.ok(response, "보험 추천 리포트 조회 성공");
 	}
 
 	@Tag(name = "Insurance", description = "보험 관련 API")
