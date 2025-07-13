@@ -69,6 +69,10 @@ public enum SwaggerResponseDescription {
     ))),
     GET_MY_LAST_INSURANCE_REPORT_SUMMARY(new LinkedHashSet<>(Set.of(
         NOT_FOUND_INSURANCE_REPORT
+    ))),
+    POST_COMMENT(new LinkedHashSet<>(Set.of(
+        USER_NOT_FOUND,
+        POST_NOT_FOUND
     )))
     ;
     private final Set<ErrorCode> errorCodeList;

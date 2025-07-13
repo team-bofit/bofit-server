@@ -5,6 +5,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.sopt.bofit.domain.comment.dto.request.CommentCreateRequest;
+import org.sopt.bofit.domain.comment.service.CommentService;
 import org.sopt.bofit.domain.post.dto.request.PostCreateRequest;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
@@ -24,6 +27,7 @@ import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
 public class PostController {
 
     private final PostService postService;
+    private final CommentService commentService;
 
     @Tag(name = "Community", description = "커뮤니티 관련 API")
     @Operation(summary = "게시물 작성", description = "커뮤니티에 글을 작성합니다.")
@@ -77,5 +81,18 @@ public class PostController {
             @PathVariable Long postId
     ){
         return BaseResponse.ok(postService.getPostDetail(postId),"글 상세 조회 성공");
+    }
+
+    @Tag(name = "Community", description = "커뮤니티 관련 API")
+    @Operation(summary = "댓글 작성", description = "커뮤니티 게시글에 댓글을 작성합니다.")
+    @CustomExceptionDescription(CREATE_POST)
+    @PostMapping("/{post-id}/comments")
+    public BaseResponse<PostCreateResponse> createComment(
+        @RequestBody @Valid CommentCreateRequest request,
+        @PathVariable(name = "post-id") Long postId,
+        @Parameter(hidden = true) @LoginUserId Long userId
+    ){
+        commentService.createComment(userId, postId, request);
+        return BaseResponse.ok("댓글 생성 성공");
     }
 }

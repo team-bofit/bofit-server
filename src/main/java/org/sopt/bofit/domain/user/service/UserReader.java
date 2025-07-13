@@ -2,6 +2,8 @@ package org.sopt.bofit.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 
+import org.sopt.bofit.domain.comment.repository.CommentRepository;
+import org.sopt.bofit.domain.post.repository.PostRepository;
 import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;
 import org.sopt.bofit.domain.comment.repository.CommentCustomRepositoryImpl;
 import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
@@ -26,9 +28,9 @@ public class UserReader {
 
     private final UserRepository userRepository;
 
-    private final PostCustomRepositoryImpl postCustomRepositoryImpl;
+    private final PostRepository postRepository;
 
-    private final CommentCustomRepositoryImpl commentCustomRepositoryImpl;
+    private final CommentRepository commentRepository;
     
     public UserProfileResponse getUserInfo(Long userId){
 
@@ -42,7 +44,7 @@ public class UserReader {
 
         findById(userId);
 
-        Slice<MyPostSummaryResponse> posts = postCustomRepositoryImpl.findPostsByCursorId(userId, cursorId, size);
+        Slice<MyPostSummaryResponse> posts = postRepository.findPostsByCursorId(userId, cursorId, size);
 
         return SliceResponse.of(posts);
     }
@@ -60,7 +62,7 @@ public class UserReader {
 
         findById(userId);
 
-        Slice<MyCommentSummaryResponse> comments = commentCustomRepositoryImpl.findCommentsByCursorId(userId, cursorId, size);
+        Slice<MyCommentSummaryResponse> comments = commentRepository.findCommentsByCursorId(userId, cursorId, size);
 
         return SliceResponse.of(comments);
     }
