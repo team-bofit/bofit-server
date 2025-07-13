@@ -2,6 +2,7 @@ package org.sopt.bofit.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 
+import org.sopt.bofit.domain.comment.repository.CommentRepository;
 import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;
 import org.sopt.bofit.domain.comment.repository.CommentCustomRepositoryImpl;
 import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
@@ -28,7 +29,7 @@ public class UserReader {
 
     private final PostCustomRepositoryImpl postCustomRepositoryImpl;
 
-    private final CommentCustomRepositoryImpl commentCustomRepositoryImpl;
+    private final CommentRepository commentRepository;
     
     public UserProfileResponse getUserInfo(Long userId){
 
@@ -60,7 +61,7 @@ public class UserReader {
 
         findById(userId);
 
-        Slice<MyCommentSummaryResponse> comments = commentCustomRepositoryImpl.findCommentsByCursorId(userId, cursorId, size);
+        Slice<MyCommentSummaryResponse> comments = commentRepository.findCommentsByCursorId(userId, cursorId, size);
 
         return SliceResponse.of(comments);
     }
