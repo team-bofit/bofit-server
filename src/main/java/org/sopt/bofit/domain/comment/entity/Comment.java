@@ -3,6 +3,7 @@ package org.sopt.bofit.domain.comment.entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sopt.bofit.domain.post.entity.Post;
@@ -17,6 +18,7 @@ public class Comment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
     private Long id;
 
     @Column(nullable = false, length = 300)
