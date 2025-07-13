@@ -26,13 +26,11 @@ import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_NOT_FO
 public class PostReader {
     private final PostRepository postRepository;
 
-    private final PostCustomRepositoryImpl postCustomRepositoryImpl;
-
     private final CommentRepository commentRepository;
 
     public SliceResponse<PostSummaryResponse> getAllPosts(Long cursorId, int size){
 
-        Slice<PostSummaryResponse> postList = postCustomRepositoryImpl.findAllByCursorId(cursorId, size);
+        Slice<PostSummaryResponse> postList = postRepository.findAllByCursorId(cursorId, size);
 
         return SliceResponse.of(postList);
     }

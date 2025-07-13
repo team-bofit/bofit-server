@@ -21,11 +21,10 @@ public class PostWriter {
 
     private final UserReader userReader;
 
-    private final PostRepository postRepository;
-
     private final PostReader postReader;
 
-    private final PostCustomRepositoryImpl postCustomRepositoryImpl;
+    private final PostRepository postRepository;
+
 
     public PostCreateResponse createPost(Long userId, String title, String content) {
         User user = userReader.findById(userId);
@@ -61,6 +60,6 @@ public class PostWriter {
         Post post = postReader.findById(postId);
         checkUserIsOwner(userId, post);
 
-        postCustomRepositoryImpl.deletePostByPostId(postId);
+        postRepository.deletePostByPostId(postId);
     }
 }
