@@ -12,7 +12,6 @@ import org.sopt.bofit.global.entity.BaseEntity;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseEntity {
 
@@ -21,13 +20,6 @@ public class Comment extends BaseEntity {
     @Column(name = "comment_id")
     private Long id;
 
-    @Column(nullable = false, length = 300)
-    private String content;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private CommentStatus status;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -35,4 +27,28 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @Column(nullable = false, length = 300)
+    private String content;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private CommentStatus status;
+
+    public static Comment create(Post post, User user, String content){
+        return Comment.builder()
+            .content(content)
+            .post(post)
+            .status(CommentStatus.ACTIVE)
+            .user(user)
+            .build();
+    }
+
+    @Builder
+    private Comment(String content, CommentStatus status, User user, Post post) {
+        this.content = content;
+        this.status = status;
+        this.user = user;
+        this.post = post;
+    }
 }
