@@ -36,7 +36,7 @@ public class PostController {
     @Tag(name = "Community", description = "커뮤니티 관련 API")
     @Operation(summary = "게시물 작성", description = "커뮤니티에 글을 작성합니다.")
     @CustomExceptionDescription(CREATE_POST)
-    @PostMapping("post")
+    @PostMapping()
     public BaseResponse<PostCreateResponse> createPost(
             @RequestBody @Valid PostCreateRequest request,
             @Parameter(hidden = true) @LoginUserId Long userId
