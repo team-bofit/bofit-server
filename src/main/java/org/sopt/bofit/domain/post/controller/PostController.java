@@ -85,7 +85,7 @@ public class PostController {
 
     @Tag(name = "Community", description = "커뮤니티 관련 API")
     @Operation(summary = "댓글 작성", description = "커뮤니티 게시글에 댓글을 작성합니다.")
-    @CustomExceptionDescription(CREATE_POST)
+    @CustomExceptionDescription(CREATE_COMMENT)
     @PostMapping("/{post-id}/comments")
     public BaseResponse<PostCreateResponse> createComment(
         @RequestBody @Valid CommentCreateRequest request,
@@ -94,5 +94,18 @@ public class PostController {
     ){
         commentService.createComment(userId, postId, request);
         return BaseResponse.ok("댓글 생성 성공");
+    }
+
+    @Tag(name = "Community", description = "커뮤니티 관련 API")
+    @Operation(summary = "댓글 삭제", description = "커뮤니티 게시글의 댓글을 삭제합니다.")
+    @CustomExceptionDescription(DELETE_COMMENT)
+    @DeleteMapping("/{post-id}/comments/{comment-id}")
+    public BaseResponse<Void> deleteComment(
+        @PathVariable(name = "post-id") Long postId,
+        @PathVariable(name = "comment-id") Long commentId,
+        @Parameter(hidden = true) @LoginUserId Long userId
+    ){
+        commentService.deleteComment(userId, postId, commentId);
+        return BaseResponse.ok("댓글 삭제 성공");
     }
 }

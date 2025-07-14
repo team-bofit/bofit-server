@@ -10,6 +10,7 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import static org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErrorCode.*;
+import static org.sopt.bofit.global.exception.constant.CommentErrorCode.*;
 import static org.sopt.bofit.global.exception.constant.InsuranceErrorCode.*;
 import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
 import static org.sopt.bofit.global.exception.constant.PostErrorCode.*;
@@ -70,9 +71,15 @@ public enum SwaggerResponseDescription {
     GET_MY_LAST_INSURANCE_REPORT_SUMMARY(new LinkedHashSet<>(Set.of(
         NOT_FOUND_INSURANCE_REPORT
     ))),
-    POST_COMMENT(new LinkedHashSet<>(Set.of(
+    CREATE_COMMENT(new LinkedHashSet<>(Set.of(
         USER_NOT_FOUND,
         POST_NOT_FOUND
+    ))),
+    DELETE_COMMENT(new LinkedHashSet<>(Set.of(
+        USER_NOT_FOUND,
+        POST_NOT_FOUND,
+        COMMENT_NOT_FOUND,
+        COMMENT_ALREADY_DELETED
     )))
     ;
     private final Set<ErrorCode> errorCodeList;

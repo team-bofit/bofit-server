@@ -7,8 +7,11 @@ import org.sopt.bofit.domain.user.entity.constant.Job;
 import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.entity.constant.UserStatus;
 import org.sopt.bofit.global.entity.BaseEntity;
+import org.sopt.bofit.global.exception.constant.ErrorCode;
+import org.sopt.bofit.global.exception.custom_exception.ForbiddenException;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -91,5 +94,33 @@ public class User extends BaseEntity {
 
     public void recommendedInsurance(){
         this.isRecommendInsurance = true;
+    }
+
+    public void checkIsWriter(User writer, ErrorCode errorCode) {
+        if (!this.equals(writer)) {
+            throw new ForbiddenException(errorCode);
+        }
+    }
+
+    public void checkIsWriter(Long writerId, ErrorCode errorCode) {
+        if (!this.getId().equals(writerId)) {
+            throw new ForbiddenException(errorCode);
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof User that)) {
+            return false;
+        }
+        return Objects.equals(this.getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getId());
     }
 }
