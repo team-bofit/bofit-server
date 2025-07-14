@@ -24,7 +24,10 @@ public record PostDetailResponse(
         String content,
 
         @Schema(description = "댓글 수 ", example = "8")
-        long commentCount
+        long commentCount,
+
+        @Schema(description = "생성 시간")
+        LocalDateTime createdAt
 ) {
 
 }
