@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.sopt.bofit.domain.comment.constant.CommentConstant.*;
+import static org.sopt.bofit.domain.post.constant.PostConstant.*;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
+import static org.sopt.bofit.global.constant.SwaggerConstant.*;
 
 @RestController
 @RequestMapping("/users")
@@ -29,9 +32,9 @@ public class UserController {
     private final UserService userService;
     private final InsuranceReportService insuranceReportService;
 
-    @Tag(name = "UserInfo", description = "유저 정보 관련 API")
+    @Tag(name = TAG_NAME_USER_INFO, description = TAG_DESCRIPTION_USER_INFO)
     @CustomExceptionDescription(USER_INFO)
-    @Operation(summary = "유저 정보 조회", description = "마이 페이지에서 유저의 정보를 조회합니다.")
+    @Operation(summary = "유저 정보 조회", description = "유저의 정보를 조회합니다.")
     @GetMapping("info")
     public BaseResponse<UserProfileResponse> getInfo(
             @Parameter(hidden = true) @LoginUserId Long userId
@@ -39,31 +42,31 @@ public class UserController {
         return BaseResponse.ok(userService.getUserInfo(userId), "유저 프로필 조회 성공");
     }
 
-    @Tag(name = "My Page", description = "마이페이지 관련 API")
+    @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
     @CustomExceptionDescription(MY_POSTS)
-    @Operation(summary = "내가 쓴 글 조회", description = "마이페이지에서 내가 쓴 글을 조회합니다.")
+    @Operation(summary = "내가 쓴 글 조회", description = "내가 쓴 글을 조회합니다.")
     @GetMapping("me/posts")
     public BaseResponse<SliceResponse<MyPostSummaryResponse>> getMyPosts(
             @Parameter(hidden = true) @LoginUserId Long userId,
             @RequestParam(required = false) Long cursorId,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = POSTS_DEFAULT_SIZE) int size
     ){
         return BaseResponse.ok(userService.getMyPosts(userId, cursorId, size), "내가 쓴 글 조회 성공");
     }
 
-    @Tag(name = "My Page", description = "마이페이지 관련 API")
+    @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
     @CustomExceptionDescription(MY_COMMENTS)
-    @Operation(summary = "내가 쓴 댓글 조회", description = "마이페이지에서 내가 쓴 댓글을 조회합니다.")
+    @Operation(summary = "내가 쓴 댓글 조회", description = "내가 쓴 댓글을 조회합니다.")
     @GetMapping("me/comments")
     public BaseResponse<SliceResponse<MyCommentSummaryResponse>> getMyComments(
             @Parameter(hidden = true) @LoginUserId Long userId,
             @RequestParam(required = false) Long cursorId,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = COMMENTS_DEFAULT_SIZE) int size
     ){
         return BaseResponse.ok(userService.getMyComments(userId, cursorId, size), "내가 쓴 댓글 조회 성공");
     }
 
-    @Tag(name = "Insurance", description = "보험 관련 API")
+    @Tag(name = TAG_NAME_INSURANCE, description = TAG_DESCRIPTION_INSURANCE)
     @CustomExceptionDescription(GET_MY_LAST_INSURANCE_REPORT_SUMMARY)
     @Operation(summary = "최근 추천 리포트 요약 조회", description = "가장 최근에 추천 받은 보험 리포트의 요약 내용을 조회합니다.")
     @GetMapping("/me/report-summary")

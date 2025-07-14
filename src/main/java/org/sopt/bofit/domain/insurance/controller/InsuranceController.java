@@ -1,6 +1,7 @@
 package org.sopt.bofit.domain.insurance.controller;
 
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
+import static org.sopt.bofit.global.constant.SwaggerConstant.*;
 
 import java.util.UUID;
 
@@ -40,7 +41,7 @@ public class InsuranceController {
 	private final InsuranceReportService insuranceReportService;
 	private final UserService userService;
 
-	@Tag(name = "Insurance", description = "보험 관련 API")
+	@Tag(name = TAG_NAME_INSURANCE, description = TAG_DESCRIPTION_INSURANCE)
 	@CustomExceptionDescription(ISSUE_INSURANCE_REPORT)
 	@Operation(summary = "보험 상품 추천", description = "보험 상품을 추천 받습니다.")
 	@PostMapping("/reports")
@@ -52,7 +53,7 @@ public class InsuranceController {
 		return BaseResponse.ok(response, "보험 추천 리포트 발급 성공");
 	}
 
-	@Tag(name = "Insurance", description = "보험 관련 API")
+	@Tag(name = TAG_NAME_INSURANCE, description = TAG_DESCRIPTION_INSURANCE)
 	@CustomExceptionDescription(GET_INSURANCE_REPORT)
 	@Operation(summary = "보험 추천 리포트 조회", description = "보험 추천 리포트를 조회합니다.")
 	@GetMapping("/reports/{insurance-report-id}")
@@ -64,7 +65,7 @@ public class InsuranceController {
 		return BaseResponse.ok(response, "보험 추천 리포트 조회 성공");
 	}
 
-	@Tag(name = "Insurance", description = "보험 관련 API")
+	@Tag(name = TAG_NAME_INSURANCE, description = TAG_DESCRIPTION_INSURANCE)
 	@CustomExceptionDescription(GET_INSURANCE_REPORT)
 	@Operation(summary = "보험 추천 리포트 큰병 섹션 조회", description = "보험 추천 리포트 큰병 섹션 조회합니다.")
 	@GetMapping("/reports/{insurance-report-id}/major-disease")
@@ -78,7 +79,7 @@ public class InsuranceController {
 		return BaseResponse.ok(response, "보험 추천 리포트 큰병 섹션 조회 성공");
 	}
 
-	@Tag(name = "Insurance", description = "보험 관련 API")
+	@Tag(name = TAG_NAME_INSURANCE, description = TAG_DESCRIPTION_INSURANCE)
 	@CustomExceptionDescription(GET_INSURANCE_REPORT)
 	@Operation(summary = "보험 추천 리포트 수술 섹션 조회", description = "보험 추천 리포트 수술 섹션을 조회합니다.")
 	@GetMapping("/reports/{insurance-report-id}/surgery")
@@ -92,7 +93,7 @@ public class InsuranceController {
 		return BaseResponse.ok(response, "보험 추천 리포트 수술 섹션 조회 성공");
 	}
 
-	@Tag(name = "Insurance", description = "보험 관련 API")
+	@Tag(name = TAG_NAME_INSURANCE, description = TAG_DESCRIPTION_INSURANCE)
 	@CustomExceptionDescription(GET_INSURANCE_REPORT)
 	@Operation(summary = "보험 추천 리포트 일당입원비 상세 조회", description = "보험 추천 리포트 일당입원비를 상세 조회합니다.")
 	@GetMapping("/reports/{insurance-report-id}/hospitalization")
@@ -106,7 +107,7 @@ public class InsuranceController {
 		return BaseResponse.ok(response, "보험 추천 리포트 일당입원비 섹션 조회 성공");
 	}
 
-	@Tag(name = "Insurance", description = "보험 관련 API")
+	@Tag(name = TAG_NAME_INSURANCE, description = TAG_DESCRIPTION_INSURANCE)
 	@CustomExceptionDescription(GET_INSURANCE_REPORT)
 	@Operation(summary = "보험 추천 리포트 장해 섹션 조회", description = "보험 추천 리포트 장해 섹션을 조회합니다.")
 	@GetMapping("/reports/{insurance-report-id}/disability")
@@ -120,7 +121,7 @@ public class InsuranceController {
 		return BaseResponse.ok(response, "보험 추천 리포트 장해 섹션 조회 성공");
 	}
 
-	@Tag(name = "Insurance", description = "보험 관련 API")
+	@Tag(name = TAG_NAME_INSURANCE, description = TAG_DESCRIPTION_INSURANCE)
 	@CustomExceptionDescription(GET_INSURANCE_REPORT)
 	@Operation(summary = "보험 추천 리포트 사망 섹션 조회", description = "보험 추천 리포트 사망 섹션을 조회합니다.")
 	@GetMapping("/reports/{insurance-report-id}/death")

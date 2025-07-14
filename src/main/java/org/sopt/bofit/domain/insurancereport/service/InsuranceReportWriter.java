@@ -25,7 +25,7 @@ import org.sopt.bofit.domain.user.entity.UserInfo;
 import org.sopt.bofit.global.external.openai.client.OpenAiClient;
 import org.sopt.bofit.global.external.openai.dto.request.ChatRequestMessage;
 import org.sopt.bofit.global.external.openai.template.OpenAiPromptManager;
-import org.sopt.bofit.global.oauth.util.JsonUtil;
+import org.sopt.bofit.global.util.JsonUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
