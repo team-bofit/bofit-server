@@ -72,7 +72,7 @@ public class PostController {
     @Operation(summary = "게시물 전체 조회", description = "커뮤니티에서 모든 글을 조회합니다.")
     @GetMapping()
     public BaseResponse<SliceResponse<PostSummaryResponse>> getAllPosts(
-            @RequestParam(required = false) Long cursorId,
+            @RequestParam(required = false, name = "cursor") Long cursorId,
             @RequestParam int size){
         return BaseResponse.ok(postService.getAllPosts(cursorId, size), "게시물 전체 조회 성공");
     }
