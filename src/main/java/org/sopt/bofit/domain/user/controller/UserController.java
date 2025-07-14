@@ -42,13 +42,6 @@ public class UserController {
         return BaseResponse.ok(userService.getUserInfo(userId), "유저 프로필 조회 성공");
     }
 
-    @Tag(name = "Users", description = "유저 관련 API")
-    @Operation(summary = "직업 목록 조회", description = "선택 가능한 직업 목록을 조회합니다.")
-    @GetMapping("/jobs")
-    public BaseResponse<JobResponses> getJobs() {
-        return BaseResponse.ok(userService.getJobs(), "선택 가능한 직업 목록 조회 성공");
-    }
-
     @Tag(name = "My Page", description = "마이페이지 관련 API")
     @CustomExceptionDescription(MY_POSTS)
     @Operation(summary = "내가 쓴 글 조회", description = "마이페이지에서 내가 쓴 글을 조회합니다.")
@@ -73,13 +66,6 @@ public class UserController {
         return BaseResponse.ok(userService.getMyComments(userId, cursorId, size), "내가 쓴 댓글 조회 성공");
     }
 
-    @Tag(name = "UserInfo", description = "유저 정보 관련 API")
-    @Operation(summary = "진단 받은 질병 목록 조회", description = "선택 가능한 진단 받았던 질병 목록을 조회합니다.")
-    @GetMapping("/diagnosed-disease")
-    public BaseResponse<DiagnosedDiseaseResponses> getDiagnosedDisease() {
-        return BaseResponse.ok(userService.getDiagnosedDiseaseNames(), "진단 받은 질병 목록 조회 성공");
-    }
-
     @Tag(name = "Insurance", description = "보험 관련 API")
     @CustomExceptionDescription(GET_MY_LAST_INSURANCE_REPORT_SUMMARY)
     @Operation(summary = "최근 추천 리포트 요약 조회", description = "가장 최근에 추천 받은 보험 리포트의 요약 내용을 조회합니다.")
@@ -91,6 +77,5 @@ public class UserController {
             = insuranceReportService.findUsersLastReportSummary(userId);
         return BaseResponse.ok(response, "최근 추천 리포트 요약 조회");
     }
-
 
 }
