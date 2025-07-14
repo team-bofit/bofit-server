@@ -151,10 +151,6 @@ public class OAuthService {
 
         return TokenReissueResponse.of(newAccessToken, newRefreshToken);
     }
-
-    private static int parseBirth(String birthday) {
-        return (birthday != null && birthday.matches("\\d+")) ? Integer.parseInt(birthday) : 0;
-    }
 }
 
 
