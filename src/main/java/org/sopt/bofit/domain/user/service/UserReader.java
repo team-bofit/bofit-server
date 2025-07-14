@@ -47,11 +47,6 @@ public class UserReader {
         return SliceResponse.of(posts);
     }
 
-
-    public JobResponses getJobs() {
-        return JobResponses.create(Job.values());
-    }
-
     public User findById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
     }
@@ -65,7 +60,4 @@ public class UserReader {
         return SliceResponse.of(comments);
     }
 
-    public DiagnosedDiseaseResponses getDiagnosedDiseaseNames(){
-        return DiagnosedDiseaseResponses.from(DiagnosedDisease.values());
-    }
 }
