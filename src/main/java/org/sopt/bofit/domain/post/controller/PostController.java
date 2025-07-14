@@ -47,11 +47,11 @@ public class PostController {
     @Tag(name = "Community", description = "커뮤니티 관련 API")
     @Operation(summary = "게시물 수정", description = "커뮤니티에서 글을 수정합니다.")
     @CustomExceptionDescription(UPDATE_POST)
-    @PutMapping("{postId}")
+    @PutMapping("{post-id}")
     public BaseResponse<PostCreateResponse> updatePost(
             @RequestBody @Valid PostCreateRequest request,
             @Parameter(hidden = true) @LoginUserId Long userId,
-            @PathVariable Long postId
+            @PathVariable(name = "post-id") Long postId
     ){
         return BaseResponse.ok(postService.updatePost(userId,postId,request.title(), request.content()),"게시물 수정 완료");
     }
@@ -59,10 +59,10 @@ public class PostController {
     @Tag(name = "Community", description = "커뮤니티 관련 API")
     @Operation(summary = "게시물 삭제", description = "커뮤니티에서 글을 삭제합니다.(소프트 딜리트)")
     @CustomExceptionDescription(DELETE_POST)
-    @DeleteMapping("{postId}")
+    @DeleteMapping("{post-id}")
     public BaseResponse<Void> deletePost(
             @Parameter(hidden = true) @LoginUserId Long userId,
-            @PathVariable Long postId
+            @PathVariable(name = "post-id") Long postId
     ){
         postService.deletePost(userId,postId);
         return BaseResponse.ok("게시물 삭제 완료");
@@ -70,7 +70,7 @@ public class PostController {
 
     @Tag(name = "Community", description = "커뮤니티 관련 API")
     @Operation(summary = "게시물 전체 조회", description = "커뮤니티에서 모든 글을 조회합니다.")
-    @GetMapping("")
+    @GetMapping()
     public BaseResponse<SliceResponse<PostSummaryResponse>> getAllPosts(
             @RequestParam(required = false) Long cursorId,
             @RequestParam int size){
@@ -80,9 +80,9 @@ public class PostController {
     @Tag(name = "Community", description = "커뮤니티 관련 API")
     @Operation(summary = "게시물 상세 조회", description = "커뮤니티에서 글을 상세 조회합니다.")
     @CustomExceptionDescription(POST_DETAIL)
-    @GetMapping("{postId}")
+    @GetMapping("{post-id}")
     public BaseResponse<PostDetailResponse> getPostDetail(
-            @PathVariable Long postId
+            @PathVariable(name = "post-id") Long postId
     ){
         return BaseResponse.ok(postService.getPostDetail(postId),"글 상세 조회 성공");
     }
