@@ -2,7 +2,11 @@ package org.sopt.bofit.global.oauth.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.bofit.domain.user.entity.User;
+import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
+import org.sopt.bofit.domain.user.repository.UserRepository;
 import org.sopt.bofit.global.config.KakaoProperties;
+import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
 import org.sopt.bofit.global.exception.custom_exception.UnAuthorizedException;
 import org.sopt.bofit.global.oauth.dto.KaKaoLoginResponse;
 import org.sopt.bofit.global.oauth.dto.KaKaoTokenResponse;
@@ -13,21 +17,17 @@ import org.sopt.bofit.global.oauth.jwt.JwtProvider;
 import org.sopt.bofit.global.oauth.jwt.JwtUtil;
 import org.sopt.bofit.global.oauth.repository.RefreshTokenRepository;
 import org.sopt.bofit.global.oauth.util.OAuthUtil;
-import org.sopt.bofit.domain.user.entity.User;
-import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
-import org.sopt.bofit.domain.user.repository.UserRepository;
-import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.JWT_INVALID;
-import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.*;
-import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.KakaoAccount.*;
 import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
+import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.KakaoAccount;
+import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.KakaoAccount.UserProfile;
 
 @Slf4j
 @Service
