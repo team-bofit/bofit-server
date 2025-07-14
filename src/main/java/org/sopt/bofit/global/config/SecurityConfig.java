@@ -2,7 +2,7 @@ package org.sopt.bofit.global.config;
 
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.global.oauth.jwt.CustomAccessDeniedHandler;
-import org.sopt.bofit.global.oauth.jwt.CustomAuthenticationEnrtyPoint;
+import org.sopt.bofit.global.oauth.jwt.CustomAuthenticationEntryPoint;
 import org.sopt.bofit.global.oauth.jwt.JwtAuthenticationFilter;
 import org.sopt.bofit.global.oauth.jwt.JwtUtil;
 import org.springframework.context.annotation.Bean;
@@ -42,7 +42,7 @@ public class SecurityConfig {
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(auth -> auth
-                        .authenticationEntryPoint(new CustomAuthenticationEnrtyPoint())
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
                         .accessDeniedHandler(new CustomAccessDeniedHandler())
                 );
 
