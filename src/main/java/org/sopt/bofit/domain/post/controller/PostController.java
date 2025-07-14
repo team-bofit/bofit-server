@@ -123,7 +123,7 @@ public class PostController {
         @RequestParam(defaultValue = COMMENT_LIST_SIZE) int size,
         @Parameter(hidden = true) @LoginUserId Long userId
     ){
-        SliceResponse<CommentResponse> response = commentService.findAllActiveWithCursor(postId, userId, Optional.ofNullable(cursorId), size);
+        SliceResponse<CommentResponse> response = commentService.findAllByPostIdAndCursor(postId, userId, Optional.ofNullable(cursorId), size);
         return BaseResponse.ok(response, "댓글 목록 조회 성공");
     }
 }
