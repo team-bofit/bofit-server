@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -23,6 +24,12 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+
+    private static final List<String> EXCLUDED_PATH_PREFIXES = List.of(
+            SwaggerPathConstants.SWAGGER_CONFIG,
+            SwaggerPathConstants.SWAGGER_UI,
+            SwaggerPathConstants.SWAGGER_DOCS
+    );
 
 
     @Override
@@ -46,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String uri = request.getRequestURI();
-        return uri.startsWith(SwaggerPathConstants.SWAGGER_CONFIG) || uri.startsWith(SwaggerPathConstants.SWAGGER_UI) || uri.startsWith(SwaggerPathConstants.SWAGGER_DOCS);
+        return EXCLUDED_PATH_PREFIXES.stream().anyMatch(uri::startsWith);
     }
 
     private String getToken(HttpServletRequest request) {
