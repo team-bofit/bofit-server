@@ -102,6 +102,12 @@ public class User extends BaseEntity {
         }
     }
 
+    public void checkIsWriter(Long writerId, ErrorCode errorCode) {
+        if (!this.getId().equals(writerId)) {
+            throw new ForbiddenException(errorCode);
+        }
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

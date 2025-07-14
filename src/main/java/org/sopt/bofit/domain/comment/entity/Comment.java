@@ -4,7 +4,6 @@ import static org.sopt.bofit.global.exception.constant.CommentErrorCode.*;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +11,7 @@ import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.global.entity.BaseEntity;
 import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
+import org.sopt.bofit.global.exception.custom_exception.ConflictException;
 
 @Entity
 @Getter
@@ -60,4 +60,20 @@ public class Comment extends BaseEntity {
             throw new BadRequestException(UNMATCHED_COMMENT_POST);
         }
     }
+
+    public void checkPost(Long postId){
+        if(!this.getPost().getId().equals(postId)){
+            throw new BadRequestException(UNMATCHED_COMMENT_POST);
+        }
+    }
+
+    public Comment softDelete(){
+        if(this.status.equals(CommentStatus.INACTIVE)){
+            throw new ConflictException(COMMENT_ALREADY_DELETED);
+        }
+        this.status = CommentStatus.INACTIVE;
+
+        return this;
+    }
+
 }

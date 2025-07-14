@@ -15,9 +15,13 @@ public class CommentWriter {
 	private final CommentRepository commentRepository;
 
 	@Transactional
-	public Comment createComment(Post post, User user, String content){
+	public Comment create(Post post, User user, String content){
 		Comment comment = Comment.create(post, user, content);
 
 		return commentRepository.save(comment);
+	}
+
+	public Comment softDelete(Comment comment){
+		return comment.softDelete();
 	}
 }
