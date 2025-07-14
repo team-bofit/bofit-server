@@ -15,6 +15,8 @@ public enum CommentErrorCode implements ErrorCode{
 
 	COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "존재하지 않는 댓글입니다."),
 
+	COMMENT_ALREADY_DELETED(HttpStatus.CONFLICT.value(), "이미 삭제된 댓글입니다.")
+
 	;
 
 	private final int httpStatus;
