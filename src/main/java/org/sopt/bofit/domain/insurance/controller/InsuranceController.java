@@ -17,7 +17,7 @@ import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserService;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.annotation.LoginUserId;
-import org.sopt.bofit.global.response.BaseResponse;
+import org.sopt.bofit.global.dto.response.BaseResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

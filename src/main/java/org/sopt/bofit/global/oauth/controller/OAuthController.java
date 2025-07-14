@@ -8,7 +8,7 @@ import org.sopt.bofit.global.oauth.dto.KaKaoLoginResponse;
 import org.sopt.bofit.global.oauth.dto.TokenReissueResponse;
 import org.sopt.bofit.global.oauth.service.OAuthService;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
-import org.sopt.bofit.global.response.BaseResponse;
+import org.sopt.bofit.global.dto.response.BaseResponse;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 

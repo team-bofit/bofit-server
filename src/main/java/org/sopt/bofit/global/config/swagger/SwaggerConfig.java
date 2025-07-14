@@ -15,14 +15,13 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.exception.constant.ErrorCode;
 import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
-import org.sopt.bofit.global.response.BaseErrorResponse;
+import org.sopt.bofit.global.dto.response.BaseErrorResponse;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.method.HandlerMethod;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
