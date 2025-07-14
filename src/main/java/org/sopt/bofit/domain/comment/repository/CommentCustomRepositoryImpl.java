@@ -3,18 +3,15 @@ package org.sopt.bofit.domain.comment.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-
 import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
 import org.sopt.bofit.domain.comment.entity.CommentStatus;
-import org.sopt.bofit.domain.post.entity.Post;
-import org.sopt.bofit.domain.post.entity.QPost;
+import org.sopt.bofit.domain.comment.entity.QComment;
 import org.sopt.bofit.domain.user.dto.response.MyCommentSummaryResponse;
 import org.sopt.bofit.domain.user.entity.QUser;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
-import org.sopt.bofit.domain.comment.entity.QComment;
 
 import java.util.List;
 import java.util.Optional;
@@ -65,6 +62,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
         List<CommentResponse> content = queryFactory
             .select(Projections.constructor(CommentResponse.class,
                 comment.id,
+                comment.user.id,
                 user.nickname,
                 user.profileImage,
                 comment.content,
