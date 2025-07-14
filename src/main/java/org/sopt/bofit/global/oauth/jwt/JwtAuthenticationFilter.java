@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.bofit.global.exception.custom_exception.CustomException;
 import org.sopt.bofit.global.oauth.constant.HttpHeaderConstants;
 import org.sopt.bofit.global.oauth.constant.RequestAttributeConstants;
+import org.sopt.bofit.global.oauth.constant.SwaggerPathConstants;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -45,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String uri = request.getRequestURI();
-        return uri.startsWith("/swagger-ui") || uri.startsWith("/v3/api-docs") || uri.startsWith("/swagger-config");
+        return uri.startsWith(SwaggerPathConstants.SWAGGER_CONFIG) || uri.startsWith(SwaggerPathConstants.SWAGGER_UI) || uri.startsWith(SwaggerPathConstants.SWAGGER_DOCS);
     }
 
     private String getToken(HttpServletRequest request) {
