@@ -130,7 +130,8 @@ public class OAuthService {
     }
 
     @Transactional
-    public TokenReissueResponse reissue(String refreshToken) {
+    public TokenReissueResponse reissue(String bearerToken) {
+        String refreshToken = bearerToken.replace("Bearer ", "").trim();
         if (!jwtUtil.isTokenValid(refreshToken)) {
             throw new UnAuthorizedException(JWT_INVALID);
         }
