@@ -1,4 +1,4 @@
-package org.sopt.bofit.global.response;
+package org.sopt.bofit.global.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
