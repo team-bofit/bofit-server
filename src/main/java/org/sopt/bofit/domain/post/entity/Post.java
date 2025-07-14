@@ -1,5 +1,7 @@
 package org.sopt.bofit.domain.post.entity;
 
+import java.util.Objects;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.sopt.bofit.domain.post.entity.constant.PostStatus;
@@ -45,6 +47,22 @@ public class Post extends BaseEntity {
     public void updatePost(String title, String content){
         this.title = title;
         this.content = content;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (!(obj instanceof Post that)) {
+            return false;
+        }
+        return Objects.equals(this.getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.getId());
     }
 
 }

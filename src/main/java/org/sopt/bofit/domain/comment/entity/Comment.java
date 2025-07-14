@@ -1,5 +1,7 @@
 package org.sopt.bofit.domain.comment.entity;
 
+import static org.sopt.bofit.global.exception.constant.CommentErrorCode.*;
+
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -9,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.global.entity.BaseEntity;
+import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
 
 @Entity
 @Getter
@@ -50,5 +53,11 @@ public class Comment extends BaseEntity {
         this.status = status;
         this.user = user;
         this.post = post;
+    }
+
+    public void checkPost(Post post){
+        if(!post.equals(this.post)){
+            throw new BadRequestException(UNMATCHED_COMMENT_POST);
+        }
     }
 }
