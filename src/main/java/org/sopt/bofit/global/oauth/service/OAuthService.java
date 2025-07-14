@@ -47,10 +47,10 @@ public class OAuthService {
     private final WebClient webClient = WebClient.create();
 
     private Mono<KaKaoTokenResponse> requestToken(String code) {
-        String body = OAuthUtil.buildTokenRequestBody(code, properties.getClientId(), properties.getRedirectUri());
+        String body = OAuthUtil.buildTokenRequestBody(code, properties.clientId(), properties.redirectUri());
 
         return webClient.post()
-                .uri(properties.getTokenUri())
+                .uri(properties.tokenUri())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .bodyValue(body)
                 .retrieve()
@@ -69,7 +69,7 @@ public class OAuthService {
 
     private Mono<KakaoUserResponse> getUserInfo(String accessToken) {
         return webClient.get()
-                .uri(properties.getUserInfoUri())
+                .uri(properties.userInfoUri())
                 .headers(headers -> headers.setBearerAuth(accessToken))
                 .retrieve()
                 .bodyToMono(KakaoUserResponse.class);
