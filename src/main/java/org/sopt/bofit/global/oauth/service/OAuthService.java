@@ -2,6 +2,7 @@ package org.sopt.bofit.global.oauth.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.sopt.bofit.global.config.KakaoProperties;
 import org.sopt.bofit.global.exception.custom_exception.UnAuthorizedException;
 import org.sopt.bofit.global.oauth.dto.KaKaoLoginResponse;
 import org.sopt.bofit.global.oauth.dto.KaKaoTokenResponse;
@@ -23,8 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
-
-import static org.sopt.bofit.domain.user.entity.constant.Gender.parseGender;
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.JWT_INVALID;
 import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.*;
 import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.KakaoAccount.*;
@@ -43,25 +42,15 @@ public class OAuthService {
 
     private final JwtUtil jwtUtil;
 
+    private final KakaoProperties properties;
+
     private final WebClient webClient = WebClient.create();
 
-    @Value("${kakao.client-id}")
-    private String clientId;
-
-    @Value("${kakao.redirect-uri}")
-    private String redirectUri;
-
-    @Value("${kakao.token-uri}")
-    private String tokenUri;
-
-    @Value("${kakao.user-info-uri}")
-    private String userInfoUri;
-
     private Mono<KaKaoTokenResponse> requestToken(String code) {
-        String body = OAuthUtil.buildTokenRequestBody(code, clientId, redirectUri);
+        String body = OAuthUtil.buildTokenRequestBody(code, properties.getClientId(), properties.getRedirectUri());
 
         return webClient.post()
-                .uri(tokenUri)
+                .uri(properties.getTokenUri())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .bodyValue(body)
                 .retrieve()
@@ -80,7 +69,7 @@ public class OAuthService {
 
     private Mono<KakaoUserResponse> getUserInfo(String accessToken) {
         return webClient.get()
-                .uri(userInfoUri)
+                .uri(properties.getUserInfoUri())
                 .headers(headers -> headers.setBearerAuth(accessToken))
                 .retrieve()
                 .bodyToMono(KakaoUserResponse.class);
