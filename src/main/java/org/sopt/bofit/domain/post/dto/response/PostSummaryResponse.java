@@ -18,7 +18,7 @@ public record PostSummaryResponse(
         String content,
 
         @Schema(description = "작성자 닉네임", example = "정훈 장")
-        String nickname,
+        String writerNickname,
 
         @Schema(description = "작성자 프로필 사진")
         String profileImageUrl,

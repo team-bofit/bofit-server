@@ -11,7 +11,7 @@ public record PostDetailResponse(
         Long writerId,
 
         @Schema(description = "닉네임", example = "정훈 장")
-        String nickname,
+        String writerNickname,
 
         @Schema(description = "프로필 사진 url")
         String profileImage,
