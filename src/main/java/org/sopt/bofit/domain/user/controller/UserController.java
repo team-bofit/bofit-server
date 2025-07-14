@@ -32,7 +32,7 @@ public class UserController {
 
     @Tag(name = TAG_NAME_USER_INFO, description = TAG_DESCRIPTION_USER_INFO)
     @CustomExceptionDescription(USER_INFO)
-    @Operation(summary = "유저 정보 조회", description = "마이 페이지에서 유저의 정보를 조회합니다.")
+    @Operation(summary = "유저 정보 조회", description = "유저의 정보를 조회합니다.")
     @GetMapping("info")
     public BaseResponse<UserProfileResponse> getInfo(
             @Parameter(hidden = true) @LoginUserId Long userId
@@ -42,7 +42,7 @@ public class UserController {
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
     @CustomExceptionDescription(MY_POSTS)
-    @Operation(summary = "내가 쓴 글 조회", description = "마이페이지에서 내가 쓴 글을 조회합니다.")
+    @Operation(summary = "내가 쓴 글 조회", description = "내가 쓴 글을 조회합니다.")
     @GetMapping("me/posts")
     public BaseResponse<SliceResponse<MyPostSummaryResponse>> getMyPosts(
             @Parameter(hidden = true) @LoginUserId Long userId,
@@ -54,7 +54,7 @@ public class UserController {
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
     @CustomExceptionDescription(MY_COMMENTS)
-    @Operation(summary = "내가 쓴 댓글 조회", description = "마이페이지에서 내가 쓴 댓글을 조회합니다.")
+    @Operation(summary = "내가 쓴 댓글 조회", description = "내가 쓴 댓글을 조회합니다.")
     @GetMapping("me/comments")
     public BaseResponse<SliceResponse<MyCommentSummaryResponse>> getMyComments(
             @Parameter(hidden = true) @LoginUserId Long userId,
