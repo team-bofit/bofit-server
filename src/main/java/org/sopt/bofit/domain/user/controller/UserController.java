@@ -39,7 +39,7 @@ public class UserController {
         return BaseResponse.ok(userService.getUserInfo(userId), "유저 프로필 조회 성공");
     }
 
-    @Tag(name = "My Page", description = "마이페이지 관련 API")
+    @Tag(name = "Community", description = "커뮤니티 관련 API")
     @CustomExceptionDescription(MY_POSTS)
     @Operation(summary = "내가 쓴 글 조회", description = "마이페이지에서 내가 쓴 글을 조회합니다.")
     @GetMapping("me/posts")
@@ -51,7 +51,7 @@ public class UserController {
         return BaseResponse.ok(userService.getMyPosts(userId, cursorId, size), "내가 쓴 글 조회 성공");
     }
 
-    @Tag(name = "My Page", description = "마이페이지 관련 API")
+    @Tag(name = "Community", description = "커뮤니티 관련 API")
     @CustomExceptionDescription(MY_COMMENTS)
     @Operation(summary = "내가 쓴 댓글 조회", description = "마이페이지에서 내가 쓴 댓글을 조회합니다.")
     @GetMapping("me/comments")
