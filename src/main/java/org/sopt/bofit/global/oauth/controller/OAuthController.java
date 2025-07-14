@@ -35,8 +35,7 @@ public class OAuthController {
     @CustomExceptionDescription(TOKEN_REISSUE)
     @Operation(summary = "토큰 재발급")
     @PostMapping("/reissue")
-    public BaseResponse<TokenReissueResponse> reissue(@Parameter(hidden = true) @RequestHeader("Authorization") String bearerToken) {
-        String refreshToken = bearerToken.replace("Bearer ", "").trim();
+    public BaseResponse<TokenReissueResponse> reissue(@Parameter(hidden = true) @RequestHeader("Authorization") String refreshToken) {
         return BaseResponse.ok(oAuthService.reissue(refreshToken), "토큰 재발급 성공");
     }
 
