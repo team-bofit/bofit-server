@@ -1,4 +1,4 @@
-package org.sopt.bofit.global.config;
+package org.sopt.bofit.global.config.properties;
 
 import lombok.Getter;
 import lombok.Setter;

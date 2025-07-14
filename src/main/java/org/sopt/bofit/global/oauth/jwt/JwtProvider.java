@@ -20,7 +20,7 @@ public class JwtProvider {
     private final Long accessTokenExpireMillis;
     private final Long refreshTokenExpireMillis;
     private final SecretKey secretKey;
-
+    
     public JwtProvider(
             @Value("${jwt.secret}") String secretKey,
             @Value("${jwt.accessTokenExpiration}") Long accessExpiration,

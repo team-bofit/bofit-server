@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserRepository;
-import org.sopt.bofit.global.config.KakaoProperties;
+import org.sopt.bofit.global.config.properties.KakaoProperties;
 import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
 import org.sopt.bofit.global.exception.custom_exception.UnAuthorizedException;
 import org.sopt.bofit.global.oauth.dto.KaKaoLoginResponse;
