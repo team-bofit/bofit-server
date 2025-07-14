@@ -14,7 +14,6 @@ import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.service.PostService;
-import org.sopt.bofit.global.constant.SwaggerConstant;
 import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.annotation.LoginUserId;
@@ -22,6 +21,7 @@ import org.sopt.bofit.global.dto.response.BaseResponse;
 import org.springframework.web.bind.annotation.*;
 
 import static org.sopt.bofit.domain.comment.constant.CommentConstant.*;
+import static org.sopt.bofit.domain.post.constant.PostConstant.*;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
 import static org.sopt.bofit.global.constant.SwaggerConstant.*;
 
@@ -75,7 +75,7 @@ public class PostController {
     @GetMapping()
     public BaseResponse<SliceResponse<PostSummaryResponse>> getAllPosts(
             @RequestParam(required = false, name = "cursor") Long cursorId,
-            @RequestParam int size){
+            @RequestParam(required = false, defaultValue = POSTS_DEFAULT_SIZE) int size){
         return BaseResponse.ok(postService.getAllPosts(cursorId, size), "게시물 전체 조회 성공");
     }
 
@@ -122,7 +122,7 @@ public class PostController {
     public BaseResponse<SliceResponse<CommentResponse>> getComments(
         @PathVariable(name = "post-id") Long postId,
         @RequestParam(required = false, name = "cursor") Long cursorId,
-        @RequestParam(defaultValue = COMMENT_LIST_SIZE) int size,
+        @RequestParam(defaultValue = COMMENTS_DEFAULT_SIZE) int size,
         @Parameter(hidden = true) @LoginUserId Long userId
     ){
         SliceResponse<CommentResponse> response = commentService.findAllByPostIdAndCursor(postId, userId, Optional.ofNullable(cursorId), size);

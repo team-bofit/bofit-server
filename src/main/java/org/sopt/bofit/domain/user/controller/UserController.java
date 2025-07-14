@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.sopt.bofit.domain.comment.constant.CommentConstant.*;
+import static org.sopt.bofit.domain.post.constant.PostConstant.*;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
 import static org.sopt.bofit.global.constant.SwaggerConstant.*;
 
@@ -47,7 +49,7 @@ public class UserController {
     public BaseResponse<SliceResponse<MyPostSummaryResponse>> getMyPosts(
             @Parameter(hidden = true) @LoginUserId Long userId,
             @RequestParam(required = false) Long cursorId,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = POSTS_DEFAULT_SIZE) int size
     ){
         return BaseResponse.ok(userService.getMyPosts(userId, cursorId, size), "내가 쓴 글 조회 성공");
     }
@@ -59,7 +61,7 @@ public class UserController {
     public BaseResponse<SliceResponse<MyCommentSummaryResponse>> getMyComments(
             @Parameter(hidden = true) @LoginUserId Long userId,
             @RequestParam(required = false) Long cursorId,
-            @RequestParam(defaultValue = "10") int size
+            @RequestParam(defaultValue = COMMENTS_DEFAULT_SIZE) int size
     ){
         return BaseResponse.ok(userService.getMyComments(userId, cursorId, size), "내가 쓴 댓글 조회 성공");
     }
