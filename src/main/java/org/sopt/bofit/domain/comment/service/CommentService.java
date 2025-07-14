@@ -2,13 +2,17 @@ package org.sopt.bofit.domain.comment.service;
 
 import static org.sopt.bofit.global.exception.constant.CommentErrorCode.*;
 
+import java.util.Optional;
+
 import org.sopt.bofit.domain.comment.dto.request.CommentCreateRequest;
+import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.service.PostReader;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReader;
-import org.sopt.bofit.global.exception.constant.CommentErrorCode;
+import org.sopt.bofit.global.dto.response.SliceResponse;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,4 +47,11 @@ public class CommentService {
 		commentWriter.softDelete(comment);
 	}
 
+	public SliceResponse<CommentResponse> findAllByPostIdAndCursor(Long postId, Long userId, Optional<Long> cursor, int size) {
+		Post post = postReader.findById(postId);
+
+		Slice<CommentResponse> commentsByCursorId = commentReader.findCommentsByCursorId(postId, cursor, size);
+
+		return SliceResponse.of(commentsByCursorId);
+	}
 }

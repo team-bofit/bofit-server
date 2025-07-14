@@ -7,19 +7,23 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.sopt.bofit.domain.comment.dto.request.CommentCreateRequest;
+import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
 import org.sopt.bofit.domain.comment.service.CommentService;
 import org.sopt.bofit.domain.post.dto.request.PostCreateRequest;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.service.PostService;
-import org.sopt.bofit.domain.user.dto.response.SliceResponse;
+import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.annotation.LoginUserId;
-import org.sopt.bofit.global.response.BaseResponse;
+import org.sopt.bofit.global.dto.response.BaseResponse;
 import org.springframework.web.bind.annotation.*;
 
+import static org.sopt.bofit.domain.comment.constant.CommentConstant.*;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
+
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -107,5 +111,19 @@ public class PostController {
     ){
         commentService.deleteComment(userId, postId, commentId);
         return BaseResponse.ok("댓글 삭제 성공");
+    }
+
+    @Tag(name = "Community", description = "커뮤니티 관련 API")
+    @Operation(summary = "댓글 목록 조회 ", description = "커뮤니티 게시글의 댓글 목록을 조회합니다.")
+    @CustomExceptionDescription(DELETE_COMMENT)
+    @GetMapping("/{post-id}/comments")
+    public BaseResponse<SliceResponse<CommentResponse>> getComments(
+        @PathVariable(name = "post-id") Long postId,
+        @RequestParam(required = false, name = "cursor") Long cursorId,
+        @RequestParam(defaultValue = COMMENT_LIST_SIZE) int size,
+        @Parameter(hidden = true) @LoginUserId Long userId
+    ){
+        SliceResponse<CommentResponse> response = commentService.findAllByPostIdAndCursor(postId, userId, Optional.ofNullable(cursorId), size);
+        return BaseResponse.ok(response, "댓글 목록 조회 성공");
     }
 }

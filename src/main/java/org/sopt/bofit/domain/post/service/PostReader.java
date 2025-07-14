@@ -8,9 +8,8 @@ import org.sopt.bofit.domain.comment.repository.CommentRepository;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.entity.Post;
-import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
 import org.sopt.bofit.domain.post.repository.PostRepository;
-import org.sopt.bofit.domain.user.dto.response.SliceResponse;
+import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
 import org.springframework.data.domain.Slice;
@@ -41,19 +40,7 @@ public class PostReader {
 
         List<Comment> activeComments = commentRepository.findAllByPostIdAndStatus(postId, CommentStatus.ACTIVE);
 
-        List<CommentDetail> comments = activeComments.stream()
-                .map(comment -> {
-                    User commenter = comment.getUser();
-                    return CommentDetail.builder()
-                            .commentId(comment.getId())
-                            .writerId(commenter.getId())
-                            .nickname(commenter.getNickname())
-                            .profileImageUrl(commenter.getProfileImage())
-                            .content(comment.getContent())
-                            .createdAt(comment.getCreatedAt())
-                            .build();
-                })
-                .toList();
+        long postCommentCount = commentRepository.countByPost(post);
 
         return builder()
                 .writerId(writer.getId())
@@ -61,8 +48,7 @@ public class PostReader {
                 .profileImageUrl(writer.getProfileImage())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .commentCount(comments.size())
-                .comments(comments)
+                .commentCount(postCommentCount)
                 .build();
 
     }
