@@ -1,4 +1,4 @@
-package org.sopt.bofit.global.oauth.util;
+package org.sopt.bofit.global.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
