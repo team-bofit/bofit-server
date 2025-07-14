@@ -40,19 +40,7 @@ public class PostReader {
 
         List<Comment> activeComments = commentRepository.findAllByPostIdAndStatus(postId, CommentStatus.ACTIVE);
 
-        List<CommentDetail> comments = activeComments.stream()
-                .map(comment -> {
-                    User commenter = comment.getUser();
-                    return CommentDetail.builder()
-                            .commentId(comment.getId())
-                            .writerId(commenter.getId())
-                            .nickname(commenter.getNickname())
-                            .profileImageUrl(commenter.getProfileImage())
-                            .content(comment.getContent())
-                            .createdAt(comment.getCreatedAt())
-                            .build();
-                })
-                .toList();
+        long postCommentCount = commentRepository.countByPost(post);
 
         return builder()
                 .writerId(writer.getId())
@@ -60,8 +48,7 @@ public class PostReader {
                 .profileImageUrl(writer.getProfileImage())
                 .title(post.getTitle())
                 .content(post.getContent())
-                .commentCount(comments.size())
-                .comments(comments)
+                .commentCount(postCommentCount)
                 .build();
 
     }

@@ -24,30 +24,7 @@ public record PostDetailResponse(
         String content,
 
         @Schema(description = "댓글 수 ", example = "8")
-        int commentCount,
-
-        List<CommentDetail> comments
+        long commentCount
 ) {
-        @Builder
-        public static record CommentDetail(
-                @Schema(description = "댓글 ID")
-                Long commentId,
 
-                @Schema(description = "작성자 ID")
-                Long writerId,
-
-                @Schema(description = "작성자 닉네임")
-                String nickname,
-
-                @Schema(description = "프로필 이미지 url")
-                String profileImageUrl,
-
-                @Schema(description = "댓글 내용", example = "저도요")
-                String content,
-
-                @Schema(description = "작성 시각")
-                LocalDateTime createdAt
-        ){
-
-        }
 }
