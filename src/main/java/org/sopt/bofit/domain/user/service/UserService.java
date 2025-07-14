@@ -1,8 +1,12 @@
 package org.sopt.bofit.domain.user.service;
 
+import org.sopt.bofit.domain.user.dto.response.CoveragePreferenceResponses;
 import org.sopt.bofit.domain.user.dto.response.MyCommentSummaryResponse;
 
 import org.sopt.bofit.domain.user.dto.response.MyPostSummaryResponse;
+import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
+import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
+import org.sopt.bofit.domain.user.entity.constant.Job;
 import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;
 import org.sopt.bofit.domain.user.dto.response.JobResponses;
@@ -26,11 +30,16 @@ public class UserService {
 	}
 
 	public JobResponses getJobs(){
-		return userReader.getJobs();
+		return JobResponses.create(Job.values());
 	}
 
 	public DiagnosedDiseaseResponses getDiagnosedDiseaseNames(){
-		return userReader.getDiagnosedDiseaseNames();
+		return DiagnosedDiseaseResponses.from(DiagnosedDisease.values());
+
+	}
+
+	public CoveragePreferenceResponses  getCoveragePreference(){
+		return CoveragePreferenceResponses.from(CoveragePreference.values());
 	}
 
 	@Transactional
