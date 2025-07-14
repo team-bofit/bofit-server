@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
+import static org.sopt.bofit.global.constant.SwaggerConstant.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class OAuthController {
 
     private final OAuthService oAuthService;
 
-    @Tag(name = "Login", description = "카카오 로그인 관련 API")
+    @Tag(name = TAG_NAME_KAKAO_LOGIN, description = TAG_DESCRIPTION_KAKAO_LOGIN)
     @CustomExceptionDescription(KAKAO_TOKEN_REQUEST)
     @Operation(summary = "카카오 로그인", description = "카카오 API를 통해 로그인합니다.")
     @GetMapping("/kakao/login")
@@ -30,7 +31,7 @@ public class OAuthController {
                 .map(response -> BaseResponse.ok(response, "카카오 로그인 성공"));
     }
 
-    @Tag(name = "Login", description = "카카오 로그인 관련 API")
+    @Tag(name = TAG_NAME_KAKAO_LOGIN, description = TAG_DESCRIPTION_KAKAO_LOGIN)
     @CustomExceptionDescription(TOKEN_REISSUE)
     @Operation(summary = "토큰 재발급")
     @PostMapping("/reissue")

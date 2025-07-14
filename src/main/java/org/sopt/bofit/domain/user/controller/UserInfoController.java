@@ -1,6 +1,7 @@
 package org.sopt.bofit.domain.user.controller;
 
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
+import static org.sopt.bofit.global.constant.SwaggerConstant.*;
 
 import org.sopt.bofit.domain.user.dto.response.CoveragePreferenceResponses;
 import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;
@@ -28,21 +29,21 @@ public class UserInfoController {
 
 	private final UserService userService;
 
-	@Tag(name = "UserInfo", description = "유저 정보 관련 API")
+	@Tag(name = TAG_NAME_USER_INFO, description = TAG_DESCRIPTION_USER_INFO)
 	@Operation(summary = "직업 목록 조회", description = "선택 가능한 직업 목록을 조회합니다.")
 	@GetMapping("/jobs")
 	public BaseResponse<JobResponses> getJobs() {
 		return BaseResponse.ok(userService.getJobs(), "선택 가능한 직업 목록 조회 성공");
 	}
 
-	@Tag(name = "UserInfo", description = "유저 정보 관련 API")
+	@Tag(name = TAG_NAME_USER_INFO, description = TAG_DESCRIPTION_USER_INFO)
 	@Operation(summary = "진단 받은 질병 목록 조회", description = "선택 가능한 진단 받았던 질병 목록을 조회합니다.")
 	@GetMapping("/diagnosed-disease")
 	public BaseResponse<DiagnosedDiseaseResponses> getDiagnosedDisease() {
 		return BaseResponse.ok(userService.getDiagnosedDiseaseNames(), "진단 받은 질병 목록 조회 성공");
 	}
 
-	@Tag(name = "UserInfo", description = "유저 정보 관련 API")
+	@Tag(name = TAG_NAME_USER_INFO, description = TAG_DESCRIPTION_USER_INFO)
 	@Operation(summary = "보장 상황 목록 조회", description = "선택 가능한 보장 상황 목록을 조회합니다.")
 	@GetMapping("/coverage-select")
 	public BaseResponse<CoveragePreferenceResponses> getCoverageSelect() {
