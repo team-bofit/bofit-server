@@ -15,7 +15,7 @@ public record PostDetailResponse(
         String nickname,
 
         @Schema(description = "프로필 사진 url")
-        String profileImageUrl,
+        String profileImage,
 
         @Schema(description = "게시물 제목")
         String title,
