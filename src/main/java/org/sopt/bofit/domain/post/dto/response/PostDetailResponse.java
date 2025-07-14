@@ -4,7 +4,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Builder
 public record PostDetailResponse(
@@ -12,7 +11,7 @@ public record PostDetailResponse(
         Long writerId,
 
         @Schema(description = "닉네임", example = "정훈 장")
-        String nickname,
+        String writerNickname,
 
         @Schema(description = "프로필 사진 url")
         String profileImage,

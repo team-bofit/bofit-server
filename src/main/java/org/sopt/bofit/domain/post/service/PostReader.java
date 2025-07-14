@@ -44,7 +44,7 @@ public class PostReader {
 
         return builder()
                 .writerId(writer.getId())
-                .nickname(writer.getNickname())
+                .writerNickname(writer.getNickname())
                 .profileImage(writer.getProfileImage())
                 .title(post.getTitle())
                 .content(post.getContent())

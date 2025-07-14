@@ -1,12 +1,9 @@
 package org.sopt.bofit.global.oauth.util;
 
-import java.util.List;
-
-import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
-import org.sopt.bofit.global.exception.custom_exception.InternalException;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
+import org.sopt.bofit.global.exception.custom_exception.InternalException;
 
 public class JsonUtil {
 	private static final ObjectMapper objectMapper = new ObjectMapper();
