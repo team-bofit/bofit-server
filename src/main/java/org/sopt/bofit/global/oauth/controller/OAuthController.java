@@ -24,7 +24,7 @@ public class OAuthController {
     @Tag(name = "Login", description = "카카오 로그인 관련 API")
     @CustomExceptionDescription(KAKAO_TOKEN_REQUEST)
     @Operation(summary = "카카오 로그인", description = "카카오 API를 통해 로그인합니다.")
-    @GetMapping("/kakao/login")
+    @PostMapping("/kakao/login")
     public Mono<BaseResponse<KaKaoLoginResponse>> kakaoCallback(@RequestParam("code") String code) {
         return oAuthService.login(code)
                 .map(response -> BaseResponse.ok(response, "카카오 로그인 성공"));
