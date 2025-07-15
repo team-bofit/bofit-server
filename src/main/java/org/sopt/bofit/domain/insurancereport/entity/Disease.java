@@ -30,7 +30,7 @@ public enum Disease {
 	EXTENDED_HEART("확대 심장질환", "extended-heart-disease"),
 	ISCHEMIC_HEART("허혈성 심장질환", "ischemic-heart-disease"),
 
-	SURGERY("수술비", "surgery"),
+	SURGERY("수술", "surgery"),
 	DISEASE_SURGERY("질병수술비", "disease-surgery"),
 	DISEASE_TYPE_SURGERY("질병 종 수술비", "disease-type-surgery"),
 	INJURY_SURGERY("상해 수술", "injury-surgery"),

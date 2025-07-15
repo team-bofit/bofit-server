@@ -2,6 +2,8 @@ package org.sopt.bofit.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
+import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
 import org.sopt.bofit.global.converter.CoveragePreferenceMapConverter;
@@ -28,6 +30,10 @@ public class UserInfo extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "insurance_report_id")
+    private InsuranceReport insuranceReport;
+
     private int minPrice;
 
     private int maxPrice;
@@ -43,4 +49,9 @@ public class UserInfo extends BaseEntity {
     @Convert(converter = CoveragePreferenceMapConverter.class)
     @Column(name = "coverage_preference", columnDefinition = "JSON")
     private Map<CoveragePreference, Integer> coveragePreferences = new LinkedHashMap<>();
+
+    public UserInfo updateReport(InsuranceReport report){
+        this.insuranceReport = report;
+        return this;
+    }
 }

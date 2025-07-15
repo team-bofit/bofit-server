@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 public enum CoverageStatus {
 	POWERFUL("강력", 3),
 	ENOUGH("충분", 2),
-	WEAKNESS("약함", 1)
+	WEAKNESS("부족", 1)
 	;
 	private final String description;
 	private final int point;

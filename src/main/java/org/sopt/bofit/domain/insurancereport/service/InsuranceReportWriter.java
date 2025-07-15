@@ -22,6 +22,7 @@ import org.sopt.bofit.domain.insurancereport.service.filter.DiseaseHistoryFilter
 import org.sopt.bofit.domain.insurancereport.service.scoringrule.ScoringRuleCalculator;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
+import org.sopt.bofit.domain.user.service.UserInfoWriter;
 import org.sopt.bofit.global.external.openai.client.OpenAiClient;
 import org.sopt.bofit.global.external.openai.dto.request.ChatRequestMessage;
 import org.sopt.bofit.global.external.openai.template.OpenAiPromptManager;
@@ -38,6 +39,8 @@ public class InsuranceReportWriter {
 	private final ScoringRuleCalculator scoringRuleCalculator;
 	private final InsuranceProductReader insuranceProductReader;
 
+	private final UserInfoWriter userInfoWriter;
+
 	private final InsuranceReportRepository insuranceReportRepository;
 
 	private final DiseaseHistoryFilter diseaseHistoryFilter;
@@ -52,6 +55,7 @@ public class InsuranceReportWriter {
 		UserInfo userInfo,
 		int age
 	){
+
 		products = diseaseHistoryFilter.filtering(products, userInfo);
 		products = coveragePreferenceFilter.filtering(products, userInfo);
 
@@ -98,6 +102,7 @@ public class InsuranceReportWriter {
 			List.of(diseaseDeathStatus, injuryDeathStatus));
 
 		InsuranceReport report = InsuranceReport.builder()
+			.user(user)
 			.product(product)
 			.statistic(average)
 
@@ -128,7 +133,10 @@ public class InsuranceReportWriter {
 
 		report.updateRationale(generateRationale(user, userInfo, report, age));
 		user.recommendedInsurance();
-		return insuranceReportRepository.save(report);
+
+		InsuranceReport savedInsuranceReport = insuranceReportRepository.save(report);
+		userInfoWriter.save(userInfo.updateReport(savedInsuranceReport));
+		return savedInsuranceReport;
 	}
 
 	private ReportRationale generateRationale(
@@ -140,7 +148,8 @@ public class InsuranceReportWriter {
 		String content = openAiClient.sendRequest(
 			List.of(
 				new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportSystemMessage()),
-				new ChatRequestMessage(USER.getValue(), openAiPromptManager.generateReportRationale(user, userInfo, report, age))
+				// new ChatRequestMessage(USER.getValue(), openAiPromptManager.generateReportRationale(user, userInfo, report, age))
+				new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportRationale(user, userInfo, report, age))
 			));
 		return JsonUtil.parseClass(ReportRationale.class, content);
 	}

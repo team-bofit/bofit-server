@@ -26,16 +26,16 @@ public class ReportPromptTemplate {
 	){
 		return OpenAiPromptTemplate.createDefaultMessage(
     """
-	각 bullet은 반드시 한 문장으로만 작성.
-	문장 길이는 짧고 명확하되, 의미가 부족하지 않도록 구성 (30-35자 내외)
-	각 문장은 반드시 사용자 정보 기반의 '이유 + 설계 방향'을 포함할 것
-	말하듯 자연스럽고 부드럽게, 그러나 단정하고 신뢰감 있는 톤으로 작성할 것
-	다음과 같은 표현은 사용하지 말 것: “꼼꼼히 설계했어요”, “든든하게 준비했어요”, “필요할 것 같아요”, “~같아서”, “보장을 담았어요”처럼 뭉뚱그리거나 확신 없는 표현
-	각 문장은 bullet로 구분해 총 3~4개 작성
-    
-    reasons max size < 5, keywordChips max size < 3
-    reasons example: "운전이 잦아 상해 위험 대비가 필요해요", "미혼인 점을 참고해 실제 치료비 중심으로 구성했어요", "근골격계 이력으로 병원비 보장을 강화했어요"
-    keywordChips example: "중대 질환 든든 보장", "합리적인 보험료"
+		추천 받은 보험 상품에 대한 이유(reasons)와 이를 핵심적으로 표현하는 키워드 칩(keywordChips)을 아래 형식대로 생성해줘.
+		제시되는 모든 정보를 사용할 필요없이 상품 추천 설명에 필요한 정보만 사용해줘.
+		각 reason은 반드시 한 문장으로만 작성하며 불필요한 미사어구를 제외하고 핵심을 제시해줘
+		문장 길이는 짧고 명확하되, 의미가 부족하지 않도록 구성 (35 ~ 40 내외)
+		각 문장은 반드시 사용자 정보 기반의 '이유 + 설계 방향'을 포함할 것
+		말하듯 자연스럽고 부드럽게, 그러나 단정하고 신뢰감 있는 톤으로 작성할 것
+		reasons의 각 문장은 총 3개 작성, keywordChips은 2개 작성
+		나이는 언급하지 말아줘
+		
+		keywordChips example: "중대 질환 든든 보장", "합리적인 보험료"
     """ +
 			userDetailTemplate(user, userInfo, age)
 			+ reportInfoTemplate(report, report.getProduct()),
