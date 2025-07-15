@@ -8,6 +8,7 @@ import org.sopt.bofit.domain.user.repository.UserRepository;
 import org.sopt.bofit.global.config.properties.KakaoProperties;
 import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
 import org.sopt.bofit.global.exception.custom_exception.UnAuthorizedException;
+import org.sopt.bofit.global.oauth.constant.HttpHeaderConstants;
 import org.sopt.bofit.global.oauth.dto.KaKaoLoginResponse;
 import org.sopt.bofit.global.oauth.dto.KaKaoTokenResponse;
 import org.sopt.bofit.global.oauth.dto.KakaoUserResponse;
@@ -131,7 +132,7 @@ public class OAuthService {
 
     @Transactional
     public TokenReissueResponse reissue(String bearerToken) {
-        String refreshToken = bearerToken.replace("Bearer ", "").trim();
+        String refreshToken = bearerToken.replace(HttpHeaderConstants.BEARER_PREFIX, "").trim();
         if (!jwtUtil.isTokenValid(refreshToken)) {
             throw new UnAuthorizedException(JWT_INVALID);
         }
