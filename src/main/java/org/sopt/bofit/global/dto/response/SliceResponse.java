@@ -3,6 +3,7 @@ package org.sopt.bofit.global.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
+import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.MyCommentSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.MyPostSummaryResponse;
 import org.springframework.data.domain.Slice;
@@ -28,6 +29,9 @@ public record SliceResponse<T>(
             }
             else if (lastElement instanceof CommentResponse lastComment){
                 nextCursorId = lastComment.commentId();
+            }
+            else if(lastElement instanceof PostSummaryResponse lastPost){
+                nextCursorId = lastPost.postId();
             }
         }
 
