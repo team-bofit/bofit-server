@@ -45,7 +45,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
                 .orderBy(comment.id.desc())
                 .limit(size + 1)
                 .fetch();
-
+        
         boolean hasNext = content.size() > size;
         if (hasNext) content.remove(size);
 
