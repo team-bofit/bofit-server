@@ -5,7 +5,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.sopt.bofit.global.config.properties.JwtProperties;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -21,14 +21,10 @@ public class JwtProvider {
     private final Long refreshTokenExpireMillis;
     private final SecretKey secretKey;
 
-    public JwtProvider(
-            @Value("${jwt.secret}") String secretKey,
-            @Value("${jwt.accessTokenExpiration}") Long accessExpiration,
-            @Value("${jwt.refreshTokenExpiration}") Long refreshExpiration
-    ){
-        this.secretKey = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
-        this.accessTokenExpireMillis = accessExpiration;
-        this.refreshTokenExpireMillis = refreshExpiration;
+    public JwtProvider(JwtProperties jwtProperties) {
+        this.secretKey = Keys.hmacShaKeyFor(jwtProperties.secret().getBytes(StandardCharsets.UTF_8));
+        this.accessTokenExpireMillis = jwtProperties.accessTokenExpiration();
+        this.refreshTokenExpireMillis = jwtProperties.refreshTokenExpiration();
     }
 
     public String generateAccessToken(Long userId) {

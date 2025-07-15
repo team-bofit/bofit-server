@@ -3,16 +3,13 @@ package org.sopt.bofit.domain.post.service;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.entity.Post;
-import org.sopt.bofit.domain.post.repository.PostCustomRepositoryImpl;
 import org.sopt.bofit.domain.post.repository.PostRepository;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.global.exception.custom_exception.ForbiddenException;
-import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_NOT_FOUND;
 import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
 
 @Service
@@ -40,9 +37,9 @@ public class PostWriter {
         User user = userReader.findById(userId);
         Post post = postReader.findById(postId);
 
-        checkUserIsOwner(userId, post);
-
+        post.getUser().checkIsWriter(userId, POST_UNAUTHORIZED);
         post.updatePost(title, content);
+
         return PostCreateResponse.from(post.getId());
     }
 
@@ -58,7 +55,7 @@ public class PostWriter {
     public void deletePost(Long userId, Long postId) {
         User user = userReader.findById(userId);
         Post post = postReader.findById(postId);
-        checkUserIsOwner(userId, post);
+        post.getUser().checkIsWriter(userId, POST_UNAUTHORIZED);
 
         postRepository.deletePostByPostId(postId);
     }

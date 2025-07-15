@@ -5,9 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserRepository;
-import org.sopt.bofit.global.config.KakaoProperties;
+import org.sopt.bofit.global.config.properties.KakaoProperties;
 import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
 import org.sopt.bofit.global.exception.custom_exception.UnAuthorizedException;
+import org.sopt.bofit.global.oauth.constant.HttpHeaderConstants;
 import org.sopt.bofit.global.oauth.dto.KaKaoLoginResponse;
 import org.sopt.bofit.global.oauth.dto.KaKaoTokenResponse;
 import org.sopt.bofit.global.oauth.dto.KakaoUserResponse;
@@ -47,10 +48,10 @@ public class OAuthService {
     private final WebClient webClient = WebClient.create();
 
     private Mono<KaKaoTokenResponse> requestToken(String code) {
-        String body = OAuthUtil.buildTokenRequestBody(code, properties.getClientId(), properties.getRedirectUri());
+        String body = OAuthUtil.buildTokenRequestBody(code, properties.clientId(), properties.redirectUri());
 
         return webClient.post()
-                .uri(properties.getTokenUri())
+                .uri(properties.tokenUri())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .bodyValue(body)
                 .retrieve()
@@ -69,7 +70,7 @@ public class OAuthService {
 
     private Mono<KakaoUserResponse> getUserInfo(String accessToken) {
         return webClient.get()
-                .uri(properties.getUserInfoUri())
+                .uri(properties.userInfoUri())
                 .headers(headers -> headers.setBearerAuth(accessToken))
                 .retrieve()
                 .bodyToMono(KakaoUserResponse.class);
@@ -130,7 +131,8 @@ public class OAuthService {
     }
 
     @Transactional
-    public TokenReissueResponse reissue(String refreshToken) {
+    public TokenReissueResponse reissue(String bearerToken) {
+        String refreshToken = bearerToken.replace(HttpHeaderConstants.BEARER_PREFIX, "").trim();
         if (!jwtUtil.isTokenValid(refreshToken)) {
             throw new UnAuthorizedException(JWT_INVALID);
         }

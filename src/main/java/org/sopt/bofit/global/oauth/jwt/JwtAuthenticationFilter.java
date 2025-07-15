@@ -7,13 +7,16 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.bofit.global.exception.custom_exception.CustomException;
+import org.sopt.bofit.global.oauth.constant.HttpHeaderConstants;
+import org.sopt.bofit.global.oauth.constant.RequestAttributeConstants;
+import org.sopt.bofit.global.oauth.constant.SwaggerPathConstants;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -21,6 +24,12 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+
+    private static final List<String> EXCLUDED_PATH_PREFIXES = List.of(
+            SwaggerPathConstants.SWAGGER_CONFIG,
+            SwaggerPathConstants.SWAGGER_UI,
+            SwaggerPathConstants.SWAGGER_DOCS
+    );
 
 
     @Override
@@ -34,7 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 }
             } catch (CustomException e) {
-                request.setAttribute("exception", e.getErrorCode());
+                request.setAttribute(RequestAttributeConstants.EXCEPTION, e.getErrorCode());
                 throw e;
             }
         }
@@ -44,12 +53,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String uri = request.getRequestURI();
-        return uri.startsWith("/swagger-ui") || uri.startsWith("/v3/api-docs") || uri.startsWith("/swagger-config");
+        return EXCLUDED_PATH_PREFIXES.stream().anyMatch(uri::startsWith);
     }
 
     private String getToken(HttpServletRequest request) {
-        String authorization = request.getHeader("authorization");
-        String validTokenPrefix = "Bearer ";
+        String authorization = request.getHeader(HttpHeaderConstants.AUTHORIZATION);
+        String validTokenPrefix = HttpHeaderConstants.BEARER_PREFIX;
         if (authorization == null || !authorization.startsWith(validTokenPrefix)) {
             return null;
         }
