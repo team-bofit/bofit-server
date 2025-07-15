@@ -141,6 +141,7 @@ public class InsuranceReport extends BaseEntity {
 
 	@Builder
 	private InsuranceReport(
+		User user,
 		InsuranceProduct product,
 		InsuranceStatistic statistic,
 		CoverageStatus majorDisease,
@@ -162,6 +163,7 @@ public class InsuranceReport extends BaseEntity {
 		CoverageStatus diseaseDeath,
 		CoverageStatus injuryDeath
 	) {
+		this.user = user;
 		this.product = product;
 		this.statistic = statistic;
 
@@ -197,24 +199,24 @@ public class InsuranceReport extends BaseEntity {
 
 	public String toReportSummaryString() {
 		return "InsuranceReport{" +
-			", majorDisease=" + majorDisease +
-			", cancer=" + cancer +
-			", cerebrovascular=" + cerebrovascular +
-			", heartDisease=" + heartDisease +
+			", majorDisease=" + majorDisease.getDescription() +
+			", cancer=" + cancer.getDescription() +
+			", cerebrovascular=" + cerebrovascular.getDescription() +
+			", heartDisease=" + heartDisease.getDescription() +
 
-			", diseaseSurgery=" + diseaseSurgery +
-			", diseaseTypeSurgery=" + diseaseTypeSurgery +
-			", injurySurgery=" + injurySurgery +
-			", injuryTypeSurgery=" + injuryTypeSurgery +
+			", diseaseSurgery=" + diseaseSurgery.getDescription() +
+			", diseaseTypeSurgery=" + diseaseTypeSurgery.getDescription() +
+			", injurySurgery=" + injurySurgery.getDescription() +
+			", injuryTypeSurgery=" + injuryTypeSurgery.getDescription() +
 
-			", diseaseDailyHospitalization=" + diseaseDailyHospitalization +
-			", injuryDailyHospitalization=" + injuryDailyHospitalization +
+			", diseaseDailyHospitalization=" + diseaseDailyHospitalization.getDescription() +
+			", injuryDailyHospitalization=" + injuryDailyHospitalization.getDescription() +
 
-			", diseaseDisability=" + diseaseDisability +
-			", injuryDisability=" + injuryDisability +
+			", diseaseDisability=" + diseaseDisability.getDescription() +
+			", injuryDisability=" + injuryDisability.getDescription() +
 
-			", diseaseDeath=" + diseaseDeath +
-			", injuryDeath=" + injuryDeath +
+			", diseaseDeath=" + diseaseDeath.getDescription() +
+			", injuryDeath=" + injuryDeath.getDescription() +
 			'}';
 	}
 }
