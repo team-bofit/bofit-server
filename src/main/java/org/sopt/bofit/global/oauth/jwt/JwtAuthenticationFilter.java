@@ -44,25 +44,29 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getToken(request);
 
-        if(token == null){
-            request.setAttribute(RequestAttributeConstants.EXCEPTION, JWT_NOT_FOUND);
-            throw new UnAuthorizedException(JWT_NOT_FOUND);
-        }
-        try {
-            if (jwtUtil.isTokenValid(token)) {
-                Authentication authentication = getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+        // if(token == null){
+        //     request.setAttribute(RequestAttributeConstants.EXCEPTION, JWT_NOT_FOUND);
+        //     // throw new UnAuthorizedException(JWT_NOT_FOUND);
+        // }
+        if(token!=null) {
+            try {
+                if (jwtUtil.isTokenValid(token)) {
+                    Authentication authentication = getAuthentication(token);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
+            } catch (CustomException e) {
+                request.setAttribute(RequestAttributeConstants.EXCEPTION, e.getErrorCode());
+                throw e;
             }
-        } catch (CustomException e) {
-            request.setAttribute(RequestAttributeConstants.EXCEPTION, e.getErrorCode());
-            throw e;
         }
 
         filterChain.doFilter(request, response);
     }
 
-    protected boolean shouldNotFilter(HttpServletRequest request) {
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String uri = request.getRequestURI();
+        // boolean d = EXCLUDED_PATH_PREFIXES.stream().anyMatch(uri::startsWith);
         return EXCLUDED_PATH_PREFIXES.stream().anyMatch(uri::startsWith);
     }
 
