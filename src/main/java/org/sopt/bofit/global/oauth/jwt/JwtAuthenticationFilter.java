@@ -1,12 +1,17 @@
 package org.sopt.bofit.global.oauth.jwt;
 
+import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.*;
+
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 import org.sopt.bofit.global.exception.custom_exception.CustomException;
+import org.sopt.bofit.global.exception.custom_exception.UnAuthorizedException;
 import org.sopt.bofit.global.oauth.constant.HttpHeaderConstants;
 import org.sopt.bofit.global.oauth.constant.RequestAttributeConstants;
 import org.sopt.bofit.global.oauth.constant.SwaggerPathConstants;
@@ -36,16 +41,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getToken(request);
 
-        if(token != null) {
-            try {
-                if (jwtUtil.isTokenValid(token)) {
-                    Authentication authentication = getAuthentication(token);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
-            } catch (CustomException e) {
-                request.setAttribute(RequestAttributeConstants.EXCEPTION, e.getErrorCode());
-                throw e;
+        if(token == null){
+            request.setAttribute(RequestAttributeConstants.EXCEPTION, JWT_NOT_FOUND);
+            throw new UnAuthorizedException(JWT_NOT_FOUND);
+        }
+        try {
+            if (jwtUtil.isTokenValid(token)) {
+                Authentication authentication = getAuthentication(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+        } catch (CustomException e) {
+            request.setAttribute(RequestAttributeConstants.EXCEPTION, e.getErrorCode());
+            throw e;
         }
 
         filterChain.doFilter(request, response);

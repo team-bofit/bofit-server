@@ -16,24 +16,20 @@ import java.io.IOException;
 import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static org.sopt.bofit.global.oauth.constant.JwtExceptionConstants.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
-    private static final Map<Object, ErrorCode> exceptionErrorCodeMap = Map.of(
-            EXPIRED, GlobalErrorCode.JWT_EXPIRED,
-            INVALID_SIGNATURE, GlobalErrorCode.JWT_INVALID_SIGNATURE,
-            INVALID, GlobalErrorCode.JWT_INVALID,
-            UNSUPPORTED, GlobalErrorCode.JWT_UNSUPPORTED
-    );
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        Object exceptionType = request.getAttribute(RequestAttributeConstants.EXCEPTION);
 
-        ErrorCode error = getErrorCode(exceptionType);
+        ErrorCode error = GlobalErrorCode.UNAUTHORIZED;
 
+        var requestError = request.getAttribute(RequestAttributeConstants.EXCEPTION);
+        if(requestError instanceof ErrorCode errorCode){
+            error = errorCode;
+        }
         response.setStatus(error.getHttpStatus());
         response.setContentType(APPLICATION_JSON_VALUE);
         response.setCharacterEncoding(UTF_8.name());
@@ -42,8 +38,4 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         response.getWriter().write(json);
     }
 
-
-    private ErrorCode getErrorCode(Object exceptionType) {
-        return exceptionErrorCodeMap.getOrDefault(exceptionType, GlobalErrorCode.UNAUTHORIZED);
-    }
 }
