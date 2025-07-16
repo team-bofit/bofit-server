@@ -7,7 +7,7 @@ import java.util.List;
 
 public record SliceResponse<T, C>(
         @Schema(description = "데이터 목록") List<T> content,
-        @Schema(description = "다음 커서 ID") C nextCursor,
+        @Schema(description = "다음 커서") C nextCursor,
         @Schema(description = "마지막 페이지 여부") boolean isLast
 ) {
     public static <T extends CursorProvider<C>, C> SliceResponse<T, C> of(Slice<T> slice) {
