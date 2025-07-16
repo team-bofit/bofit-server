@@ -29,7 +29,7 @@ public class UserReader {
 
         User user = findById(userId);
 
-        return UserProfileResponse.of(userId, user.getNickname(), user.getProfileImage(), user.isRecommendInsurance());
+        return UserProfileResponse.of(userId, user.getName(), user.getNickname(), user.getProfileImage(), user.isRecommendInsurance());
 
     }
 
