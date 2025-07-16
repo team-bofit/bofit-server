@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.sopt.bofit.global.exception.custom_exception.CustomException;
 import org.sopt.bofit.global.oauth.constant.HttpHeaderConstants;
+import org.sopt.bofit.global.oauth.constant.PathConstant;
 import org.sopt.bofit.global.oauth.constant.RequestAttributeConstants;
 import org.sopt.bofit.global.oauth.constant.SwaggerPathConstants;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Slf4j
 @Component
@@ -24,13 +26,6 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-
-    private static final List<String> EXCLUDED_PATH_PREFIXES = List.of(
-            SwaggerPathConstants.SWAGGER_CONFIG,
-            SwaggerPathConstants.SWAGGER_UI,
-            SwaggerPathConstants.SWAGGER_DOCS
-    );
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -53,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String uri = request.getRequestURI();
-        return EXCLUDED_PATH_PREFIXES.stream().anyMatch(uri::startsWith);
+        return Stream.of(PathConstant.ALLOWED_PATHS).anyMatch(uri::startsWith);
     }
 
     private String getToken(HttpServletRequest request) {

@@ -1,6 +1,10 @@
 package org.sopt.bofit.global.config;
 
+import static org.sopt.bofit.global.oauth.constant.PathConstant.*;
+
 import lombok.RequiredArgsConstructor;
+
+import org.sopt.bofit.global.oauth.constant.PathConstant;
 import org.sopt.bofit.global.oauth.jwt.CustomAccessDeniedHandler;
 import org.sopt.bofit.global.oauth.jwt.CustomAuthenticationEntryPoint;
 import org.sopt.bofit.global.oauth.jwt.JwtAuthenticationFilter;
@@ -22,11 +26,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
-
-    private final String[] ALLOWED_PATHS = {
-            "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**",
-            "/oauth/kakao/login"
-    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
