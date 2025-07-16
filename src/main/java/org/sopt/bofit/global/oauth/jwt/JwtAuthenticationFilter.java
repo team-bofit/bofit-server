@@ -1,7 +1,7 @@
 package org.sopt.bofit.global.oauth.jwt;
 
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.*;
-import static org.sopt.bofit.global.oauth.constant.JwtExceptionConstants.*;
+
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -42,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String token = getToken(request);
 
         if(token == null){
-            request.setAttribute(RequestAttributeConstants.EXCEPTION, NOT_EXIST);
+            request.setAttribute(RequestAttributeConstants.EXCEPTION, JWT_NOT_FOUND);
             throw new UnAuthorizedException(JWT_NOT_FOUND);
         }
         try {
