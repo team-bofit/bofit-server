@@ -30,7 +30,7 @@ public class PostService {
         postWriter.deletePost(userId, postId);
     }
 
-    public SliceResponse<PostSummaryResponse> getAllPosts(Long cursorId, int size){
+    public SliceResponse<PostSummaryResponse, Long> getAllPosts(Long cursorId, int size){
         return postReader.getAllPosts(cursorId, size);
     }
 

@@ -58,11 +58,11 @@ public class UserService {
 		);
 	}
 
-	public SliceResponse<MyPostSummaryResponse> getMyPosts(Long userId, Long cursorId, int size){
+	public SliceResponse<MyPostSummaryResponse, Long> getMyPosts(Long userId, Long cursorId, int size){
 		return userReader.getMyPosts(userId, cursorId, size);
 	}
 
-	public SliceResponse<MyCommentSummaryResponse> getMyComments(Long userId, Long cursorId, int size) {
+	public SliceResponse<MyCommentSummaryResponse, Long> getMyComments(Long userId, Long cursorId, int size) {
 		return userReader.getMyComments(userId, cursorId, size);
 	}
 }

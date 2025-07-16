@@ -27,7 +27,7 @@ public class PostReader {
 
     private final CommentRepository commentRepository;
 
-    public SliceResponse<PostSummaryResponse> getAllPosts(Long cursorId, int size){
+    public SliceResponse<PostSummaryResponse, Long> getAllPosts(Long cursorId, int size){
 
         Slice<PostSummaryResponse> postList = postRepository.findAllByCursorId(cursorId, size);
 

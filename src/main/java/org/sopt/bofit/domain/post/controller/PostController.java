@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-
 import org.sopt.bofit.domain.comment.dto.request.CommentCreateRequest;
 import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
 import org.sopt.bofit.domain.comment.service.CommentService;
@@ -14,18 +13,19 @@ import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.service.PostService;
-import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.annotation.LoginUserId;
 import org.sopt.bofit.global.dto.response.BaseResponse;
+import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.springframework.web.bind.annotation.*;
 
-import static org.sopt.bofit.domain.comment.constant.CommentConstant.*;
-import static org.sopt.bofit.domain.post.constant.PostConstant.*;
-import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
-import static org.sopt.bofit.global.constant.SwaggerConstant.*;
-
 import java.util.Optional;
+
+import static org.sopt.bofit.domain.comment.constant.CommentConstant.COMMENTS_DEFAULT_SIZE;
+import static org.sopt.bofit.domain.post.constant.PostConstant.POSTS_DEFAULT_SIZE;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
+import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_DESCRIPTION_COMMUNITY;
+import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_NAME_COMMUNITY;
 
 @RestController
 @RequiredArgsConstructor
@@ -73,7 +73,7 @@ public class PostController {
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
     @Operation(summary = "게시물 전체 조회", description = "커뮤니티에서 모든 글을 조회합니다.")
     @GetMapping()
-    public BaseResponse<SliceResponse<PostSummaryResponse>> getAllPosts(
+    public BaseResponse<SliceResponse<PostSummaryResponse, Long>> getAllPosts(
             @RequestParam(required = false, name = "cursor") Long cursorId,
             @RequestParam(required = false, defaultValue = POSTS_DEFAULT_SIZE) int size){
         return BaseResponse.ok(postService.getAllPosts(cursorId, size), "게시물 전체 조회 성공");
@@ -119,13 +119,13 @@ public class PostController {
     @Operation(summary = "댓글 목록 조회 ", description = "커뮤니티 게시글의 댓글 목록을 조회합니다.")
     @CustomExceptionDescription(DELETE_COMMENT)
     @GetMapping("/{post-id}/comments")
-    public BaseResponse<SliceResponse<CommentResponse>> getComments(
+    public BaseResponse<SliceResponse<CommentResponse,Long>> getComments(
         @PathVariable(name = "post-id") Long postId,
         @RequestParam(required = false, name = "cursor") Long cursorId,
         @RequestParam(defaultValue = COMMENTS_DEFAULT_SIZE) int size,
         @Parameter(hidden = true) @LoginUserId Long userId
     ){
-        SliceResponse<CommentResponse> response = commentService.findAllByPostIdAndCursor(postId, userId, Optional.ofNullable(cursorId), size);
+        SliceResponse<CommentResponse,Long> response = commentService.findAllByPostIdAndCursor(postId, userId, Optional.ofNullable(cursorId), size);
         return BaseResponse.ok(response, "댓글 목록 조회 성공");
     }
 }
