@@ -9,4 +9,5 @@ public class JwtExceptionConstants {
     public static final String INVALID_SIGNATURE = "JWT_INVALID_SIGNATURE";
     public static final String INVALID = "JWT_INVALID";
     public static final String UNSUPPORTED = "JWT_UNSUPPORTED";
+    public static final String NOT_EXIST = "JWT_NOT_EXIST";
 }
