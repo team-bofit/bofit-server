@@ -49,6 +49,7 @@ public class PostReader {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .commentCount(postCommentCount)
+                .createdAt(post.getCreatedAt())
                 .build();
 
     }
