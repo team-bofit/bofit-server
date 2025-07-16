@@ -63,9 +63,16 @@ public enum ConditionCoverage {
 	DISEASE_TYPE_3_SURGERY("질병 3종 수술비", product -> product.getSurgery().getDiseaseSurgery().getType3()),
 	DISEASE_TYPE_4_SURGERY("질병 4종 수술비", product -> product.getSurgery().getDiseaseSurgery().getType4()),
 	DISEASE_TYPE_5_SURGERY("질병 5종 수술비", product -> product.getSurgery().getDiseaseSurgery().getType5()),
-	ALL_DISEASE_SURGERY("질병 수술비 및 질병 종 수술비 전부",
-		product -> List.of(product.getSurgery().getDiseaseSurgery().getGeneral(), product.getSurgery().getDiseaseSurgery().getType5())), // 기능적 요구사항에 맞춰 일반과 5종을 고려함.
 
+	// 기능적 요구사항에 맞춰 일반과 5종을 고려함.
+	ALL_DISEASE_SURGERY("질병 수술비 및 질병 종 수술비 전부", product -> {
+		int general = product.getSurgery().getDiseaseSurgery().getGeneral();
+		int type5 = product.getSurgery().getDiseaseSurgery().getType5();
+		if(general > 0 && type5 > 0){
+			return general + type5;
+		}
+		return 0;
+	}),
 
 	INJURY_SURGERY("상해 수술", product -> product.getSurgery().getInjurySurgery().getGeneral()),
 	INJURY_TYPE_1_SURGERY("상해 1종 수술비", product -> product.getSurgery().getInjurySurgery().getType1()),
@@ -81,6 +88,7 @@ public enum ConditionCoverage {
 
 	public int getCoverage(InsuranceProduct product){
 		try {
+			System.out.println((int)fieldAccessor.apply(product));
 			return (int)fieldAccessor.apply(product);
 		}catch (Exception e){
 			throw new InternalException(GlobalErrorCode.INTERNAL_SERVER_ERROR, "보장 금액 파싱 중 오류");
