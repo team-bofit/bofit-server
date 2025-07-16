@@ -1,8 +1,5 @@
 package org.sopt.bofit.global.oauth.jwt;
 
-import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.*;
-import static org.sopt.bofit.global.oauth.constant.PathConstant.*;
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.sopt.bofit.global.exception.custom_exception.CustomException;
-import org.sopt.bofit.global.exception.custom_exception.UnAuthorizedException;
 import org.sopt.bofit.global.oauth.constant.HttpHeaderConstants;
-import org.sopt.bofit.global.oauth.constant.PathConstant;
 import org.sopt.bofit.global.oauth.constant.RequestAttributeConstants;
 import org.sopt.bofit.global.oauth.constant.SwaggerPathConstants;
 import org.springframework.security.core.Authentication;
@@ -35,19 +30,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final List<String> EXCLUDED_PATH_PREFIXES = List.of(
         SwaggerPathConstants.SWAGGER_CONFIG,
         SwaggerPathConstants.SWAGGER_UI,
-        SwaggerPathConstants.SWAGGER_DOCS,
-        OAUTH_KAKAO_LOGIN_PATH,
-        ACTUATOR_PATH
+        SwaggerPathConstants.SWAGGER_DOCS
     );
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getToken(request);
 
-        // if(token == null){
-        //     request.setAttribute(RequestAttributeConstants.EXCEPTION, JWT_NOT_FOUND);
-        //     // throw new UnAuthorizedException(JWT_NOT_FOUND);
-        // }
         if(token!=null) {
             try {
                 if (jwtUtil.isTokenValid(token)) {
@@ -66,7 +55,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String uri = request.getRequestURI();
-        // boolean d = EXCLUDED_PATH_PREFIXES.stream().anyMatch(uri::startsWith);
         return EXCLUDED_PATH_PREFIXES.stream().anyMatch(uri::startsWith);
     }
 
