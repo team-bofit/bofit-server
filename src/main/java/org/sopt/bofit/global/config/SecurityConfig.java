@@ -1,10 +1,8 @@
 package org.sopt.bofit.global.config;
 
-import static org.sopt.bofit.global.oauth.constant.PathConstant.*;
 
 import lombok.RequiredArgsConstructor;
 
-import org.sopt.bofit.global.oauth.constant.PathConstant;
 import org.sopt.bofit.global.oauth.jwt.CustomAccessDeniedHandler;
 import org.sopt.bofit.global.oauth.jwt.CustomAuthenticationEntryPoint;
 import org.sopt.bofit.global.oauth.jwt.JwtAuthenticationFilter;
@@ -27,6 +25,12 @@ public class SecurityConfig {
 
     private final JwtUtil jwtUtil;
 
+    public static final String[] ALLOWED_PATHS = {
+        "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/swagger-config",
+        "/oauth/kakao/login",
+        "/actuator/health",
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -35,9 +39,8 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth) -> auth
-                       // .requestMatchers(ALLOWED_PATHS).permitAll()
-                       // .anyRequest().authenticated()
-                    .anyRequest().permitAll()
+                       .requestMatchers(ALLOWED_PATHS).permitAll()
+                       .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(auth -> auth
