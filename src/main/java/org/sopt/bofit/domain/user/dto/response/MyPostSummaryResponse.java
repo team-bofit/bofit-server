@@ -1,6 +1,7 @@
 package org.sopt.bofit.domain.user.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.sopt.bofit.global.dto.response.CursorProvider;
 
 import java.time.LocalDateTime;
 
@@ -20,4 +21,10 @@ public record MyPostSummaryResponse(
 
         @Schema(description = "작성 시간")
         LocalDateTime createdAt
-){}
+) implements CursorProvider<Long> {
+
+        @Override
+        public Long getCursor() {
+                return postId;
+        }
+}

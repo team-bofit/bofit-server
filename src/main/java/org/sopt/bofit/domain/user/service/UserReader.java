@@ -1,24 +1,19 @@
 package org.sopt.bofit.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
-
 import org.sopt.bofit.domain.comment.repository.CommentRepository;
 import org.sopt.bofit.domain.post.repository.PostRepository;
-import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;
 import org.sopt.bofit.domain.user.dto.response.MyCommentSummaryResponse;
-import org.sopt.bofit.domain.user.dto.response.JobResponses;
 import org.sopt.bofit.domain.user.dto.response.MyPostSummaryResponse;
-import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
 import org.sopt.bofit.domain.user.entity.User;
-import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
-import org.sopt.bofit.domain.user.entity.constant.Job;
 import org.sopt.bofit.domain.user.repository.UserRepository;
+import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
-import static org.sopt.bofit.global.exception.constant.UserErrorCode.*;
+import static org.sopt.bofit.global.exception.constant.UserErrorCode.USER_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -38,7 +33,7 @@ public class UserReader {
 
     }
 
-    public SliceResponse<MyPostSummaryResponse> getMyPosts(Long userId, Long cursorId, int size) {
+    public SliceResponse<MyPostSummaryResponse, Long> getMyPosts(Long userId, Long cursorId, int size) {
 
         findById(userId);
 
@@ -51,7 +46,7 @@ public class UserReader {
         return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
     }
 
-    public SliceResponse<MyCommentSummaryResponse> getMyComments(Long userId, Long cursorId, int size) {
+    public SliceResponse<MyCommentSummaryResponse, Long> getMyComments(Long userId, Long cursorId, int size) {
 
         findById(userId);
 

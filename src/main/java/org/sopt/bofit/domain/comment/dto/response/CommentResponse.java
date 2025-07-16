@@ -2,6 +2,7 @@ package org.sopt.bofit.domain.comment.dto.response;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.sopt.bofit.global.dto.response.CursorProvider;
 
 import java.time.LocalDateTime;
 
@@ -26,5 +27,10 @@ public record CommentResponse (
 
 	@Schema(description = "수정 시간")
 	LocalDateTime updatedAt
-){
+) implements CursorProvider<Long>
+{
+	@Override
+	public Long getCursor() {
+		return commentId;
+	}
 }

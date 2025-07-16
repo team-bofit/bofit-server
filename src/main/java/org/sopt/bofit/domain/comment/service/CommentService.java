@@ -1,9 +1,6 @@
 package org.sopt.bofit.domain.comment.service;
 
-import static org.sopt.bofit.global.exception.constant.CommentErrorCode.*;
-
-import java.util.Optional;
-
+import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.dto.request.CommentCreateRequest;
 import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
 import org.sopt.bofit.domain.comment.entity.Comment;
@@ -16,7 +13,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.RequiredArgsConstructor;
+import java.util.Optional;
+
+import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_UNAUTHORIZED;
 
 
 @Service
@@ -47,7 +46,7 @@ public class CommentService {
 		commentWriter.softDelete(comment);
 	}
 
-	public SliceResponse<CommentResponse> findAllByPostIdAndCursor(Long postId, Long userId, Optional<Long> cursor, int size) {
+	public SliceResponse<CommentResponse, Long> findAllByPostIdAndCursor(Long postId, Long userId, Optional<Long> cursor, int size) {
 		Post post = postReader.findById(postId);
 
 		Slice<CommentResponse> commentsByCursorId = commentReader.findCommentsByCursorId(postId, cursor, size);

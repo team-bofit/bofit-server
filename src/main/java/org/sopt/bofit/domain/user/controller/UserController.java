@@ -46,7 +46,7 @@ public class UserController {
     @CustomExceptionDescription(MY_POSTS)
     @Operation(summary = "내가 쓴 글 조회", description = "내가 쓴 글을 조회합니다.")
     @GetMapping("me/posts")
-    public BaseResponse<SliceResponse<MyPostSummaryResponse>> getMyPosts(
+    public BaseResponse<SliceResponse<MyPostSummaryResponse, Long>> getMyPosts(
             @Parameter(hidden = true) @LoginUserId Long userId,
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue = POSTS_DEFAULT_SIZE) int size
@@ -58,7 +58,7 @@ public class UserController {
     @CustomExceptionDescription(MY_COMMENTS)
     @Operation(summary = "내가 쓴 댓글 조회", description = "내가 쓴 댓글을 조회합니다.")
     @GetMapping("me/comments")
-    public BaseResponse<SliceResponse<MyCommentSummaryResponse>> getMyComments(
+    public BaseResponse<SliceResponse<MyCommentSummaryResponse, Long>> getMyComments(
             @Parameter(hidden = true) @LoginUserId Long userId,
             @RequestParam(required = false) Long cursorId,
             @RequestParam(defaultValue = COMMENTS_DEFAULT_SIZE) int size
