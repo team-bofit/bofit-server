@@ -11,6 +11,6 @@ public class PathConstant {
 	};
 
 	public static final String ACTUATOR_PATH = "/actuator";
-	public static final String OAUTH_KAKAO_LOGIN_PATH = "/actuator";
+	public static final String OAUTH_KAKAO_LOGIN_PATH = "/oauth/kakao/login";
 
 }
