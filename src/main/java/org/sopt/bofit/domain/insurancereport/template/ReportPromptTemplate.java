@@ -34,6 +34,7 @@ public class ReportPromptTemplate {
 		말하듯 자연스럽고 부드럽게, 그러나 단정하고 신뢰감 있는 톤으로 작성할 것
 		reasons의 각 문장은 총 3개 작성, keywordChips은 2개 작성
 		나이는 언급하지 말아줘
+		'~했습니다'를 '~했어요' 말투로 작성해줘
 		
 		keywordChips example: "중대 질환 든든 보장", "합리적인 보험료"
     """ +
