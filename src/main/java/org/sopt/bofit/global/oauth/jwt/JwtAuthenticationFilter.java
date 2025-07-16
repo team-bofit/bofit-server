@@ -1,7 +1,7 @@
 package org.sopt.bofit.global.oauth.jwt;
 
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.*;
-
+import static org.sopt.bofit.global.oauth.constant.PathConstant.*;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -32,6 +32,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
 
+    private static final List<String> EXCLUDED_PATH_PREFIXES = List.of(
+        SwaggerPathConstants.SWAGGER_CONFIG,
+        SwaggerPathConstants.SWAGGER_UI,
+        SwaggerPathConstants.SWAGGER_DOCS,
+        OAUTH_KAKAO_LOGIN_PATH,
+        ACTUATOR_PATH
+    );
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = getToken(request);
@@ -55,7 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String uri = request.getRequestURI();
-        return Stream.of(PathConstant.ALLOWED_PATHS).anyMatch(uri::startsWith);
+        return EXCLUDED_PATH_PREFIXES.stream().anyMatch(uri::startsWith);
     }
 
     private String getToken(HttpServletRequest request) {
