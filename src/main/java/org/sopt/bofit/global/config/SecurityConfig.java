@@ -36,9 +36,8 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth) -> auth
-//                        .requestMatchers(ALLOWED_PATHS).permitAll()
-//                        .anyRequest().authenticated()
-                                .anyRequest().permitAll() // 개발을 위해 일시적으로 허용
+                       .requestMatchers(ALLOWED_PATHS).permitAll()
+                       .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(auth -> auth
