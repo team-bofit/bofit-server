@@ -14,7 +14,7 @@ public record CommentResponse (
 	Long writerId,
 
 	@Schema(description = "작성자 닉네임")
-	String wrtierNickname,
+	String writerNickname,
 
 	@Schema(description = "작성자 프로필 이미지")
 	String profileImage,
