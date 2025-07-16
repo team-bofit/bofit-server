@@ -16,12 +16,14 @@ import java.io.IOException;
 import java.util.Map;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.*;
 import static org.sopt.bofit.global.oauth.constant.JwtExceptionConstants.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @Component
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
     private static final Map<Object, ErrorCode> exceptionErrorCodeMap = Map.of(
+            NOT_EXIST, JWT_NOT_FOUND,
             EXPIRED, GlobalErrorCode.JWT_EXPIRED,
             INVALID_SIGNATURE, GlobalErrorCode.JWT_INVALID_SIGNATURE,
             INVALID, GlobalErrorCode.JWT_INVALID,
