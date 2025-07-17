@@ -3,7 +3,6 @@ package org.sopt.bofit.global.oauth.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.dto.response.BaseResponse;
@@ -29,8 +28,7 @@ public class OAuthController {
     @Operation(summary = "카카오 로그인", description = "카카오 API를 통해 로그인합니다.")
     @GetMapping("/kakao/login")
     public BaseResponse<KaKaoLoginResponse> kakaoCallback(@RequestParam("code") String code,
-                                                          HttpServletRequest request) {
-        String redirectUri = request.getRequestURL().toString();
+                                                          @RequestParam("redirectUri") String redirectUri) {
         return BaseResponse.ok(oAuthService.login(code, redirectUri), "카카오 로그인 성공");
     }
 
