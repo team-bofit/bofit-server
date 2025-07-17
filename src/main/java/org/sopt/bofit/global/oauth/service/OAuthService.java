@@ -47,8 +47,8 @@ public class OAuthService {
 
     private final RestClient restClient = RestClient.builder().baseUrl("").build();
 
-    private KaKaoTokenResponse requestToken(String code) {
-        String body = OAuthUtil.buildTokenRequestBody(code, properties.clientId(), properties.redirectUri());
+    private KaKaoTokenResponse requestToken(String code, String redirectUri) {
+        String body = OAuthUtil.buildTokenRequestBody(code, properties.clientId(), redirectUri);
 
         return restClient.post()
                 .uri(properties.tokenUri())
@@ -96,8 +96,8 @@ public class OAuthService {
     }
 
     @Transactional
-    public KaKaoLoginResponse login(String code) {
-        KaKaoTokenResponse token = requestToken(code);
+    public KaKaoLoginResponse login(String code, String redirectUri) {
+        KaKaoTokenResponse token = requestToken(code, redirectUri);
         User user = registerOrLogin(token.accessToken());
 
         String accessToken = jwtProvider.generateAccessToken(user.getId());

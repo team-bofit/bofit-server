@@ -3,6 +3,7 @@ package org.sopt.bofit.global.oauth.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.dto.response.BaseResponse;
@@ -27,8 +28,10 @@ public class OAuthController {
     @CustomExceptionDescription(KAKAO_TOKEN_REQUEST)
     @Operation(summary = "카카오 로그인", description = "카카오 API를 통해 로그인합니다.")
     @GetMapping("/kakao/login")
-    public BaseResponse<KaKaoLoginResponse> kakaoCallback(@RequestParam("code") String code) {
-        return BaseResponse.ok(oAuthService.login(code), "카카오 로그인 성공");
+    public BaseResponse<KaKaoLoginResponse> kakaoCallback(@RequestParam("code") String code,
+                                                          HttpServletRequest request) {
+        String redirectUri = request.getRequestURL().toString();
+        return BaseResponse.ok(oAuthService.login(code, redirectUri), "카카오 로그인 성공");
     }
 
     @Tag(name = TAG_NAME_KAKAO_LOGIN, description = TAG_DESCRIPTION_KAKAO_LOGIN)
@@ -38,5 +41,6 @@ public class OAuthController {
     public BaseResponse<TokenReissueResponse> reissue(@Parameter(hidden = true) @RequestHeader("Authorization") String refreshToken) {
         return BaseResponse.ok(oAuthService.reissue(refreshToken), "토큰 재발급 성공");
     }
+
 
 }

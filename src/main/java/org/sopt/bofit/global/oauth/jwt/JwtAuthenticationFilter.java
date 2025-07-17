@@ -18,9 +18,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.List;
 
-import static org.sopt.bofit.global.oauth.constant.PathConstant.ACTUATOR_PATH;
-import static org.sopt.bofit.global.oauth.constant.PathConstant.OAUTH_KAKAO_LOGIN_PATH;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
