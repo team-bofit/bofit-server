@@ -18,6 +18,7 @@ public enum GlobalErrorCode implements ErrorCode {
     MISSING_REQUEST_PARAMETER(HttpStatus.BAD_REQUEST.value(), "필수 요청 파라미터가 누락되었습니다."),
     TYPE_MISMATCH(HttpStatus.BAD_REQUEST.value(), "요청 파라미터 타입이 일치하지 않습니다."),
     MISSING_PATH_VARIABLE(HttpStatus.BAD_REQUEST.value(), "경로 변수 값이 누락되었습니다."),
+    NOT_SUPPORTED_URI_ERROR(NOT_FOUND.value(), "지원하지 않는 URL입니다."),
     JSON_SERIALIZATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Enum 리스트를 JSON 문자열로 직렬화하는 데 실패했습니다."),
     JSON_DESERIALIZATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "JSON 문자열을 Enum 리스트로 역직렬화하는 데 실패했습니다."),
     AUTHENTICATION_SETTING_FAIL(HttpStatus.INTERNAL_SERVER_ERROR.value(), "인증 정보 처리에 실패했습니다"),
@@ -25,7 +26,8 @@ public enum GlobalErrorCode implements ErrorCode {
     JWT_INVALID_SIGNATURE(HttpStatus.UNAUTHORIZED.value(), "잘못된 JWT 서명입니다."),
     JWT_EXPIRED(HttpStatus.UNAUTHORIZED.value(), "만료된 토큰입니다."),
     JWT_UNSUPPORTED(HttpStatus.UNAUTHORIZED.value(), "지원하지 않는 JWT입니다."),
-    JWT_INVALID(HttpStatus.UNAUTHORIZED.value(), "유효하지 않은 JWT입니다.")
+    JWT_INVALID(HttpStatus.UNAUTHORIZED.value(), "유효하지 않은 JWT입니다."),
+    EXTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "외부 서버 오류입니다.")
     ;
 
 

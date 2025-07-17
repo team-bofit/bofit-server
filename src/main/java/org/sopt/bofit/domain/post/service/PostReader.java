@@ -11,7 +11,7 @@ import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.repository.PostRepository;
 import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.sopt.bofit.domain.user.entity.User;
-import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
+import org.sopt.bofit.global.exception.customexception.NotFoundException;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +40,7 @@ public class PostReader {
 
         List<Comment> activeComments = commentRepository.findAllByPostIdAndStatus(postId, CommentStatus.ACTIVE);
 
-        long postCommentCount = commentRepository.countByPost(post);
+        long postCommentCount = activeComments.size();
 
         return builder()
                 .writerId(writer.getId())

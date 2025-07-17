@@ -39,6 +39,20 @@ openai:
 server:
   forward-headers-strategy: FRAMEWORK
 
+resilience4j.retry:
+  instances:
+    LLMRetry:
+      maxAttempts: 3
+      waitDuration: 1s
+      enableExponentialBackoff: true
+      exponentialBackoffMultiplier: 2.5
+      retryExceptions:
+        - java.io.IOException
+        - org.sopt.bofit.global.exception.customexception.InternalException
+        - org.sopt.bofit.global.exception.customexception.CustomException
+
+
+
 
 ---
 spring:

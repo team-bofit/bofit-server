@@ -3,7 +3,7 @@ package org.sopt.bofit.domain.insurancereport.util;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.InsuranceScoringRule;
 import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
-import org.sopt.bofit.global.exception.custom_exception.InternalException;
+import org.sopt.bofit.global.exception.customexception.InternalException;
 
 public class ScoringRuleUtil {
 

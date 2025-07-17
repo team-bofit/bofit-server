@@ -3,8 +3,8 @@ package org.sopt.bofit.global.oauth.jwt;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.bofit.global.exception.custom_exception.InternalException;
-import org.sopt.bofit.global.exception.custom_exception.UnAuthorizedException;
+import org.sopt.bofit.global.exception.customexception.InternalException;
+import org.sopt.bofit.global.exception.customexception.UnAuthorizedException;
 import org.springframework.stereotype.Component;
 
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.*;
@@ -28,7 +28,7 @@ public class JwtUtil {
         try {
             getClaims(token);
             return true;
-        } catch (SecurityException | MalformedJwtException e) {
+        } catch (SecurityException | MalformedJwtException | io.jsonwebtoken.security.SignatureException e) {
             throw new UnAuthorizedException(JWT_INVALID_SIGNATURE);
         } catch (ExpiredJwtException e) {
             throw new UnAuthorizedException(JWT_EXPIRED);

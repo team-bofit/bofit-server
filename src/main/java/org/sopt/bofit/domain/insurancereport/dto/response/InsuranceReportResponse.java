@@ -16,7 +16,7 @@ import lombok.Builder;
 
 @Builder
 @JsonPropertyOrder({"reportId", "reportInformation", "reportRationale",
-	"majorDisease", "surgery", "hospitalization", "disability", "death"})
+	"majorDisease", "surgery", "hospitalization", "disability", "death", "externalUri"})
 public record InsuranceReportResponse (
 	UUID reportId,
 	BasicInformation reportInformation,
@@ -25,7 +25,8 @@ public record InsuranceReportResponse (
 	SectionData surgery,
 	SectionData hospitalization,
 	SectionData disability,
-	SectionData death
+	SectionData death,
+	String externalUri
 ) {
 
 	public static InsuranceReportResponse from(InsuranceReport report){
@@ -38,6 +39,7 @@ public record InsuranceReportResponse (
 			.hospitalization(SectionData.hospitalization(report))
 			.disability(SectionData.disability(report))
 			.death(SectionData.death(report))
+			.externalUri(report.getProduct().getExtraInformation().getExternalUri())
 			.build();
 	}
 

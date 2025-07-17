@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.bofit.global.exception.custom_exception.CustomException;
+import org.sopt.bofit.global.exception.customexception.CustomException;
 import org.sopt.bofit.global.oauth.constant.HttpHeaderConstants;
 import org.sopt.bofit.global.oauth.constant.RequestAttributeConstants;
 import org.sopt.bofit.global.oauth.constant.SwaggerPathConstants;
