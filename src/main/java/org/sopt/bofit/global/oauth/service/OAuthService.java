@@ -108,7 +108,6 @@ public class OAuthService {
                         existing -> existing.updateToken(refreshToken),
                         () -> refreshTokenRepository.save(RefreshToken.of(user.getId(), refreshToken))
                 );
-
         return KaKaoLoginResponse.of(user.getId(), accessToken, refreshToken);
     }
 

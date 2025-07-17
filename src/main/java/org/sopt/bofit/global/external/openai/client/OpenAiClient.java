@@ -1,10 +1,10 @@
 package org.sopt.bofit.global.external.openai.client;
 
+import org.sopt.bofit.global.config.properties.OpenAiProperties;
 import org.sopt.bofit.global.external.openai.dto.request.ChatRequestMessage;
 import org.sopt.bofit.global.external.openai.dto.request.OpenAiRequest;
 import org.sopt.bofit.global.external.openai.dto.response.OpenAiResponse;
 import org.sopt.bofit.global.oauth.constant.HttpHeaderConstants;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -18,29 +18,24 @@ public class OpenAiClient {
 	public static final String REQUEST_URI = "/chat/completions";
 
 	private final RestClient restClient;
+	private final OpenAiProperties properties;
 
-	@Value("${openai.model}")
-	private String model;
-
-	@Value("${openai.max-tokens}")
-	private int maxTokens;
-
-	@Value("${openai.temperature}")
-	private double temperature;
-
-	public OpenAiClient(
-			@Value("${openai.secret-key}") String secretKey,
-			@Value("${openai.base-url}") String baseUrl
-	) {
+	public OpenAiClient(OpenAiProperties properties) {
+		this.properties = properties;
 		this.restClient = RestClient.builder()
-				.baseUrl(baseUrl)
-				.defaultHeader(HttpHeaders.AUTHORIZATION, HttpHeaderConstants.BEARER_PREFIX + secretKey)
+				.baseUrl(properties.baseUrl())
+				.defaultHeader(HttpHeaders.AUTHORIZATION, HttpHeaderConstants.BEARER_PREFIX + properties.secretKey())
 				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 				.build();
 	}
 
 	public String sendRequest(List<ChatRequestMessage> messages) {
-		OpenAiRequest request = new OpenAiRequest(model, messages, maxTokens, temperature);
+		OpenAiRequest request = new OpenAiRequest(
+				properties.model(),
+				messages,
+				properties.maxTokens(),
+				properties.temperature()
+		);
 
 		OpenAiResponse response = restClient.post()
 				.uri(REQUEST_URI)
