@@ -1,7 +1,6 @@
-package org.sopt.bofit.global.exception.custom_exception;
+package org.sopt.bofit.global.exception.customexception;
 
 import org.sopt.bofit.global.exception.constant.ErrorCode;
-import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
 
 public class UnAuthorizedException extends CustomException{
     public UnAuthorizedException(ErrorCode errorCode) {

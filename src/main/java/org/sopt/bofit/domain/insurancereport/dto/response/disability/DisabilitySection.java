@@ -7,8 +7,7 @@ import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurancereport.dto.response.CompareCoverage;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
-import org.sopt.bofit.domain.insurancereport.entity.constant.CoverageStatus;
-import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
+import org.sopt.bofit.global.exception.customexception.BadRequestException;
 
 public record DisabilitySection (
 	String displayName,

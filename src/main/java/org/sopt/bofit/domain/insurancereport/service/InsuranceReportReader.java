@@ -2,13 +2,11 @@ package org.sopt.bofit.domain.insurancereport.service;
 
 import java.util.UUID;
 
-import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErrorCode;
 import org.sopt.bofit.domain.insurancereport.repository.InsuranceReportRepository;
 import org.sopt.bofit.domain.user.entity.User;
-import org.sopt.bofit.global.exception.constant.InsuranceErrorCode;
-import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
+import org.sopt.bofit.global.exception.customexception.NotFoundException;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

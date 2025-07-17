@@ -1,4 +1,4 @@
-package org.sopt.bofit.global.exception.custom_exception;
+package org.sopt.bofit.global.exception.customexception;
 
 import lombok.Getter;
 import org.sopt.bofit.global.exception.constant.ErrorCode;

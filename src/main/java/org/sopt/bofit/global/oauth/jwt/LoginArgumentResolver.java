@@ -2,8 +2,8 @@ package org.sopt.bofit.global.oauth.jwt;
 
 import org.sopt.bofit.global.annotation.LoginUserId;
 import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
-import org.sopt.bofit.global.exception.custom_exception.InternalException;
-import org.sopt.bofit.global.exception.custom_exception.UnAuthorizedException;
+import org.sopt.bofit.global.exception.customexception.InternalException;
+import org.sopt.bofit.global.exception.customexception.UnAuthorizedException;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

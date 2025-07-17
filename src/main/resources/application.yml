@@ -48,8 +48,8 @@ resilience4j.retry:
       exponentialBackoffMultiplier: 2.5
       retryExceptions:
         - java.io.IOException
-        - org.sopt.bofit.global.exception.custom_exception.InternalException
-        - org.sopt.bofit.global.exception.custom_exception.CustomException
+        - org.sopt.bofit.global.exception.customexception.InternalException
+        - org.sopt.bofit.global.exception.customexception.CustomException
 
 
 

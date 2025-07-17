@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.global.entity.BaseEntity;
-import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
-import org.sopt.bofit.global.exception.custom_exception.ConflictException;
+import org.sopt.bofit.global.exception.customexception.BadRequestException;
+import org.sopt.bofit.global.exception.customexception.ConflictException;
 
 @Entity
 @Getter

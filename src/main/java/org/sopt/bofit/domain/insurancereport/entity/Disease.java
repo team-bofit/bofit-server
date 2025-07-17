@@ -1,11 +1,5 @@
 package org.sopt.bofit.domain.insurancereport.entity;
 
-import static org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErrorCode.*;
-
-import java.util.Objects;
-
-import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

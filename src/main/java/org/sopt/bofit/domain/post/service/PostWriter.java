@@ -6,7 +6,7 @@ import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.repository.PostRepository;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReader;
-import org.sopt.bofit.global.exception.custom_exception.ForbiddenException;
+import org.sopt.bofit.global.exception.customexception.ForbiddenException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

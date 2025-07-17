@@ -8,7 +8,7 @@ import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.entity.constant.UserStatus;
 import org.sopt.bofit.global.entity.BaseEntity;
 import org.sopt.bofit.global.exception.constant.ErrorCode;
-import org.sopt.bofit.global.exception.custom_exception.ForbiddenException;
+import org.sopt.bofit.global.exception.customexception.ForbiddenException;
 
 import java.time.LocalDate;
 import java.util.Objects;

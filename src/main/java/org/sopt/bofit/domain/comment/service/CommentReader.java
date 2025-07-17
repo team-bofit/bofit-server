@@ -6,7 +6,7 @@ import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.comment.repository.CommentRepository;
 import org.sopt.bofit.global.exception.constant.CommentErrorCode;
-import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
+import org.sopt.bofit.global.exception.customexception.NotFoundException;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
