@@ -23,6 +23,10 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+	resilience4jVersion = '2.2.0'
+}
+
 dependencies {
 	//Spring Data JPA
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -72,6 +76,12 @@ dependencies {
 
 	//Validation
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	//resilience4j
+	implementation "io.github.resilience4j:resilience4j-spring-boot3:${resilience4jVersion}"
+
+	//aop
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
 }
 
 def generated = "build/generated/querydsl"
