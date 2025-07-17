@@ -28,7 +28,7 @@ public class JwtUtil {
         try {
             getClaims(token);
             return true;
-        } catch (SecurityException | MalformedJwtException e) {
+        } catch (SecurityException | MalformedJwtException | io.jsonwebtoken.security.SignatureException e) {
             throw new UnAuthorizedException(JWT_INVALID_SIGNATURE);
         } catch (ExpiredJwtException e) {
             throw new UnAuthorizedException(JWT_EXPIRED);
