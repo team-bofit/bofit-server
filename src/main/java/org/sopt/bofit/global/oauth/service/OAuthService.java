@@ -48,6 +48,7 @@ public class OAuthService {
     private final RestClient restClient = RestClient.builder().baseUrl("").build();
 
     private KaKaoTokenResponse requestToken(String code, String redirectUri) {
+        log.info("redirect uri: {}", redirectUri);
         String body = OAuthUtil.buildTokenRequestBody(code, properties.clientId(), redirectUri);
 
         return restClient.post()
