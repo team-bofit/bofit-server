@@ -15,6 +15,7 @@ import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
 
 public record DeathSection(
 	String displayName,
+	String hyphenCase,
 	CompareCoverage coverage
 ) {
 
@@ -35,6 +36,7 @@ public record DeathSection(
 	){
 		return new DeathSection(
 			DISEASE_DEATH.getDisplayName(),
+			DISEASE_DEATH.getHyphenCase(),
 			CompareCoverage.of(product.getDeath().getDisease(), statistic.getDeath().getDisease()));
 	}
 
@@ -43,6 +45,7 @@ public record DeathSection(
 	){
 		return new DeathSection(
 			INJURY_DEATH.getDisplayName(),
+			INJURY_DEATH.getHyphenCase(),
 			CompareCoverage.of(product.getDeath().getInjury(), statistic.getDeath().getInjury()));
 	}
 }
