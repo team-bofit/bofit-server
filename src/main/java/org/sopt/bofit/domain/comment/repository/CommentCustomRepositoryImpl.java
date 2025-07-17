@@ -74,7 +74,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
             .where(
                 comment.post.id.eq(postId),
                 comment.status.eq(CommentStatus.ACTIVE),
-				cursor.map(comment.id::lt).orElse(null)
+				cursor.map(comment.id::gt).orElse(null)
             )
             .groupBy(comment.id)
             .orderBy(comment.id.asc())
