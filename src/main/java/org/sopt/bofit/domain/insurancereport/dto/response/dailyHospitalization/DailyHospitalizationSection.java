@@ -12,6 +12,7 @@ import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
 
 public record DailyHospitalizationSection (
 	String displayName,
+	String hyphenCase,
 	CompareCoverage diseaseDailyHospitalization
 ){
 
@@ -33,6 +34,7 @@ public record DailyHospitalizationSection (
 	){
 		return new DailyHospitalizationSection(
 			Disease.DISEASE_DAILY_HOSPITALIZATION.getDisplayName(),
+			Disease.DISEASE_DAILY_HOSPITALIZATION.getHyphenCase(),
 			CompareCoverage.of(product.getDailyHospitalization().getDisease(),
 				average.getDailyHospitalization().getDisease()));
 	}
@@ -43,6 +45,7 @@ public record DailyHospitalizationSection (
 	){
 		return new DailyHospitalizationSection(
 			Disease.INJURY_DAILY_HOSPITALIZATION.getDisplayName(),
+			Disease.INJURY_DAILY_HOSPITALIZATION.getHyphenCase(),
 			CompareCoverage.of(product.getDailyHospitalization().getInjury(),
 				average.getDailyHospitalization().getInjury()));
 	}

@@ -17,6 +17,7 @@ import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
 
 public record MajorDiseaseSection(
 	String displayName,
+	String hyphenCase,
 	String additionalInfo,
 	List<MajorDiseaseSubSection> sections
 ) {
@@ -42,15 +43,16 @@ public record MajorDiseaseSection(
 
 		return new MajorDiseaseSection(
 			CANCER.getDisplayName(),
+			CANCER.getHyphenCase(),
 			AdditionalInfo.CANCER.getInformation(),
 			List.of(
 				MajorDiseaseSubSection.of(
-					Disease.GENERAL_CANCER.getDisplayName(),
+					Disease.GENERAL_CANCER,
 					productCancer.getGeneralDiagnosis(), averageCancer.getGeneralDiagnosis(),
 					productCancer.getGeneralSurgery(), averageCancer.getGeneralSurgery()),
 
 				MajorDiseaseSubSection.of(
-					Disease.ATYPICAL_CANCER.getDisplayName(),
+					Disease.ATYPICAL_CANCER,
 					productCancer.getAtypicalDiagnosis(), averageCancer.getAtypicalDiagnosis(),
 					productCancer.getAtypicalSurgery(), averageCancer.getAtypicalSurgery())
 			)
@@ -64,18 +66,19 @@ public record MajorDiseaseSection(
 
 		return new MajorDiseaseSection(
 			Disease.CEREBROVASCULAR.getDisplayName(),
+			Disease.CEREBROVASCULAR.getHyphenCase(),
 			AdditionalInfo.CEREBROVASCULAR.getInformation(),
 			List.of(
 				MajorDiseaseSubSection.of(
-					Disease.CEREBRAL_HEMORRHAGE.getDisplayName(),
+					Disease.CEREBRAL_HEMORRHAGE,
 					productCerebrovascular.getHemorrhageDiagnosis(), averageCerebrovascular.getHemorrhageDiagnosis(),
 					productCerebrovascular.getHemorrhageSurgery(), averageCerebrovascular.getHemorrhageSurgery()),
 				MajorDiseaseSubSection.of(
-					Disease.CEREBRAL_INFARCTION.getDisplayName(),
+					Disease.CEREBRAL_INFARCTION,
 					productCerebrovascular.getInfarctionDiagnosis(), averageCerebrovascular.getInfarctionDiagnosis(),
 					productCerebrovascular.getInfarctionSurgery(), averageCerebrovascular.getInfarctionSurgery()),
 				MajorDiseaseSubSection.of(
-					Disease.OTHER_CEREBROVASCULAR.getDisplayName(),
+					Disease.OTHER_CEREBROVASCULAR,
 					productCerebrovascular.getOtherDiagnosis(), averageCerebrovascular.getOtherDiagnosis(),
 				productCerebrovascular.getOtherSurgery(), averageCerebrovascular.getOtherSurgery())
 			)
@@ -89,22 +92,23 @@ public record MajorDiseaseSection(
 
 		return new MajorDiseaseSection(
 			Disease.HEART.getDisplayName(),
+			Disease.HEART.getHyphenCase(),
 			AdditionalInfo.HEART_DISEASE.getInformation(),
 			List.of(
 					MajorDiseaseSubSection.of(
-						Disease.ACUTE_MYOCARDIAL_INFARCTION.getDisplayName(),
+						Disease.ACUTE_MYOCARDIAL_INFARCTION,
 						productHeart.getAcuteMyocardialInfarctionDiagnosis(), averageHeart.getAcuteMyocardialInfarctionDiagnosis(),
 						productHeart.getAcuteMyocardialInfarctionSurgery(), averageHeart.getAcuteMyocardialInfarctionSurgery()),
 					MajorDiseaseSubSection.of(
-						Disease.ISCHEMIC_HEART.getDisplayName(),
+						Disease.ISCHEMIC_HEART,
 						productHeart.getIschemicDiagnosis(), averageHeart.getIschemicDiagnosis(),
 						productHeart.getIschemicSurgery(), averageHeart.getIschemicSurgery()),
 					MajorDiseaseSubSection.of(
-						Disease.EXTENDED_HEART.getDisplayName(),
+						Disease.EXTENDED_HEART,
 						productHeart.getExtendedDiagnosis(), averageHeart.getExtendedDiagnosis(),
 						productHeart.getExtendedSurgery(), averageHeart.getExtendedSurgery()),
 					MajorDiseaseSubSection.of(
-						Disease.ARRHYTHMIA_HEART_FAILURE.getDisplayName(),
+						Disease.ARRHYTHMIA_HEART_FAILURE,
 						productHeart.getArrhythmiaDiagnosis(), averageHeart.getArrhythmiaDiagnosis(),
 						productHeart.getArrhythmiaSurgery(), averageHeart.getArrhythmiaSurgery())
 			)
