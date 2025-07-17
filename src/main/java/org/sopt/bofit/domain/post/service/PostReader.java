@@ -40,7 +40,7 @@ public class PostReader {
 
         List<Comment> activeComments = commentRepository.findAllByPostIdAndStatus(postId, CommentStatus.ACTIVE);
 
-        long postCommentCount = commentRepository.countByPost(post);
+        long postCommentCount = activeComments.size();
 
         return builder()
                 .writerId(writer.getId())
