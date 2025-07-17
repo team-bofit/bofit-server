@@ -77,7 +77,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
 				cursor.map(comment.id::lt).orElse(null)
             )
             .groupBy(comment.id)
-            .orderBy(comment.id.desc())
+            .orderBy(comment.id.asc())
             .limit(size + 1)
             .fetch();
 
