@@ -4,10 +4,9 @@ import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportCons
 import static org.sopt.bofit.global.constant.ConfigConstant.*;
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.*;
 
-import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
 import org.sopt.bofit.global.config.properties.OpenAiProperties;
-import org.sopt.bofit.global.exception.custom_exception.InternalException;
+import org.sopt.bofit.global.exception.customexception.InternalException;
 import org.sopt.bofit.global.external.openai.dto.request.ChatRequestMessage;
 import org.sopt.bofit.global.external.openai.dto.request.OpenAiRequest;
 import org.sopt.bofit.global.external.openai.dto.response.OpenAiResponse;
@@ -20,7 +19,6 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 

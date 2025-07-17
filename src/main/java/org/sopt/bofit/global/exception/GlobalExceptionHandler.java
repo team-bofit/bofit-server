@@ -1,7 +1,7 @@
 package org.sopt.bofit.global.exception;
 
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.bofit.global.exception.custom_exception.CustomException;
+import org.sopt.bofit.global.exception.customexception.CustomException;
 import org.sopt.bofit.global.dto.response.BaseErrorResponse;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.context.MessageSourceResolvable;
@@ -20,7 +20,8 @@ import org.springframework.web.server.MethodNotAllowedException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.*;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.INTERNAL_SERVER_ERROR;
+import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.METHOD_NOT_ALLOWED;
 
 import java.util.stream.Collectors;
 
@@ -32,7 +33,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public BaseErrorResponse handleInternalServerError(Exception e) {
         log.error("Unhandled exception occurred: {}", e.getMessage(), e);
-        return BaseErrorResponse.of(INTERNAL_SERVER_ERROR);
+        return BaseErrorResponse.of(INTERNAL_SERVER_ERROR, e.getMessage());
     }
 
     @ExceptionHandler(HandlerMethodValidationException.class)
@@ -80,7 +81,7 @@ public class GlobalExceptionHandler {
                 .orElse("입력값이 잘못되었습니다.");
 
         log.warn("Validation failed: {}", message);
-        return BaseErrorResponse.of(BAD_REQUEST.value(),message, null);
+        return BaseErrorResponse.of(HttpStatus.BAD_REQUEST.value(), message, null);
     }
 
     // JSON 파싱 오류

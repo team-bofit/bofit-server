@@ -7,7 +7,7 @@ import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
-import org.sopt.bofit.global.exception.custom_exception.InternalException;
+import org.sopt.bofit.global.exception.customexception.InternalException;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;

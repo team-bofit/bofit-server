@@ -13,7 +13,7 @@ import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurancereport.constant.AdditionalInfo;
 import org.sopt.bofit.domain.insurancereport.entity.Disease;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
-import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
+import org.sopt.bofit.global.exception.customexception.BadRequestException;
 
 public record MajorDiseaseSection(
 	String displayName,

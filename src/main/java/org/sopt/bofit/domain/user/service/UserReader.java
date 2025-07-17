@@ -9,7 +9,7 @@ import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.repository.UserRepository;
 import org.sopt.bofit.global.dto.response.SliceResponse;
-import org.sopt.bofit.global.exception.custom_exception.NotFoundException;
+import org.sopt.bofit.global.exception.customexception.NotFoundException;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 

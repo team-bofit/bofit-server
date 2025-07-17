@@ -1,12 +1,8 @@
 package org.sopt.bofit.domain.insurancereport.service.scoringrule;
 
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
-import org.sopt.bofit.domain.insurancereport.entity.scoringrule.InsuranceScoringRule;
-import org.sopt.bofit.domain.insurancereport.entity.scoringrule.diseasehistory.DiseaseHistoryScoringRule;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
-import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
-import org.sopt.bofit.global.exception.custom_exception.InternalException;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

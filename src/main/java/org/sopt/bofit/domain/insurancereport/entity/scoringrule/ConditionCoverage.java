@@ -1,12 +1,10 @@
 package org.sopt.bofit.domain.insurancereport.entity.scoringrule;
 
-import java.util.List;
 import java.util.function.Function;
 
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
-import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
-import org.sopt.bofit.global.exception.custom_exception.InternalException;
+import org.sopt.bofit.global.exception.customexception.InternalException;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

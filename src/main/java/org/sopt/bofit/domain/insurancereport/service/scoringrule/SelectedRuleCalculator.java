@@ -8,7 +8,7 @@ import org.sopt.bofit.domain.insurancereport.entity.scoringrule.select.SelectedS
 import org.sopt.bofit.domain.insurancereport.util.ScoringRuleUtil;
 import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.global.exception.constant.InsuranceErrorCode;
-import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
+import org.sopt.bofit.global.exception.customexception.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
