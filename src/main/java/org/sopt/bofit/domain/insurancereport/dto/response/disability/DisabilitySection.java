@@ -12,6 +12,7 @@ import org.sopt.bofit.global.exception.custom_exception.BadRequestException;
 
 public record DisabilitySection (
 	String displayName,
+	String hyphenCase,
 	CompareCoverage coverage
 ){
 	public static DisabilitySection getDisabilitySection(String hyphenCase, InsuranceReport report){
@@ -34,6 +35,7 @@ public record DisabilitySection (
 
 		return new DisabilitySection(
 			DISEASE_DISABILITY.getDisplayName(),
+			DISEASE_DISABILITY.getHyphenCase(),
 			CompareCoverage.of(productDiseaseGE3PCT, statisticDiseaseGE3PCT));
 	}
 
@@ -45,14 +47,8 @@ public record DisabilitySection (
 
 		return new DisabilitySection(
 			INJURY_DISABILITY.getDisplayName(),
+			INJURY_DISABILITY.getHyphenCase(),
 			CompareCoverage.of(productInjuryGE3PCT, statisticInjuryGE3PCT));
 	}
 
-
-	public static DisabilitySection of(CoverageStatus coverageStatus,
-		int productCoverage, int averageCoverage){
-
-		return new DisabilitySection(coverageStatus.getDescription(),
-			CompareCoverage.of(productCoverage, averageCoverage));
-	}
 }

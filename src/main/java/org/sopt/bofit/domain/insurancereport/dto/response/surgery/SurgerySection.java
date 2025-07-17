@@ -18,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record SurgerySection(
 	String displayName,
+	String hyphenCase,
 	CompareCoverage surgery,
 	SurgeryTypeSection surgeryType
 ) {
@@ -46,6 +47,7 @@ public record SurgerySection(
 		DiseaseSurgery averageSurgery = average.getSurgery().getDiseaseSurgery();
 		return new SurgerySection(
 			Disease.DISEASE_SURGERY.getDisplayName(),
+			Disease.DISEASE_SURGERY.getHyphenCase(),
 			CompareCoverage.of(productSurgery.getGeneral(), averageSurgery.getGeneral()),
 			null
 			);
@@ -59,6 +61,7 @@ public record SurgerySection(
 		InjurySurgery averageSurgery = average.getSurgery().getInjurySurgery();
 		return new SurgerySection(
 			Disease.INJURY_SURGERY.getDisplayName(),
+			Disease.INJURY_SURGERY.getHyphenCase(),
 			CompareCoverage.of(productSurgery.getGeneral(), averageSurgery.getGeneral()),
 			null
 		);
@@ -72,6 +75,7 @@ public record SurgerySection(
 		SurgeryType averageSurgery = average.getSurgery().getDiseaseSurgery();
 		return new SurgerySection(
 			DISEASE_TYPE_SURGERY.getDisplayName(),
+			DISEASE_TYPE_SURGERY.getHyphenCase(),
 			null,
 			SurgeryTypeSection.of( productSurgery, averageSurgery)
 		);
@@ -85,6 +89,7 @@ public record SurgerySection(
 		SurgeryType averageSurgery = average.getSurgery().getInjurySurgery();
 		return new SurgerySection(
 			INJURY_TYPE_SURGERY.getDisplayName(),
+			INJURY_TYPE_SURGERY.getHyphenCase(),
 			null,
 			SurgeryTypeSection.of(productSurgery, averageSurgery)
 		);
