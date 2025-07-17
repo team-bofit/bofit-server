@@ -88,7 +88,6 @@ public enum ConditionCoverage {
 
 	public int getCoverage(InsuranceProduct product){
 		try {
-			System.out.println((int)fieldAccessor.apply(product));
 			return (int)fieldAccessor.apply(product);
 		}catch (Exception e){
 			throw new InternalException(GlobalErrorCode.INTERNAL_SERVER_ERROR, "보장 금액 파싱 중 오류");

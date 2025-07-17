@@ -23,6 +23,7 @@ import org.sopt.bofit.domain.insurancereport.service.scoringrule.ScoringRuleCalc
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
 import org.sopt.bofit.domain.user.service.UserInfoWriter;
+import org.sopt.bofit.global.exception.custom_exception.InternalException;
 import org.sopt.bofit.global.external.openai.client.OpenAiClient;
 import org.sopt.bofit.global.external.openai.dto.request.ChatRequestMessage;
 import org.sopt.bofit.global.external.openai.template.OpenAiPromptManager;
@@ -31,7 +32,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class InsuranceReportWriter {
@@ -56,8 +59,8 @@ public class InsuranceReportWriter {
 		int age
 	){
 
-		products = diseaseHistoryFilter.filtering(products, userInfo);
-		products = coveragePreferenceFilter.filtering(products, userInfo);
+		// products = diseaseHistoryFilter.filtering(products, userInfo);
+		// products = coveragePreferenceFilter.filtering(products, userInfo);
 
 		Optional<InsuranceProduct> scoringRuledProduct = products.stream()
 			.max(Comparator.comparingDouble(product -> scoringRuleCalculator.calculatorScoringRule(user, userInfo, product, age)));
@@ -139,19 +142,19 @@ public class InsuranceReportWriter {
 		return savedInsuranceReport;
 	}
 
-	private ReportRationale generateRationale(
+	public ReportRationale generateRationale(
 		User user,
 		UserInfo userInfo,
 		InsuranceReport report,
 		int age
 	){
-		String content = openAiClient.sendRequest(
+
+		ReportRationale response = openAiClient.sendReportRelationalRequest(
 			List.of(
 				new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportSystemMessage()),
-				// new ChatRequestMessage(USER.getValue(), openAiPromptManager.generateReportRationale(user, userInfo, report, age))
 				new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportRationale(user, userInfo, report, age))
 			));
-		return JsonUtil.parseClass(ReportRationale.class, content);
+		return response;
 	}
 
 	private CoverageStatus diseaseDeathCoverageStatus (InsuranceProduct product, InsuranceBenefit average){
