@@ -21,9 +21,11 @@ import org.sopt.bofit.global.oauth.util.OAuthUtil;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+
+import java.nio.charset.StandardCharsets;
 
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.JWT_INVALID;
 import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
@@ -45,35 +47,35 @@ public class OAuthService {
 
     private final KakaoProperties properties;
 
-    private final WebClient webClient = WebClient.create();
+    private final RestClient restClient = RestClient.builder().baseUrl("").build();
 
     private Mono<KaKaoTokenResponse> requestToken(String code) {
         String body = OAuthUtil.buildTokenRequestBody(code, properties.clientId(), properties.redirectUri());
 
-        return webClient.post()
+        return Mono.fromCallable(() -> restClient.post()
                 .uri(properties.tokenUri())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .bodyValue(body)
+                .body(body)
                 .retrieve()
-                .onStatus(
-                        status -> status.is4xxClientError() || status.is5xxServerError(),
-                        clientResponse -> clientResponse.bodyToMono(String.class)
-                                .flatMap(errorBody -> {
-                                    log.error("❌ Kakao 토큰 요청 실패: {}", errorBody);
-                                    return Mono.error(new BadRequestException(KAKAO_TOKEN_REQUEST_FAILED));
-                                })
-                )
-                .bodyToMono(KaKaoTokenResponse.class)
+                .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
+                        (req, res) -> {
+                            String errorBody = new String(res.getBody().readAllBytes(), StandardCharsets.UTF_8);
+                            log.error("❌ Kakao 토큰 요청 실패: {}", errorBody);
+                            throw new BadRequestException(KAKAO_TOKEN_REQUEST_FAILED);
+                        })
+                .body(KaKaoTokenResponse.class))
+                .subscribeOn(Schedulers.boundedElastic())
                 .doOnNext(token -> log.info("✅ Kakao access token 발급 성공"))
                 .doOnError(e -> log.error("❌ Kakao 토큰 요청 중 예외 발생", e));
     }
 
     private Mono<KakaoUserResponse> getUserInfo(String accessToken) {
-        return webClient.get()
+        return Mono.fromCallable(() -> restClient.get()
                 .uri(properties.userInfoUri())
-                .headers(headers -> headers.setBearerAuth(accessToken))
+                .headers(h -> h.setBearerAuth(accessToken))
                 .retrieve()
-                .bodyToMono(KakaoUserResponse.class);
+                .body(KakaoUserResponse.class))
+                .subscribeOn(Schedulers.boundedElastic());
     }
 
     private Mono<User> registerOrLogin(String accessToken) {
