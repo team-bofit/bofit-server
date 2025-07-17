@@ -10,9 +10,13 @@ import org.sopt.bofit.domain.insurancereport.entity.Disease;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import lombok.Builder;
 
 @Builder
+@JsonPropertyOrder({"reportId", "reportInformation", "reportRationale",
+	"majorDisease", "surgery", "hospitalization", "disability", "death"})
 public record InsuranceReportResponse (
 	UUID reportId,
 	BasicInformation reportInformation,
