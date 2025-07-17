@@ -27,7 +27,7 @@ public class SecurityConfig {
 
     public static final String[] ALLOWED_PATHS = {
         "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/swagger-config",
-        "/oauth/kakao/login",
+        "/oauth/kakao/login", "/oauth/reissue",
         "/actuator/health",
     };
 

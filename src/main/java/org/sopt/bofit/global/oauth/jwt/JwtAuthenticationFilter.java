@@ -30,7 +30,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final List<String> EXCLUDED_PATH_PREFIXES = List.of(
         SwaggerPathConstants.SWAGGER_CONFIG,
         SwaggerPathConstants.SWAGGER_UI,
-        SwaggerPathConstants.SWAGGER_DOCS
+        SwaggerPathConstants.SWAGGER_DOCS,
+        "/oauth/reissue"
     );
 
     @Override
