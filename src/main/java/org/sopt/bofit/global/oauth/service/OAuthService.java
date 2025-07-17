@@ -21,9 +21,9 @@ import org.sopt.bofit.global.oauth.util.OAuthUtil;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
+import org.springframework.web.client.RestClient;
+
+import java.nio.charset.StandardCharsets;
 
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.JWT_INVALID;
 import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
@@ -45,89 +45,70 @@ public class OAuthService {
 
     private final KakaoProperties properties;
 
-    private final WebClient webClient = WebClient.create();
+    private final RestClient restClient = RestClient.builder().baseUrl("").build();
 
-    private Mono<KaKaoTokenResponse> requestToken(String code) {
+    private KaKaoTokenResponse requestToken(String code) {
         String body = OAuthUtil.buildTokenRequestBody(code, properties.clientId(), properties.redirectUri());
 
-        return webClient.post()
+        return restClient.post()
                 .uri(properties.tokenUri())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .bodyValue(body)
+                .body(body)
                 .retrieve()
-                .onStatus(
-                        status -> status.is4xxClientError() || status.is5xxServerError(),
-                        clientResponse -> clientResponse.bodyToMono(String.class)
-                                .flatMap(errorBody -> {
-                                    log.error("❌ Kakao 토큰 요청 실패: {}", errorBody);
-                                    return Mono.error(new BadRequestException(KAKAO_TOKEN_REQUEST_FAILED));
-                                })
-                )
-                .bodyToMono(KaKaoTokenResponse.class)
-                .doOnNext(token -> log.info("✅ Kakao access token 발급 성공"))
-                .doOnError(e -> log.error("❌ Kakao 토큰 요청 중 예외 발생", e));
+                .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
+                        (req, res) -> {
+                            String errorBody = new String(res.getBody().readAllBytes(), StandardCharsets.UTF_8);
+                            log.error("❌ Kakao 토큰 요청 실패: {}", errorBody);
+                            throw new BadRequestException(KAKAO_TOKEN_REQUEST_FAILED);
+                        })
+                .body(KaKaoTokenResponse.class);
     }
 
-    private Mono<KakaoUserResponse> getUserInfo(String accessToken) {
-        return webClient.get()
+    private KakaoUserResponse getUserInfo(String accessToken) {
+        return restClient.get()
                 .uri(properties.userInfoUri())
-                .headers(headers -> headers.setBearerAuth(accessToken))
+                .headers(h -> h.setBearerAuth(accessToken))
                 .retrieve()
-                .bodyToMono(KakaoUserResponse.class);
+                .body(KakaoUserResponse.class);
     }
 
-    private Mono<User> registerOrLogin(String accessToken) {
-        return getUserInfo(accessToken)
-                .flatMap(kakaoUser -> {
-                    KakaoAccount account = kakaoUser.kakaoAccount();
-                    if (account == null) {
-                        return Mono.error(new BadRequestException(KAKAO_USER_INFO_REQUEST_FAILED));
-                    }
-                    UserProfile profile = account.profile();
-                    boolean isDefault = account.profile().isDefaultImage();
-                    String userProfileImage = isDefault ? null : account.profile().profileImageUrl();
+    private User registerOrLogin(String accessToken) {
+        KakaoUserResponse kakaoUser = getUserInfo(accessToken);
+        KakaoAccount account = kakaoUser.kakaoAccount();
+        if (account == null) {
+            throw new BadRequestException(KAKAO_USER_INFO_REQUEST_FAILED);
+        }
 
-                    return Mono.fromCallable(() ->
-                                    userRepository.findByOauthId(String.valueOf(kakaoUser.oauthId()))
-                            )
-                            .subscribeOn(Schedulers.boundedElastic())
-                            .flatMap(optionalUser ->
-                                    optionalUser.map(Mono::just).orElseGet(() -> {
-                                        User newUser = User.builder()
-                                                .loginProvider(LoginProvider.KAKAO)
-                                                .oauthId(String.valueOf(kakaoUser.oauthId()))
-                                                .nickname(profile.nickname())
-                                                .profileImage(userProfileImage)
-                                                .build();
-                                        return Mono.fromCallable(() -> userRepository.save(newUser))
-                                                .subscribeOn(Schedulers.boundedElastic());
-                                    })
-                            );
+        UserProfile profile = account.profile();
+        boolean isDefault = profile.isDefaultImage();
+        String userProfileImage = isDefault ? null : profile.profileImageUrl();
+
+        return userRepository.findByOauthId(String.valueOf(kakaoUser.oauthId()))
+                .orElseGet(() -> {
+                    User newUser = User.builder()
+                            .loginProvider(LoginProvider.KAKAO)
+                            .oauthId(String.valueOf(kakaoUser.oauthId()))
+                            .nickname(profile.nickname())
+                            .profileImage(userProfileImage)
+                            .build();
+                    return userRepository.save(newUser);
                 });
     }
 
     @Transactional
-    public Mono<KaKaoLoginResponse> login(String code) {
-        return requestToken(code)
-                .flatMap(token ->
-                        registerOrLogin(token.accessToken())
-                                .publishOn(Schedulers.boundedElastic())
-                                .map(user -> {
-                                    String accessToken = jwtProvider.generateAccessToken(user.getId());
-                                    String refreshToken = jwtProvider.generateRefreshToken(user.getId());
+    public KaKaoLoginResponse login(String code) {
+        KaKaoTokenResponse token = requestToken(code);
+        User user = registerOrLogin(token.accessToken());
 
-                                    refreshTokenRepository.findByUserId(user.getId())
-                                            .ifPresentOrElse(
-                                                    existing -> existing.updateToken(refreshToken),
-                                                    () -> refreshTokenRepository.save(RefreshToken.of(user.getId(), refreshToken))
-                                            );
-                                    return KaKaoLoginResponse.of(
-                                            user.getId(),
-                                            accessToken,
-                                            refreshToken
-                                    );
-                                })
+        String accessToken = jwtProvider.generateAccessToken(user.getId());
+        String refreshToken = jwtProvider.generateRefreshToken(user.getId());
+
+        refreshTokenRepository.findByUserId(user.getId())
+                .ifPresentOrElse(
+                        existing -> existing.updateToken(refreshToken),
+                        () -> refreshTokenRepository.save(RefreshToken.of(user.getId(), refreshToken))
                 );
+        return KaKaoLoginResponse.of(user.getId(), accessToken, refreshToken);
     }
 
     @Transactional

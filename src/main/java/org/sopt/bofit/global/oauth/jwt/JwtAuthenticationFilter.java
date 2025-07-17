@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.sopt.bofit.global.exception.custom_exception.CustomException;
 import org.sopt.bofit.global.oauth.constant.HttpHeaderConstants;
 import org.sopt.bofit.global.oauth.constant.RequestAttributeConstants;
@@ -18,7 +17,9 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Stream;
+
+import static org.sopt.bofit.global.oauth.constant.PathConstant.ACTUATOR_PATH;
+import static org.sopt.bofit.global.oauth.constant.PathConstant.OAUTH_KAKAO_LOGIN_PATH;
 
 @Slf4j
 @Component
