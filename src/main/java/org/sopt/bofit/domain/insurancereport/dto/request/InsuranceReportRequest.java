@@ -1,7 +1,5 @@
 package org.sopt.bofit.domain.insurancereport.dto.request;
 
-
-
 import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.*;
 import static org.sopt.bofit.domain.user.constant.UserInfoConstant.*;
 
@@ -28,7 +26,7 @@ import jakarta.validation.constraints.Size;
 
 public record InsuranceReportRequest(
 
-	@Pattern(message = "실명 입력 불가능한 값이 존재합니다.", regexp = NAME_REGEX)
+	// @Pattern(message = "실명 입력 불가능한 값이 존재합니다.", regexp = NAME_REGEX)
 	@NotBlank(message = "실명은 공백일 수 없습니다.")
 	@Schema(description = "실명", example = "김재헌")
 	String name,
