@@ -27,7 +27,7 @@ public enum Disease {
 	SURGERY("수술", "surgery"),
 	DISEASE_SURGERY("질병수술비", "disease-surgery"),
 	DISEASE_TYPE_SURGERY("질병 종 수술비", "disease-type-surgery"),
-	INJURY_SURGERY("상해 수술", "injury-surgery"),
+	INJURY_SURGERY("상해 수술비", "injury-surgery"),
 	INJURY_TYPE_SURGERY("상해 종 수술비", "injury-type-surgery"),
 
 	HOSPITALIZATION("입원", "hospitalization"),

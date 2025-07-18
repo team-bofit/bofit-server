@@ -72,7 +72,7 @@ public enum ConditionCoverage {
 		return 0;
 	}),
 
-	INJURY_SURGERY("상해 수술", product -> product.getSurgery().getInjurySurgery().getGeneral()),
+	INJURY_SURGERY("상해 수술비", product -> product.getSurgery().getInjurySurgery().getGeneral()),
 	INJURY_TYPE_1_SURGERY("상해 1종 수술비", product -> product.getSurgery().getInjurySurgery().getType1()),
 	INJURY_TYPE_2_SURGERY("상해 2종 수술비", product -> product.getSurgery().getInjurySurgery().getType2()),
 	INJURY_TYPE_3_SURGERY("상해 3종 수술비", product -> product.getSurgery().getInjurySurgery().getType3()),
