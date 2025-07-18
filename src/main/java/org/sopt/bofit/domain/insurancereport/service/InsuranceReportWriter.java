@@ -50,13 +50,13 @@ public class InsuranceReportWriter {
 	private final OpenAiPromptManager openAiPromptManager;
 	private final OpenAiClient openAiClient;
 
+	@Transactional(readOnly = true)
 	public InsuranceProduct recommendBestInsurance(
 		List<InsuranceProduct> products,
 		User user,
 		UserInfo userInfo,
 		int age
 	){
-
 		// products = diseaseHistoryFilter.filtering(products, userInfo);
 		// products = coveragePreferenceFilter.filtering(products, userInfo);
 
