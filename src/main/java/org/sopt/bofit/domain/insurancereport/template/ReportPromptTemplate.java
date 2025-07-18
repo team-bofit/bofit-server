@@ -34,6 +34,7 @@ public class ReportPromptTemplate {
 		말하듯 자연스럽고 부드럽게, 그러나 단정하고 신뢰감 있는 톤으로 작성할 것
 		reasons의 각 문장은 총 3개 작성, keywordChips은 2개 작성
 		나이는 언급하지 말아줘
+		높은 신뢰도를 위해 입력된 정보를 정확하게 사용하는지 한번 더 생각해서 작성해줘
 		'~했습니다'를 '~했어요' 말투로 작성해줘
 		
 		keywordChips example: "중대 질환 든든 보장", "합리적인 보험료"
@@ -62,7 +63,7 @@ public class ReportPromptTemplate {
 			- 결혼 여부: %s
 			- 자녀 유무: %s
 			- 운전 여부: %s
-			- 병력: %s
+			- 질병력: %s
 			- 가족력: %s
 			- 보장 니즈: %s
 			- 희망 보험료: %d ~ %d
@@ -82,7 +83,7 @@ public class ReportPromptTemplate {
 					.map(DiagnosedDisease::getDiseaseName)
 					.collect(Collectors.joining(DELIMITER)),
 				userInfo.getCoveragePreferences().keySet().stream()
-					.map(CoveragePreference::getDescription)
+					.map(CoveragePreference::getPrompting)
 					.collect(Collectors.joining(DELIMITER)),
 				userInfo.getMinPrice(), userInfo.getMaxPrice()
 		);
