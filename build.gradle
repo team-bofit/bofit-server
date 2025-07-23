@@ -82,6 +82,9 @@ dependencies {
 
 	//aop
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+	// prometheus
+	implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 def generated = "build/generated/querydsl"
