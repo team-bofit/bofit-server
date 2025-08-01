@@ -1,5 +1,7 @@
 package org.sopt.bofit.domain.insurancereport.service;
 
+import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.*;
+import static org.sopt.bofit.global.constant.CacheConstant.*;
 import static org.sopt.bofit.global.external.openai.constant.OpenAiRole.*;
 
 import java.util.Comparator;
@@ -26,6 +28,8 @@ import org.sopt.bofit.domain.user.service.UserInfoWriter;
 import org.sopt.bofit.global.external.openai.client.OpenAiClient;
 import org.sopt.bofit.global.external.openai.dto.request.ChatRequestMessage;
 import org.sopt.bofit.global.external.openai.template.OpenAiPromptManager;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,7 +70,7 @@ public class InsuranceReportWriter {
 		return scoringRuledProduct.orElseGet(insuranceProductReader::getRecommendedStatusProducts);
 	}
 
-	@Transactional
+	@CachePut(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id", unless = "#result==null")
 	public InsuranceReport writeReport(
 		InsuranceStatistic average,
 		InsuranceProduct product,
