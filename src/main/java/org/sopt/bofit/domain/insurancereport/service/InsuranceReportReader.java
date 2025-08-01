@@ -1,5 +1,7 @@
 package org.sopt.bofit.domain.insurancereport.service;
 
+import static org.sopt.bofit.global.constant.CacheConstant.*;
+
 import java.util.UUID;
 
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
@@ -7,6 +9,7 @@ import org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErrorCode;
 import org.sopt.bofit.domain.insurancereport.repository.InsuranceReportRepository;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.global.exception.customexception.NotFoundException;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ public class InsuranceReportReader {
 			new NotFoundException(InsuranceReportErrorCode.NOT_FOUND_INSURANCE_REPORT));
 	}
 
+	@Cacheable(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#insuranceReportId")
 	public InsuranceReport findByIdWithRelatedEntity(UUID insuranceReportId){
 		return insuranceReportRepository.findByIdWithProductAndStatistic(insuranceReportId).orElseThrow(() ->
 			new NotFoundException(InsuranceReportErrorCode.NOT_FOUND_INSURANCE_REPORT));
