@@ -55,7 +55,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: prometheus, openapi, swagger, health, metrics
+        include: prometheus, openapi, swagger, health, metrics, info
   metrics:
     tags:
       application: bofit-server # 메트릭에 애플리케이션 이름 태그 추가
