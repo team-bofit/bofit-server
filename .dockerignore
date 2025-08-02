@@ -1,6 +1,5 @@
-# Gradle build cache & output
+# Gradle build cache (but not output)
 .gradle/
-build/
 out/
 
 # IDE/Editor
@@ -13,5 +12,3 @@ out/
 
 # Docs or others
 *.md
-Dockerfile
-docker-compose.yml
