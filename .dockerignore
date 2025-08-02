@@ -1,0 +1,17 @@
+# Gradle build cache & output
+.gradle/
+build/
+out/
+
+# IDE/Editor
+.idea/
+*.iml
+.vscode/
+
+# OS files
+.DS_Store
+
+# Docs or others
+*.md
+Dockerfile
+docker-compose.yml
