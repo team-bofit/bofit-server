@@ -22,6 +22,7 @@ spring:
         format_sql: true
         show_sql: true
         highlight_sql: true
+    open-in-view: false
 kakao:
   authorization-uri: https://kauth.kakao.com/oauth/authorize
   token-uri: https://kauth.kakao.com/oauth/token
