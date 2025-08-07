@@ -51,6 +51,6 @@ public class CommentService {
 
 		Slice<CommentResponse> commentsByCursorId = commentReader.findCommentsByCursorId(postId, cursor, size);
 
-		return SliceResponse.of(commentsByCursorId);
+		return SliceResponse.from(commentsByCursorId);
 	}
 }

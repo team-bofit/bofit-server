@@ -39,7 +39,7 @@ public class UserReader {
 
         Slice<MyPostSummaryResponse> posts = postRepository.findPostsByCursorId(userId, cursorId, size);
 
-        return SliceResponse.of(posts);
+        return SliceResponse.from(posts);
     }
 
     public User findById(Long userId) {
@@ -52,7 +52,7 @@ public class UserReader {
 
         Slice<MyCommentSummaryResponse> comments = commentRepository.findCommentsByCursorId(userId, cursorId, size);
 
-        return SliceResponse.of(comments);
+        return SliceResponse.from(comments);
     }
 
 }

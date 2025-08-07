@@ -10,7 +10,7 @@ public record SliceResponse<T, C>(
         @Schema(description = "다음 커서") C nextCursor,
         @Schema(description = "마지막 페이지 여부") boolean isLast
 ) {
-    public static <T extends CursorProvider<C>, C> SliceResponse<T, C> of(Slice<T> slice) {
+    public static <T extends CursorProvider<C>, C> SliceResponse<T, C> from(Slice<T> slice) {
         List<T> content = slice.getContent();
         C nextCursor = !slice.isLast() && !content.isEmpty()
                 ? content.get(content.size() - 1).getCursor()

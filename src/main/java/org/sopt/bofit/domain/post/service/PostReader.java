@@ -32,7 +32,7 @@ public class PostReader {
 
         Slice<PostSummaryResponse> postList = postRepository.findAllByCursorId(cursorId, size);
 
-        return SliceResponse.of(postList);
+        return SliceResponse.from(postList);
     }
 
     @Transactional(readOnly = true)
