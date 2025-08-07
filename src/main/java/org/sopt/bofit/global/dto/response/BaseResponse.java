@@ -14,17 +14,25 @@ public class BaseResponse<T> {
 
     private final T data;
 
-    private BaseResponse(T data, String message) {
-        this.code = HttpStatus.OK.value();
+    private BaseResponse(int code, T data, String message) {
+        this.code = code;
         this.message = message;
         this.data = data;
     }
 
     public static <T> BaseResponse<T> ok(T data, String message) {
-        return new BaseResponse<>(data, message);
+        return new BaseResponse<>(HttpStatus.OK.value(), data, message);
     }
 
     public static <T> BaseResponse<T> ok(String message){
-        return new BaseResponse<>(null, message);
+        return new BaseResponse<>(HttpStatus.OK.value(), null, message);
+    }
+
+    public static <T> BaseResponse<T> create(T data, String message) {
+        return new BaseResponse<>(HttpStatus.CREATED.value(), data, message);
+    }
+
+    public static <T> BaseResponse<T> create(String message) {
+        return new BaseResponse<>(HttpStatus.CREATED.value(), null, message);
     }
 }
