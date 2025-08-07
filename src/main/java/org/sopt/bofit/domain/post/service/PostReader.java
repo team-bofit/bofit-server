@@ -14,6 +14,7 @@ import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.global.exception.customexception.NotFoundException;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class PostReader {
         return SliceResponse.of(postList);
     }
 
+    @Transactional(readOnly = true)
     public PostDetailResponse getPostById(Long postId) {
         Post post = findById(postId);
         User writer = post.getUser();
