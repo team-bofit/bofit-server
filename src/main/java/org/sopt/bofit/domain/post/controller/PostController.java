@@ -43,7 +43,7 @@ public class PostController {
             @RequestBody @Valid PostCreateRequest request,
             @Parameter(hidden = true) @LoginUserId Long userId
     ){
-        return BaseResponse.ok(postService.createPost(userId, request.title(), request.content()),"게시물 생성 완료");
+        return BaseResponse.create(postService.createPost(userId, request.title(), request.content()),"게시물 생성 완료");
     }
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
@@ -99,7 +99,7 @@ public class PostController {
         @Parameter(hidden = true) @LoginUserId Long userId
     ){
         commentService.createComment(userId, postId, request);
-        return BaseResponse.ok("댓글 생성 성공");
+        return BaseResponse.create("댓글 생성 성공");
     }
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
