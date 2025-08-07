@@ -27,10 +27,10 @@ public class PostWriter {
     private final CommentRepository commentRepository;
 
 
+    @Transactional
     public PostCreateResponse createPost(Long userId, String title, String content) {
         User user = userReader.findById(userId);
-        Post newPost = Post.create(title, content);
-        newPost.setUser(user);
+        Post newPost = Post.create(user, title, content);
 
         postRepository.save(newPost);
         return PostCreateResponse.from(newPost.getId());

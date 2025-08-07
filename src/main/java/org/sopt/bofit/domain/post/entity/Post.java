@@ -36,8 +36,9 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public static Post create(String title, String content) {
+    public static Post create(User user, String title, String content) {
         return Post.builder()
+                .user(user)
                 .title(title)
                 .content(content)
                 .status(PostStatus.ACTIVE)
