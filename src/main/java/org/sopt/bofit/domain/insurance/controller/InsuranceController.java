@@ -50,7 +50,7 @@ public class InsuranceController {
 		@Valid @RequestBody InsuranceReportRequest request){
 		User user = userService.userUpdate(userId, request.toUserUpdate());
 		IssueInsuranceReportResponse response = insuranceReportService.recommend(user, request.toUserInfo(user));
-		return BaseResponse.ok(response, "보험 추천 리포트 발급 성공");
+		return BaseResponse.create(response, "보험 추천 리포트 발급 성공");
 	}
 
 	@Tag(name = TAG_NAME_INSURANCE, description = TAG_DESCRIPTION_INSURANCE)
