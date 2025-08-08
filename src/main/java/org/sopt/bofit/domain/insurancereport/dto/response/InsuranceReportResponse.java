@@ -46,58 +46,56 @@ public record InsuranceReportResponse (
 
 	private record SectionData(
 		String additionalInfo,
-		List<ShowCoverageStatus> statuses
+		String resource,
+		List<ShowCoverageStatusDetail> statuses
 	){
 		private static SectionData majorDisease(InsuranceReport report){
 			return new SectionData(
 				AdditionalInfo.MAJOR_DISEASE.getInformation(),
-				List.of(
-					new ShowCoverageStatus(Disease.CANCER.getDisplayName(), report.getCancer().getDescription()),
-					new ShowCoverageStatus(Disease.CEREBROVASCULAR.getDisplayName(), report.getCerebrovascular().getDescription()),
-					new ShowCoverageStatus(Disease.HEART.getDisplayName(), report.getHeartDisease().getDescription())
-				)
+				Disease.MAJOR_DISEASE.getHyphenCase(),
+				Disease.getMajorDiseaseSections().stream()
+					.map(disease -> ShowCoverageStatusDetail.create(disease, report))
+					.toList()
 			);
 		}
 
 		private static SectionData surgery (InsuranceReport report){
 			return new SectionData(
 				AdditionalInfo.SURGERY.getInformation(),
-				List.of(
-					new ShowCoverageStatus(Disease.DISEASE_SURGERY.getDisplayName(), report.getDiseaseSurgery().getDescription()),
-					new ShowCoverageStatus(Disease.DISEASE_TYPE_SURGERY.getDisplayName(), report.getDiseaseTypeSurgery().getDescription()),
-					new ShowCoverageStatus(Disease.INJURY_SURGERY.getDisplayName(), report.getInjurySurgery().getDescription()),
-					new ShowCoverageStatus(Disease.INJURY_TYPE_SURGERY.getDisplayName(), report.getInjuryTypeSurgery().getDescription())
-				)
+				Disease.SURGERY.getHyphenCase(),
+				Disease.getSurgerySections().stream()
+					.map(disease -> ShowCoverageStatusDetail.create(disease, report))
+					.toList()
 			);
 		}
 
 		private static SectionData hospitalization (InsuranceReport report){
 			return new SectionData(
 				AdditionalInfo.HOSPITALIZATION.getInformation(),
-				List.of(
-					new ShowCoverageStatus(Disease.DISEASE_DAILY_HOSPITALIZATION.getDisplayName(), report.getDiseaseDailyHospitalization().getDescription()),
-					new ShowCoverageStatus(Disease.INJURY_DAILY_HOSPITALIZATION.getDisplayName(), report.getInjuryDailyHospitalization().getDescription())
-				)
+				Disease.HOSPITALIZATION.getHyphenCase(),
+				Disease.getHospitalizationSections().stream()
+					.map(disease -> ShowCoverageStatusDetail.create(disease, report))
+					.toList()
 			);
 		}
 
 		private static SectionData disability (InsuranceReport report){
 			return new SectionData(
 				AdditionalInfo.DISABILITY.getInformation(),
-				List.of(
-					new ShowCoverageStatus(Disease.DISEASE_DISABILITY.getDisplayName(), report.getDiseaseDisability().getDescription()),
-					new ShowCoverageStatus(Disease.INJURY_DISABILITY.getDisplayName(), report.getInjuryDisability().getDescription())
-				)
+				Disease.DISABILITY.getHyphenCase(),
+				Disease.getDisabilitySections().stream()
+					.map(disease -> ShowCoverageStatusDetail.create(disease, report))
+					.toList()
 			);
 		}
 
 		private static SectionData death (InsuranceReport report){
 			return new SectionData(
 				AdditionalInfo.DEATH.getInformation(),
-				List.of(
-					new ShowCoverageStatus(Disease.DISEASE_DEATH.getDisplayName(), report.getDiseaseDeath().getDescription()),
-					new ShowCoverageStatus(Disease.INJURY_DEATH.getDisplayName(), report.getInjuryDeath().getDescription())
-				)
+				Disease.DEATH.getHyphenCase(),
+				Disease.getDeathSections().stream()
+					.map(disease -> ShowCoverageStatusDetail.create(disease, report))
+					.toList()
 			);
 		}
 
