@@ -2,10 +2,15 @@ package org.sopt.bofit.domain.insurance.entity.product;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Embeddable
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class BasicInformation {
 
 	@Column(name = "product_name", length = 50, nullable = false)
@@ -36,4 +41,16 @@ public class BasicInformation {
 		columnDefinition = "TINYINT UNSIGNED DEFAULT 0")
 	private int paymentPeriodYears;
 
+	@Builder
+	private BasicInformation(String name, String company, String productType, int minEnrollmentAge, int maxEnrollmentAge,
+		int premium, int maturityAge, int paymentPeriodYears) {
+		this.name = name;
+		this.company = company;
+		this.productType = productType;
+		this.minEnrollmentAge = minEnrollmentAge;
+		this.maxEnrollmentAge = maxEnrollmentAge;
+		this.premium = premium;
+		this.maturityAge = maturityAge;
+		this.paymentPeriodYears = paymentPeriodYears;
+	}
 }

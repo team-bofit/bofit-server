@@ -1,6 +1,11 @@
 package org.sopt.bofit.domain.insurance.entity.product;
 
+import org.sopt.bofit.domain.insurance.entity.benefit.DailyHospitalization;
+import org.sopt.bofit.domain.insurance.entity.benefit.Death;
+import org.sopt.bofit.domain.insurance.entity.benefit.Disability;
 import org.sopt.bofit.domain.insurance.entity.benefit.InsuranceBenefit;
+import org.sopt.bofit.domain.insurance.entity.benefit.MajorDisease;
+import org.sopt.bofit.domain.insurance.entity.benefit.Surgery;
 import org.sopt.bofit.domain.insurance.entity.product.constant.InsuranceStatus;
 
 import jakarta.persistence.Column;
@@ -13,12 +18,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "insurance_product")
 public class InsuranceProduct extends InsuranceBenefit {
 
@@ -36,5 +44,48 @@ public class InsuranceProduct extends InsuranceBenefit {
 
 	@Embedded
 	private ExtraInformation extraInformation;
+
+	public static InsuranceProduct create(
+		InsuranceStatus status,
+		BasicInformation basicInformation,
+		ExtraInformation extraInformation,
+		MajorDisease majorDisease,
+		Surgery surgery,
+		DailyHospitalization dailyHospitalization,
+		Disability disability,
+		Death death
+		){
+		return InsuranceProduct.builder()
+			.status(status)
+			.basicInformation(basicInformation)
+			.extraInformation(extraInformation)
+			.majorDisease(majorDisease)
+			.surgery(surgery)
+			.dailyHospitalization(dailyHospitalization)
+			.disability(disability)
+			.death(death)
+			.build();
+	}
+
+	@Builder
+	private InsuranceProduct(
+		InsuranceStatus status,
+		BasicInformation basicInformation,
+		ExtraInformation extraInformation,
+		MajorDisease majorDisease,
+		Surgery surgery,
+		DailyHospitalization dailyHospitalization,
+		Disability disability,
+		Death death
+	) {
+		this.status = status;
+		this.basicInformation = basicInformation;
+		this.extraInformation = extraInformation;
+		this.majorDisease = majorDisease;
+		this.surgery = surgery;
+		this.dailyHospitalization = dailyHospitalization;
+		this.disability = disability;
+		this.death = death;
+	}
 
 }
