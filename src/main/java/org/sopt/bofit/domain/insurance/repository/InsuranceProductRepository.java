@@ -19,7 +19,7 @@ public interface InsuranceProductRepository extends JpaRepository<InsuranceProdu
 		select ip
 		from InsuranceProduct as ip
 		where ip.basicInformation.minEnrollmentAge <= :age and ip.basicInformation.maxEnrollmentAge >= :age and
-			ip.basicInformation.premium > :minPremium and ip.basicInformation.premium < :maxPremium
+			ip.basicInformation.premium >= :minPremium and ip.basicInformation.premium <= :maxPremium
 	""")
 	List<InsuranceProduct> findAllByAgeAndPremium(
 		@Param("age") int age,
