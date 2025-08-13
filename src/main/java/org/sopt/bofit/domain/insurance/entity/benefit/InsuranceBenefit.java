@@ -14,18 +14,18 @@ import lombok.NoArgsConstructor;
 public abstract class InsuranceBenefit extends BaseEntity {
 
 	@Embedded
-	private MajorDisease majorDisease;
+	protected MajorDisease majorDisease;
 
 	@Embedded
-	private Surgery surgery;
+	protected Surgery surgery;
 
 	@Embedded
-	private DailyHospitalization dailyHospitalization;
+	protected DailyHospitalization dailyHospitalization;
 
 	@Embedded
-	private Disability disability;
+	protected Disability disability;
 
 	@Embedded
-	private Death death;
+	protected Death death;
 
 }
