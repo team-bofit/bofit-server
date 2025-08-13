@@ -1,0 +1,45 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL
+    driver-class-name: org.h2.Driver
+    username: test
+    password: test
+
+  sql:
+    init:
+      mode: never
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+        hbm2ddl:
+          auto: create-drop
+    open-in-view: false
+
+  h2:
+    console:
+      enabled: true
+
+jwt:
+  secret: testSecretKeyForJwtWhichIsAtLeast32Bytes~~~
+  accessTokenExpiration: 3600000
+  refreshTokenExpiration: 604800000
+
+openai:
+  secret-key: test-key
+  model: test-gpt-3.5-turbo
+  max-tokens: 1000
+  temperature: 0.7
+
+kakao:
+  client-id: test-client-id
+  redirect-uri: http://localhost:8080/test
