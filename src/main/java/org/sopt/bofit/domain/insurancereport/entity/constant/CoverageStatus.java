@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.OptionalDouble;
 
+import org.sopt.bofit.domain.insurancereport.dto.response.CompareCoverage;
+
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -17,7 +19,7 @@ public enum CoverageStatus {
 	private final String description;
 	private final int point;
 
-	public static CoverageStatus judge(int coverageValue, int average) {
+	public static CoverageStatus judgeFromCompareCoverages(int coverageValue, int average) {
 		return switch (Integer.compare(coverageValue, average)){
 			case 1 -> POWERFUL;
 			case 0 -> ENOUGH;
@@ -26,7 +28,7 @@ public enum CoverageStatus {
 		};
 	}
 
-	public static CoverageStatus judge(List<CoverageStatus> coverageStatuses){
+	public static CoverageStatus judgeFromCoverageStatuses(List<CoverageStatus> coverageStatuses){
 		OptionalDouble coverageValue = coverageStatuses.stream()
 			.mapToInt(CoverageStatus::getPoint)
 			.average();
@@ -38,16 +40,6 @@ public enum CoverageStatus {
 		return WEAKNESS;
 	}
 
-	public static CoverageStatus judge(Map.Entry<Integer, Integer> coverageValueAndAverages) {
-		return switch (Integer.compare(coverageValueAndAverages.getKey(), coverageValueAndAverages.getValue())){
-			case 1 -> POWERFUL;
-			case 0 -> ENOUGH;
-			case -1 -> WEAKNESS;
-			default -> throw new IllegalStateException("Unexpected value: " +
-				Integer.compare(coverageValueAndAverages.getKey(), coverageValueAndAverages.getValue()));
-		};
-	}
-
 	public static CoverageStatus judgeFromPoint(double point){
 		if(point > ENOUGH.point)
 			return POWERFUL;
@@ -56,10 +48,19 @@ public enum CoverageStatus {
 		return WEAKNESS;
 	}
 
-	public static CoverageStatus judge(Map<Integer, Integer> coverageValueAndAverages){
-		OptionalDouble coverageValue = coverageValueAndAverages.entrySet()
-			.stream()
-			.map(CoverageStatus::judge)
+	public static CoverageStatus judgeFromCompareCoverage(CompareCoverage compareCoverage){
+		return switch (Integer.compare(compareCoverage.productCoverage(), compareCoverage.averageCoverage())){
+			case 1 -> POWERFUL;
+			case 0 -> ENOUGH;
+			case -1 -> WEAKNESS;
+			default -> throw new IllegalStateException("Unexpected value: " +
+				Integer.compare(compareCoverage.productCoverage(), compareCoverage.averageCoverage()));
+		};
+	}
+
+	public static CoverageStatus judgeFromCompareCoverages(List<CompareCoverage> compareCoverages){
+		OptionalDouble coverageValue = compareCoverages.stream()
+			.map(CoverageStatus::judgeFromCompareCoverage)
 			.mapToInt(CoverageStatus::getPoint)
 			.average();
 
@@ -69,4 +70,5 @@ public enum CoverageStatus {
 
 		return WEAKNESS;
 	}
+
 }
