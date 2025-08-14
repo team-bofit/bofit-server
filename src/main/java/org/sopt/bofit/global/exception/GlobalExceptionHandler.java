@@ -73,12 +73,19 @@ public class GlobalExceptionHandler {
 
     //입력값 검증할 때 발생하는 예외
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public BaseErrorResponse handleValidationExceptions(MethodArgumentNotValidException ex) {
+
         String message = ex.getBindingResult().getFieldErrors()
+            .stream()
+            .findFirst()
+            .map(DefaultMessageSourceResolvable::getDefaultMessage)
+            .orElseGet(() -> ex.getBindingResult().getGlobalErrors()
                 .stream()
                 .findFirst()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                .orElse("입력값이 잘못되었습니다.");
+                .orElse("입력값이 잘못되었습니다.")
+            );
 
         log.warn("Validation failed: {}", message);
         return BaseErrorResponse.of(HttpStatus.BAD_REQUEST.value(), message, null);
