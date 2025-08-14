@@ -10,7 +10,6 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableCaching
-@EnableJpaAuditing
 @SpringBootApplication
 @EnableConfigurationProperties({JwtProperties.class, KakaoProperties.class, OpenAiProperties.class})
 public class BofitApplication {
