@@ -38,14 +38,14 @@ public abstract class InsuranceBenefitTestBuilder<
 	private int ischemicDiagnosis = 0;
 	private int ischemicSurgery = 0;
 
-	private int disease = 0;
+	private int diseaseSurgery = 0;
 	private int diseaseType1 = 0;
 	private int diseaseType2 = 0;
 	private int diseaseType3 = 0;
 	private int diseaseType4 = 0;
 	private int diseaseType5 = 0;
 
-	private int injury = 0;
+	private int injurySurgery = 0;
 	private int injuryType1 = 0;
 	private int injuryType2 = 0;
 	private int injuryType3 = 0;
@@ -61,10 +61,10 @@ public abstract class InsuranceBenefitTestBuilder<
 	private int dailyHospitalizationDisease = 0;
 	private int dailyHospitalizationInjury = 0;
 
-	public SELF withGeneralDiagnosis(int val) { this.generalCancerDiagnosis = val; return (SELF) this; }
-	public SELF withGeneralSurgery(int val) { this.generalCancerSurgery = val; return (SELF) this; }
-	public SELF withAtypicalDiagnosis(int val) { this.atypicalCancerDiagnosis = val; return (SELF) this; }
-	public SELF withAtypicalSurgery(int val) { this.atypicalCancerSurgery = val; return (SELF) this; }
+	public SELF withGeneralCancerDiagnosis(int val) { this.generalCancerDiagnosis = val; return (SELF) this; }
+	public SELF withGeneralCancerSurgery(int val) { this.generalCancerSurgery = val; return (SELF) this; }
+	public SELF withAtypicalCancerDiagnosis(int val) { this.atypicalCancerDiagnosis = val; return (SELF) this; }
+	public SELF withAtypicalCancerSurgery(int val) { this.atypicalCancerSurgery = val; return (SELF) this; }
 
 	public SELF withHemorrhageDiagnosis(int val) { this.hemorrhageDiagnosis = val; return (SELF) this; }
 	public SELF withHemorrhageSurgery(int val) { this.hemorrhageSurgery = val; return (SELF) this; }
@@ -82,14 +82,14 @@ public abstract class InsuranceBenefitTestBuilder<
 	public SELF withIschemicDiagnosis(int val) { this.ischemicDiagnosis = val; return (SELF) this; }
 	public SELF withIschemicSurgery(int val) { this.ischemicSurgery = val; return (SELF) this; }
 
-	public SELF withDisease(int val) { this.disease = val; return (SELF) this; }
+	public SELF withDiseaseSurgery(int val) { this.diseaseSurgery = val; return (SELF) this; }
 	public SELF withDiseaseType1(int val) { this.diseaseType1 = val; return (SELF) this; }
 	public SELF withDiseaseType2(int val) { this.diseaseType2 = val; return (SELF) this; }
 	public SELF withDiseaseType3(int val) { this.diseaseType3 = val; return (SELF) this; }
 	public SELF withDiseaseType4(int val) { this.diseaseType4 = val; return (SELF) this; }
 	public SELF withDiseaseType5(int val) { this.diseaseType5 = val; return (SELF) this; }
 
-	public SELF withInjury(int val) { this.injury = val; return (SELF) this; }
+	public SELF withInjurySurgery(int val) { this.injurySurgery = val; return (SELF) this; }
 	public SELF withInjuryType1(int val) { this.injuryType1 = val; return (SELF) this; }
 	public SELF withInjuryType2(int val) { this.injuryType2 = val; return (SELF) this; }
 	public SELF withInjuryType3(int val) { this.injuryType3 = val; return (SELF) this; }
@@ -142,7 +142,7 @@ public abstract class InsuranceBenefitTestBuilder<
 			.build();
 
 		DiseaseSurgery diseaseSurgery = DiseaseSurgery.builder()
-			.disease(disease)
+			.disease(this.diseaseSurgery)
 			.diseaseType1(diseaseType1)
 			.diseaseType2(diseaseType2)
 			.diseaseType3(diseaseType3)
@@ -151,7 +151,7 @@ public abstract class InsuranceBenefitTestBuilder<
 			.build();
 
 		InjurySurgery injurySurgery = InjurySurgery.builder()
-			.injury(injury)
+			.injury(this.injurySurgery)
 			.injuryType1(injuryType1)
 			.injuryType2(injuryType2)
 			.injuryType3(injuryType3)
