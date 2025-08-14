@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class InsuranceReportConstant {
 
 	public final static String NAME_REGEX = "^[가-힣]+$";
+	public final static int PREMIUM_RANGE = 10000;
 
 	public final static List<String> DEFAULT_RATIONALE_REASONS = List.of(
 		"고객님의 상황을 고려해 최적의 상품을 추천해드렸어요",

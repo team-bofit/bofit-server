@@ -26,6 +26,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 
+@PremiumRange
 @Builder
 public record InsuranceReportRequest(
 
