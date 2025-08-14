@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
+import org.sopt.bofit.domain.insurancereport.annotation.PremiumRange;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
 import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
@@ -23,7 +24,9 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
+@Builder
 public record InsuranceReportRequest(
 
 	// @Pattern(message = "실명 입력 불가능한 값이 존재합니다.", regexp = NAME_REGEX)
@@ -82,19 +85,20 @@ public record InsuranceReportRequest(
 	@Schema(description = "희망 최대 가격", example = "150000")
 	int maxPremium
 ) {
-		public UserUpdate toUserUpdate(){
+
+	public UserUpdate toUserUpdate(){
 			return new UserUpdate(name, gender, birthDate, job,
 				isMarried, isDriver, hasChild);
-		}
+	}
 
-		public UserInfo toUserInfo(User user){
-			return UserInfo.builder()
-				.user(user)
-				.minPrice(minPremium)
-				.maxPrice(maxPremium)
-				.diseaseHistory(diseaseHistory)
-				.familyHistory(familyHistory)
-				.coveragePreferences(coveragePreferences)
-				.build();
+	public UserInfo toUserInfo(User user){
+		return UserInfo.builder()
+			.user(user)
+			.minPrice(minPremium)
+			.maxPrice(maxPremium)
+			.diseaseHistory(diseaseHistory)
+			.familyHistory(familyHistory)
+			.coveragePreferences(coveragePreferences)
+			.build();
 	}
 }
