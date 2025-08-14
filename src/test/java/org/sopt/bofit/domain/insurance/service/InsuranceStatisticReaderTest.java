@@ -32,7 +32,7 @@ class InsuranceStatisticReaderTest {
 	void getTotalAverageWhenTotalAverageExist(){
 	    // given
 		InsuranceStatistic statistic = new InsuranceStatisticTestBuilder()
-			.withDisease(10)
+			.withDiseaseSurgery(10)
 			.withStatisticRange(StatisticRange.TOTAL_AVERAGE)
 			.build();
 		insuranceStatisticRepository.save(statistic);
