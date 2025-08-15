@@ -1,6 +1,5 @@
 package org.sopt.bofit.domain.insurancereport.entity.scoringrule;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.MappedSuperclass;
@@ -14,14 +13,14 @@ import lombok.NoArgsConstructor;
 public class InsuranceScoringRule{
 
 	@Enumerated(EnumType.STRING)
-	private ConditionCoverage conditionCoverage;
+	protected ConditionCoverage conditionCoverage;
 
 	@Enumerated(EnumType.STRING)
-	private ConditionOperator conditionOperator;
+	protected ConditionOperator conditionOperator;
 
-	private Integer conditionValue;
+	protected Integer conditionValue;
 
-	private Double point;
+	protected Double point;
 
 }
 
