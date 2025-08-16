@@ -55,9 +55,9 @@ class SelectedRuleCalculatorTest {
 		SelectedScoringRule appliedRule1 = SelectedScoringRule.create(
 			CoveragePreference.ESSENTIAL_ONLY,
 			PREMIUM,
-			MINUS,
+			ALWAYS_MULTIPLE,
 			0,
-			-0.5d
+			-0.0005d
 		);
 
 		SelectedScoringRule appliedRule2 = SelectedScoringRule.create(

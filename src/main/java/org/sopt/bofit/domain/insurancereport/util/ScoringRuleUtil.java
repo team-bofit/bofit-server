@@ -12,7 +12,7 @@ public class ScoringRuleUtil {
 		return switch (scoringRule.getConditionOperator()){
 			case GE -> coverage >= scoringRule.getConditionValue() ? scoringRule.getPoint() : 0;
 			case EXIST -> coverage > 0 ? scoringRule.getPoint() : 0;
-			case MINUS -> scoringRule.getPoint() * (coverage / 1000.0);
+			case ALWAYS_MULTIPLE -> scoringRule.getPoint() * coverage;
 			default -> throw new InternalException(GlobalErrorCode.INTERNAL_SERVER_ERROR, "올바르지 않은 ConditionOperator 입니다.");
 		};
 	}
