@@ -9,7 +9,7 @@ public enum ConditionOperator {
 
 	GE(">="),
 	EXIST("> 0"),
-	MINUS("-")
+	ALWAYS_MULTIPLE(""),
 	;
 	private final String operator;
 
