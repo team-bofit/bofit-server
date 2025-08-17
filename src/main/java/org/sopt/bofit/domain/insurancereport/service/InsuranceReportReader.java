@@ -25,7 +25,7 @@ public class InsuranceReportReader {
 	}
 
 	@Cacheable(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#insuranceReportId")
-	public InsuranceReport findByIdWithRelatedEntity(UUID insuranceReportId){
+	public InsuranceReport findByIdWithProductAndStatistic(UUID insuranceReportId){
 		return insuranceReportRepository.findByIdWithProductAndStatistic(insuranceReportId).orElseThrow(() ->
 			new NotFoundException(InsuranceReportErrorCode.NOT_FOUND_INSURANCE_REPORT));
 	}
