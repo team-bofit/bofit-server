@@ -56,32 +56,32 @@ public class InsuranceReportService {
 	}
 
 	public MajorDiseaseSection findMajorDiseaseSection(UUID insuranceReportId, String hyphenSection){
-		InsuranceReport report = insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId);
+		InsuranceReport report = insuranceReportReader.findByIdWithProductAndStatistic(insuranceReportId);
 		return MajorDiseaseSection.getMajorDiseaseSection(hyphenSection, report);
 	}
 
 	public SurgerySection findSurgerySection(UUID insuranceReportId, String hyphenSection){
-		InsuranceReport report = insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId);
+		InsuranceReport report = insuranceReportReader.findByIdWithProductAndStatistic(insuranceReportId);
 		return SurgerySection.getSurgerySection(hyphenSection, report);
 	}
 
 	public DailyHospitalizationSection findHospitalizationSection(UUID insuranceReportId, String hyphenSection){
-		InsuranceReport report = insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId);
+		InsuranceReport report = insuranceReportReader.findByIdWithProductAndStatistic(insuranceReportId);
 		return DailyHospitalizationSection.getHospitalizationSection(hyphenSection, report);
 	}
 
 	public DisabilitySection findDisabilitySection(UUID insuranceReportId, String hyphenSection){
-		InsuranceReport report = insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId);
+		InsuranceReport report = insuranceReportReader.findByIdWithProductAndStatistic(insuranceReportId);
 		return DisabilitySection.getDisabilitySection(hyphenSection, report);
 	}
 
 	public DeathSection findDeathSection(UUID insuranceReportId, String hyphenSection){
-		InsuranceReport report = insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId);
+		InsuranceReport report = insuranceReportReader.findByIdWithProductAndStatistic(insuranceReportId);
 		return DeathSection.getDeathSection(hyphenSection, report);
 	}
 
 	public InsuranceReportResponse findReportResponse(UUID insuranceReportId){
-		InsuranceReport report = insuranceReportReader.findByIdWithRelatedEntity(insuranceReportId);
+		InsuranceReport report = insuranceReportReader.findByIdWithProductAndStatistic(insuranceReportId);
 
 		return InsuranceReportResponse.from(report);
 	}

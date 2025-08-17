@@ -144,6 +144,7 @@ public class InsuranceReport extends BaseEntity {
 		User user,
 		InsuranceProduct product,
 		InsuranceStatistic statistic,
+		ReportRationale reportRationale,
 		CoverageStatus majorDisease,
 		CoverageStatus cancer,
 		CoverageStatus cerebrovascular,
@@ -166,6 +167,7 @@ public class InsuranceReport extends BaseEntity {
 		this.user = user;
 		this.product = product;
 		this.statistic = statistic;
+		this.reportRationale = reportRationale;
 
 		this.majorDisease = majorDisease;
 		this.cancer = cancer;
