@@ -1,0 +1,183 @@
+package org.sopt.bofit.domain.insurancereport.service;
+
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.*;
+
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.sopt.bofit.domain.insurance.InsuranceProductTestBuilder;
+import org.sopt.bofit.domain.insurance.InsuranceStatisticTestBuilder;
+import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
+import org.sopt.bofit.domain.insurance.entity.product.constant.InsuranceStatus;
+import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
+import org.sopt.bofit.domain.insurance.entity.statistic.StatisticRange;
+import org.sopt.bofit.domain.insurance.repository.InsuranceProductRepository;
+import org.sopt.bofit.domain.insurance.repository.InsuranceStatisticRepository;
+import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
+import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
+import org.sopt.bofit.domain.insurancereport.repository.InsuranceReportRepository;
+import org.sopt.bofit.domain.user.entity.User;
+import org.sopt.bofit.domain.user.entity.UserInfo;
+import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
+import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
+import org.sopt.bofit.domain.user.entity.constant.Gender;
+import org.sopt.bofit.domain.user.entity.constant.Job;
+import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
+import org.sopt.bofit.domain.user.repository.UserInfoRepository;
+import org.sopt.bofit.domain.user.repository.UserRepository;
+import org.sopt.bofit.global.external.openai.client.OpenAiClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
+
+@ActiveProfiles("test")
+@SpringBootTest
+class InsuranceReportWriterTest {
+
+	@Autowired
+	private InsuranceReportWriter insuranceReportWriter;
+
+	@MockBean
+	private OpenAiClient openAiClient;
+
+	@Autowired
+	private InsuranceReportRepository insuranceReportRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private InsuranceProductRepository insuranceProductRepository;
+
+	@Autowired
+	private InsuranceStatisticRepository insuranceStatisticRepository;
+
+	@Autowired
+	private UserInfoRepository userInfoRepository;
+
+	@AfterEach
+	void clearInAfterTest(){
+		userInfoRepository.deleteAllInBatch();
+		insuranceReportRepository.deleteAllInBatch();
+		insuranceProductRepository.deleteAllInBatch();
+		userRepository.deleteAllInBatch();
+		insuranceStatisticRepository.deleteAllInBatch();
+	}
+
+	@DisplayName("유저 요청 범위에 해당하는 상품이 존재하지 않는 경우 추천 상품 중 하나를 반환함")
+	@Test
+	void recommendWhenProductsNotExist(){
+	    // given
+		InsuranceProduct product1 = new InsuranceProductTestBuilder()
+			.withName("테스트용 상품1")
+			.withStatus(InsuranceStatus.SELLING)
+			.withPremium(200000)
+			.withMinEnrollmentAge(0)
+			.withMaxEnrollmentAge(100)
+			.build();
+
+		InsuranceProduct product2 = new InsuranceProductTestBuilder()
+			.withName("테스트용 상품1")
+			.withStatus(InsuranceStatus.SELLING)
+			.withPremium(15000)
+			.withMinEnrollmentAge(30)
+			.withMaxEnrollmentAge(100)
+			.build();
+
+		InsuranceProduct recommendedProduct1 = new InsuranceProductTestBuilder()
+			.withName("추천 상품1")
+			.withPremium(200000)
+			.withMinEnrollmentAge(0)
+			.withMaxEnrollmentAge(100)
+			.withStatus(InsuranceStatus.RECOMMENDED)
+			.build();
+
+		User user = User.builder()
+			.gender(Gender.FEMALE)
+			.hasChild(false)
+			.job(Job.STUDENT)
+			.isDriver(false)
+			.isMarried(false)
+			.build();
+
+		UserInfo userInfo = UserInfo.builder()
+			.minPrice(10000)
+			.maxPrice(20000)
+			.build();
+
+		insuranceProductRepository.saveAll(List.of(product1, product2, recommendedProduct1));
+	    // when
+
+		InsuranceProduct result = insuranceReportWriter.recommendBestInsurance(List.of(), user, userInfo, 10);
+
+		// then
+		assertThat(result)
+			.extracting("status", "basicInformation.name")
+			.containsExactly(InsuranceStatus.RECOMMENDED, "추천 상품1");
+	}
+
+	@DisplayName("리포트를 정상적으로 생성함")
+	@Test
+	void createReport(){
+	    // given
+		String productName = "테스트용 보험 상품";
+		InsuranceProduct product = new InsuranceProductTestBuilder()
+			.withName(productName)
+			.build();
+
+		InsuranceStatistic statistic = new InsuranceStatisticTestBuilder()
+			.withStatisticRange(StatisticRange.TOTAL_AVERAGE)
+			.build();
+
+		String userName = "유저1";
+		User user = User.builder()
+			.name(userName)
+			.loginProvider(LoginProvider.KAKAO)
+			.gender(Gender.FEMALE)
+			.job(Job.STUDENT)
+			.isMarried(false)
+			.hasChild(false)
+			.oauthId("0123456")
+			.build();
+
+		Map<CoveragePreference, Integer> selectedCoverages = Map.of(
+			CoveragePreference.MAXIMUM_COVERAGE, 1,
+			CoveragePreference.MAJOR_DISEASE, 2
+		);
+
+		UserInfo userInfo = UserInfo.builder()
+			.minPrice(10000)
+			.maxPrice(100000)
+			.familyHistory(List.of(DiagnosedDisease.NONE))
+			.diseaseHistory(List.of(DiagnosedDisease.NONE))
+			.coveragePreferences(selectedCoverages)
+			.user(user)
+			.build();
+
+		InsuranceProduct savedProduct = insuranceProductRepository.save(product);
+		InsuranceStatistic savedStatistic = insuranceStatisticRepository.save(statistic);
+		User savedUser = userRepository.save(user);
+
+		when(openAiClient.sendReportRelationalRequest(anyList()))
+			.thenReturn(new ReportRationale(DEFAULT_RATIONALE_REASONS, DEFAULT_RATIONAL_KEYWORD_CHIPS));
+
+	    // when
+		InsuranceReport result = insuranceReportWriter.writeReport(statistic, savedProduct, savedUser, userInfo, 30);
+
+		// then
+		assertThat(result)
+			.isNotNull()
+			.extracting("product.basicInformation.name", "user.name", "reportRationale.reasons")
+			.containsExactly(productName, userName, DEFAULT_RATIONALE_REASONS );
+
+		assertThat(userInfoRepository.findAll().size())
+			.isEqualTo(1);
+	}
+
+}
