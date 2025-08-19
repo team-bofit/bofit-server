@@ -16,13 +16,10 @@ import org.sopt.bofit.domain.insurancereport.entity.scoringrule.familyhistory.Fa
 import org.sopt.bofit.domain.insurancereport.repository.scoringrule.FamilyHistoryScoringRuleRepository;
 import org.sopt.bofit.domain.insurancereport.util.ScoringRuleUtil;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
+import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("test")
-@SpringBootTest
-class FamilyHistoryRuleCalculatorTest {
+class FamilyHistoryRuleCalculatorTest extends IntegrationTestSupport {
 
 	@Autowired
 	private FamilyHistoryRuleCalculator familyHistoryRuleCalculator;

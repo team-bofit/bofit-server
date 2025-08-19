@@ -20,13 +20,10 @@ import org.sopt.bofit.domain.insurancereport.repository.scoringrule.UserInfoScor
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.Gender;
 import org.sopt.bofit.domain.user.entity.constant.Job;
+import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("test")
-@SpringBootTest
-class UserInfoRuleCalculatorTest {
+class UserInfoRuleCalculatorTest extends IntegrationTestSupport {
 	@Autowired
 	private UserInfoRuleCalculator userInfoRuleCalculator;
 

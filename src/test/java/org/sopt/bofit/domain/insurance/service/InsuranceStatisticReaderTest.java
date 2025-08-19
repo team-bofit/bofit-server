@@ -5,22 +5,16 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.sopt.bofit.config.TestCacheConfig;
 import org.sopt.bofit.domain.insurance.InsuranceStatisticTestBuilder;
 import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurance.entity.statistic.StatisticRange;
 import org.sopt.bofit.domain.insurance.repository.InsuranceStatisticRepository;
 import org.sopt.bofit.global.exception.constant.InsuranceErrorCode;
 import org.sopt.bofit.global.exception.customexception.InternalException;
+import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("test")
-@SpringBootTest
-@Import(TestCacheConfig.class)
-class InsuranceStatisticReaderTest {
+class InsuranceStatisticReaderTest extends IntegrationTestSupport {
 
 	@Autowired
 	private InsuranceStatisticReader insuranceStatisticReader;

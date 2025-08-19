@@ -40,18 +40,10 @@ import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserInfoRepository;
 import org.sopt.bofit.domain.user.repository.UserRepository;
 import org.sopt.bofit.global.exception.customexception.BadRequestException;
-import org.sopt.bofit.global.external.openai.client.OpenAiClient;
+import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("test")
-@SpringBootTest
-class InsuranceReportServiceTest {
-
-	@MockBean
-	private OpenAiClient openAiClient;
+class InsuranceReportServiceTest extends IntegrationTestSupport {
 
 	@Autowired
 	private InsuranceReportService insuranceReportService;
@@ -158,8 +150,8 @@ class InsuranceReportServiceTest {
 			.isEqualTo("테스트용 보험 상품3");
 
 		assertThat(resultReport)
-			.extracting("user", "reportRationale.reasons")
-			.containsExactly(savedUser, DEFAULT_RATIONALE_REASONS);
+			.extracting("user.id", "reportRationale.reasons")
+			.containsExactly(savedUser.getId(), DEFAULT_RATIONALE_REASONS);
 
 		assertThat(userInfoRepository.findAll().size())
 			.isEqualTo(1);

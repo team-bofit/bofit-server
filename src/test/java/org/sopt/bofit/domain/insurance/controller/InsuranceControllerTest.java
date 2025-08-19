@@ -16,53 +16,18 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.sopt.bofit.config.TestConfig;
 import org.sopt.bofit.domain.insurancereport.dto.request.InsuranceReportRequest;
 import org.sopt.bofit.domain.insurancereport.dto.response.IssueInsuranceReportResponse;
-import org.sopt.bofit.domain.insurancereport.service.InsuranceReportService;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.Gender;
 import org.sopt.bofit.domain.user.entity.constant.Job;
-import org.sopt.bofit.domain.user.service.UserService;
-import org.sopt.bofit.global.config.WebConfig;
-import org.sopt.bofit.global.oauth.jwt.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.context.annotation.Import;
+import org.sopt.bofit.support.ControllerTestSupport;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 
-@WebMvcTest(controllers = InsuranceController.class,
-	excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
-			classes = {WebConfig.class})
-	})
-@ActiveProfiles("test")
-@Import(TestConfig.class)
-class InsuranceControllerTest{
-
-	@Autowired
-	private MockMvc mockMvc;
-
-	@Autowired
-	private ObjectMapper objectMapper;
-
-	@MockBean
-	private UserService userService;
-
-	@MockBean
-	private InsuranceReportService insuranceReportService;
-
-	@MockBean
-	private JwtUtil jwtUtil;
-
+class InsuranceControllerTest extends ControllerTestSupport {
+	
 	@WithMockUser()
 	@DisplayName("보험 상품 추천 리포트를 생성함")
 	@Test

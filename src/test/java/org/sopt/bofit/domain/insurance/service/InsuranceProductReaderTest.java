@@ -14,13 +14,10 @@ import org.sopt.bofit.domain.insurance.entity.product.constant.InsuranceStatus;
 import org.sopt.bofit.domain.insurance.repository.InsuranceProductRepository;
 import org.sopt.bofit.global.exception.constant.InsuranceErrorCode;
 import org.sopt.bofit.global.exception.customexception.InternalException;
+import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest
-@ActiveProfiles("test")
-class InsuranceProductReaderTest {
+class InsuranceProductReaderTest extends IntegrationTestSupport {
 
 	@Autowired
 	private InsuranceProductReader insuranceProductReader;
