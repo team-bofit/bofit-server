@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.UUID;
 
-import org.hibernate.Hibernate;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,6 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+
 @ActiveProfiles("test")
 @SpringBootTest
 class InsuranceReportReaderTest {
@@ -48,6 +50,9 @@ class InsuranceReportReaderTest {
 
 	@Autowired
 	private InsuranceStatisticRepository insuranceStatisticRepository;
+
+	@PersistenceContext
+	private EntityManager entityManager;
 
 	@AfterEach
 	void clearInAfterTest(){
@@ -92,9 +97,9 @@ class InsuranceReportReaderTest {
 		InsuranceReport result = insuranceReportReader.findByIdWithProductAndStatistic(reportId);
 
 	    // then
-		assertTrue(Hibernate.isInitialized(result.getProduct()));
-		assertTrue(Hibernate.isInitialized(result.getStatistic()));
-		assertFalse(Hibernate.isInitialized(result.getUser()));
+		assertTrue(entityManager.getEntityManagerFactory().getPersistenceUnitUtil().isLoaded(result.getProduct()));
+		assertTrue(entityManager.getEntityManagerFactory().getPersistenceUnitUtil().isLoaded(result.getStatistic()));
+		assertFalse(entityManager.getEntityManagerFactory().getPersistenceUnitUtil().isLoaded(result.getUser()));
 	}
 
 	@DisplayName("존재하지 않는 리포트를 조회하는 경우 예외가 발생함")
