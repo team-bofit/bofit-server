@@ -30,21 +30,13 @@ import org.sopt.bofit.domain.user.entity.constant.Job;
 import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserInfoRepository;
 import org.sopt.bofit.domain.user.repository.UserRepository;
-import org.sopt.bofit.global.external.openai.client.OpenAiClient;
+import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("test")
-@SpringBootTest
-class InsuranceReportWriterTest {
+class InsuranceReportWriterTest extends IntegrationTestSupport {
 
 	@Autowired
 	private InsuranceReportWriter insuranceReportWriter;
-
-	@MockBean
-	private OpenAiClient openAiClient;
 
 	@Autowired
 	private InsuranceReportRepository insuranceReportRepository;

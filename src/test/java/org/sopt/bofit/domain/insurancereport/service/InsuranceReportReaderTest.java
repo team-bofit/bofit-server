@@ -25,16 +25,13 @@ import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserRepository;
 import org.sopt.bofit.global.exception.customexception.NotFoundException;
+import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-@ActiveProfiles("test")
-@SpringBootTest
-class InsuranceReportReaderTest {
+class InsuranceReportReaderTest extends IntegrationTestSupport {
 
 	@Autowired
 	private InsuranceReportReader insuranceReportReader;

@@ -16,13 +16,10 @@ import org.sopt.bofit.domain.insurancereport.entity.scoringrule.diseasehistory.D
 import org.sopt.bofit.domain.insurancereport.repository.scoringrule.DiseaseHistoryScoringRuleRepository;
 import org.sopt.bofit.domain.insurancereport.util.ScoringRuleUtil;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
+import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("test")
-@SpringBootTest
-class DiseaseHistoryRuleCalculatorTest {
+class DiseaseHistoryRuleCalculatorTest extends IntegrationTestSupport {
 
 	@Autowired
 	private DiseaseHistoryRuleCalculator diseaseHistoryRuleCalculator;

@@ -17,13 +17,10 @@ import org.sopt.bofit.domain.insurancereport.entity.scoringrule.select.SelectedS
 import org.sopt.bofit.domain.insurancereport.repository.scoringrule.SelectedScoringRuleRepository;
 import org.sopt.bofit.domain.insurancereport.util.ScoringRuleUtil;
 import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
+import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("test")
-@SpringBootTest
-class SelectedRuleCalculatorTest {
+class SelectedRuleCalculatorTest extends IntegrationTestSupport {
 
 	private final static double FIRST_WEIGHT = 1.2;
 	private final static double SECOND_WEIGHT = 1.0;

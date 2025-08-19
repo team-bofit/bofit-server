@@ -10,15 +10,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sopt.bofit.domain.insurance.InsuranceProductTestBuilder;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
+import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-@ActiveProfiles("test")
-@SpringBootTest
 @Transactional
-class InsuranceProductRepositoryTest {
+class InsuranceProductRepositoryTest extends IntegrationTestSupport {
 
 	@Autowired
 	private InsuranceProductRepository insuranceProductRepository;
