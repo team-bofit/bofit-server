@@ -1,7 +1,5 @@
 package org.sopt.bofit.domain.insurancereport.service.scoringrule;
 
-import static org.sopt.bofit.domain.user.entity.constant.Job.*;
-
 import java.util.List;
 
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
