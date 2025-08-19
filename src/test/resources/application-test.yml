@@ -3,11 +3,18 @@ spring:
     activate:
       on-profile: test
 
+  cache:
+    type: none
+
   datasource:
-    url: jdbc:h2:mem:testdb;MODE=MySQL;NON_KEYWORDS=USER
+    url: jdbc:h2:mem:testdb;NON_KEYWORDS=USER;MODE=MySQL
     driver-class-name: org.h2.Driver
     username: test
     password: test
+
+  h2:
+    console:
+      enabled: true
 
   sql:
     init:
@@ -25,10 +32,6 @@ spring:
           auto: create-drop
     open-in-view: false
 
-  h2:
-    console:
-      enabled: true
-
 jwt:
   secret: testSecretKeyForJwtWhichIsAtLeast32Bytes~~~
   accessTokenExpiration: 3600000
@@ -36,7 +39,7 @@ jwt:
 
 openai:
   secret-key: test-key
-  model: test-gpt-3.5-turbo
+  model: test-gpt-model
   max-tokens: 1000
   temperature: 0.7
 

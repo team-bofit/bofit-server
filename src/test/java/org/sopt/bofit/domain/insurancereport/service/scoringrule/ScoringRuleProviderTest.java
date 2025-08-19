@@ -11,6 +11,7 @@ import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.sopt.bofit.config.TestCacheConfig;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.ConditionOperator;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.diseasehistory.DiseaseHistoryScoringRule;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.familyhistory.FamilyHistoryScoringRule;
@@ -24,10 +25,12 @@ import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
 @SpringBootTest
+@Import(TestCacheConfig.class)
 class ScoringRuleProviderTest {
 
 	@Autowired
@@ -155,6 +158,7 @@ class ScoringRuleProviderTest {
 		// when
 		List<DiseaseHistoryScoringRule> results = scoringRuleProvider.findAllDiseaseHistory(DiagnosedDisease.CANCER);
 
+		List<DiseaseHistoryScoringRule> r2 = diseaseHistoryScoringRuleRepository.findAll();
 		// then
 		assertThat(results).hasSize(3)
 			.extracting("diagnosedDisease", "conditionCoverage")
@@ -165,7 +169,7 @@ class ScoringRuleProviderTest {
 			);
 	}
 
-	@DisplayName("파라미터로 전달하는 DiagnosedDisease 에 해당하는 FamilyHistoryScoringRule 를 전부 정상적으로 반환함.")
+	@DisplayName("파라미터로 전달하는 DiagnosedDisease 에 해당하는 FamilyHistoryScoringRule 을 전부 정상적으로 반환함.")
 	@Test
 	void getFamilyHistoryRuleTest(){
 		// given

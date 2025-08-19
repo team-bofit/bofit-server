@@ -2,9 +2,10 @@ package org.sopt.bofit.domain.insurance.service;
 
 import static org.assertj.core.api.Assertions.*;
 
-
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.sopt.bofit.config.TestCacheConfig;
 import org.sopt.bofit.domain.insurance.InsuranceStatisticTestBuilder;
 import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurance.entity.statistic.StatisticRange;
@@ -13,12 +14,12 @@ import org.sopt.bofit.global.exception.constant.InsuranceErrorCode;
 import org.sopt.bofit.global.exception.customexception.InternalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.transaction.annotation.Transactional;
 
 @ActiveProfiles("test")
 @SpringBootTest
-@Transactional
+@Import(TestCacheConfig.class)
 class InsuranceStatisticReaderTest {
 
 	@Autowired
@@ -26,6 +27,11 @@ class InsuranceStatisticReaderTest {
 
 	@Autowired
 	private InsuranceStatisticRepository insuranceStatisticRepository;
+
+	@AfterEach
+	void clearInAfterTest(){
+		insuranceStatisticRepository.deleteAllInBatch();
+	}
 
 	@DisplayName("TOTAL_AVERAGE 인 통계 정보가 존재하는 경우 정상적으로 가져옴")
 	@Test
