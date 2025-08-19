@@ -1,11 +1,10 @@
 package org.sopt.bofit.domain.insurancereport.entity.scoringrule;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.sopt.bofit.domain.insurance.InsuranceProductTestBuilder;
+import org.sopt.bofit.domain.insurance.builder.InsuranceProductTestBuilder;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 
 class ConditionCoverageTest {
