@@ -8,7 +8,7 @@ import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.sopt.bofit.domain.insurance.InsuranceProductTestBuilder;
+import org.sopt.bofit.domain.insurance.builder.InsuranceProductTestBuilder;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;

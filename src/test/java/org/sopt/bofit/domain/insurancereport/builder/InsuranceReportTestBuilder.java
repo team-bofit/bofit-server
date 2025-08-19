@@ -1,4 +1,4 @@
-package org.sopt.bofit.domain.insurance;
+package org.sopt.bofit.domain.insurancereport.builder;
 
 import java.time.LocalDateTime;
 import java.util.List;

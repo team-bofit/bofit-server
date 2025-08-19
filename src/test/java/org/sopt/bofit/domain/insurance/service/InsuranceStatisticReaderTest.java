@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.sopt.bofit.domain.insurance.InsuranceStatisticTestBuilder;
+import org.sopt.bofit.domain.insurance.builder.InsuranceStatisticTestBuilder;
 import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurance.entity.statistic.StatisticRange;
 import org.sopt.bofit.domain.insurance.repository.InsuranceStatisticRepository;

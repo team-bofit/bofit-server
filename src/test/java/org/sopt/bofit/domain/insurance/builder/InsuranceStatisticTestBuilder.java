@@ -1,9 +1,10 @@
-package org.sopt.bofit.domain.insurance;
+package org.sopt.bofit.domain.insurance.builder;
 
 import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurance.entity.statistic.StatisticRange;
 
-public class InsuranceStatisticTestBuilder extends InsuranceBenefitTestBuilder<InsuranceStatisticTestBuilder, InsuranceStatistic> {
+public class InsuranceStatisticTestBuilder extends
+	InsuranceBenefitTestBuilder<InsuranceStatisticTestBuilder, InsuranceStatistic> {
 
 	private StatisticRange statisticRange = StatisticRange.TOTAL_AVERAGE;
 

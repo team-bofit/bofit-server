@@ -1,4 +1,4 @@
-package org.sopt.bofit.domain.insurance;
+package org.sopt.bofit.domain.insurance.builder;
 
 import org.sopt.bofit.domain.insurance.entity.benefit.Cancer;
 import org.sopt.bofit.domain.insurance.entity.benefit.Cerebrovascular;

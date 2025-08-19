@@ -6,7 +6,7 @@ import static org.sopt.bofit.domain.insurancereport.entity.scoringrule.Condition
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.sopt.bofit.domain.insurance.InsuranceProductTestBuilder;
+import org.sopt.bofit.domain.insurance.builder.InsuranceProductTestBuilder;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.familyhistory.FamilyHistoryScoringRule;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.select.SelectedScoringRule;

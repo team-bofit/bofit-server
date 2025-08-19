@@ -9,7 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.sopt.bofit.domain.insurance.InsuranceProductTestBuilder;
+import org.sopt.bofit.domain.insurance.builder.InsuranceProductTestBuilder;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.ConditionOperator;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.diseasehistory.DiseaseHistoryScoringRule;

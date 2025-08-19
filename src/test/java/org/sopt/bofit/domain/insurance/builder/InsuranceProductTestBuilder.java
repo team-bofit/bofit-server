@@ -1,11 +1,12 @@
-package org.sopt.bofit.domain.insurance;
+package org.sopt.bofit.domain.insurance.builder;
 
 import org.sopt.bofit.domain.insurance.entity.product.BasicInformation;
 import org.sopt.bofit.domain.insurance.entity.product.ExtraInformation;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurance.entity.product.constant.InsuranceStatus;
 
-public class InsuranceProductTestBuilder extends InsuranceBenefitTestBuilder<InsuranceProductTestBuilder, InsuranceProduct>{
+public class InsuranceProductTestBuilder extends
+	InsuranceBenefitTestBuilder<InsuranceProductTestBuilder, InsuranceProduct> {
 
 	private String name = "테스트용 상품명";
 	private String company = "테스트용 회사명";
