@@ -1,4 +1,4 @@
-package org.sopt.bofit.global.oauth.dto;
+package org.sopt.bofit.global.oauth.dto.response;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
