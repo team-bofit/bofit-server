@@ -2,8 +2,8 @@ package org.sopt.bofit.global.oauth.service;
 
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.*;
 import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
-import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.*;
-import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.KakaoAccount.*;
+import static org.sopt.bofit.global.oauth.dto.response.KakaoUserResponse.*;
+import static org.sopt.bofit.global.oauth.dto.response.KakaoUserResponse.KakaoAccount.*;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -15,10 +15,11 @@ import org.sopt.bofit.global.config.properties.KakaoProperties;
 import org.sopt.bofit.global.exception.customexception.BadRequestException;
 import org.sopt.bofit.global.exception.customexception.UnAuthorizedException;
 import org.sopt.bofit.global.oauth.constant.HttpHeaderConstants;
-import org.sopt.bofit.global.oauth.dto.KaKaoLoginResponse;
-import org.sopt.bofit.global.oauth.dto.KaKaoTokenResponse;
-import org.sopt.bofit.global.oauth.dto.KakaoUserResponse;
-import org.sopt.bofit.global.oauth.dto.TokenReissueResponse;
+import org.sopt.bofit.global.oauth.dto.request.OAuthLoginRequest;
+import org.sopt.bofit.global.oauth.dto.response.KaKaoLoginResponse;
+import org.sopt.bofit.global.oauth.dto.response.KaKaoTokenResponse;
+import org.sopt.bofit.global.oauth.dto.response.KakaoUserResponse;
+import org.sopt.bofit.global.oauth.dto.response.TokenReissueResponse;
 import org.sopt.bofit.global.oauth.entity.RefreshToken;
 import org.sopt.bofit.global.oauth.jwt.JwtProvider;
 import org.sopt.bofit.global.oauth.jwt.JwtUtil;
@@ -111,6 +112,22 @@ public class OAuthService {
                         existing -> existing.updateToken(refreshToken),
                         () -> refreshTokenRepository.save(RefreshToken.of(user.getId(), refreshToken))
                 );
+        return KaKaoLoginResponse.of(user.getId(), accessToken, refreshToken);
+    }
+
+    @Transactional
+    public KaKaoLoginResponse login(OAuthLoginRequest request) {
+        KaKaoTokenResponse token = requestToken(request.code(), Optional.ofNullable(request.redirectUrl()));
+        User user = registerOrLogin(token.accessToken());
+
+        String accessToken = jwtProvider.generateAccessToken(user.getId());
+        String refreshToken = jwtProvider.generateRefreshToken(user.getId());
+
+        refreshTokenRepository.findByUserId(user.getId())
+            .ifPresentOrElse(
+                existing -> existing.updateToken(refreshToken),
+                () -> refreshTokenRepository.save(RefreshToken.of(user.getId(), refreshToken))
+            );
         return KaKaoLoginResponse.of(user.getId(), accessToken, refreshToken);
     }
 
