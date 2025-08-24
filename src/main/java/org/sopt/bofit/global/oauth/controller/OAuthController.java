@@ -27,8 +27,11 @@ public class OAuthController {
     @CustomExceptionDescription(KAKAO_TOKEN_REQUEST)
     @Operation(summary = "카카오 로그인", description = "카카오 API를 통해 로그인합니다.")
     @GetMapping("/kakao/login")
-    public BaseResponse<KaKaoLoginResponse> kakaoCallback(@RequestParam("code") String code) {
-        return BaseResponse.ok(oAuthService.login(code), "카카오 로그인 성공");
+    public BaseResponse<KaKaoLoginResponse> kakaoCallback(
+        @RequestParam("code") String code,
+        @RequestParam(value = "redirect-url", required = false) String redirectUrl
+    ) {
+        return BaseResponse.ok(oAuthService.login(code, Optional.ofNullable(redirectUrl)), "카카오 로그인 성공");
     }
 
     @Tag(name = TAG_NAME_KAKAO_LOGIN, description = TAG_DESCRIPTION_KAKAO_LOGIN)
