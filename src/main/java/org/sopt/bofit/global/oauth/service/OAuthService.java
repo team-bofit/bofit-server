@@ -1,7 +1,13 @@
 package org.sopt.bofit.global.oauth.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.*;
+import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
+import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.*;
+import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.KakaoAccount.*;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserRepository;
@@ -23,12 +29,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClient;
 
-import java.nio.charset.StandardCharsets;
-
-import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.JWT_INVALID;
-import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
-import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.KakaoAccount;
-import static org.sopt.bofit.global.oauth.dto.KakaoUserResponse.KakaoAccount.UserProfile;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -47,8 +49,9 @@ public class OAuthService {
 
     private final RestClient restClient = RestClient.builder().baseUrl("").build();
 
-    private KaKaoTokenResponse requestToken(String code) {
-        String body = OAuthUtil.buildTokenRequestBody(code, properties.clientId(), properties.redirectUri());
+    private KaKaoTokenResponse requestToken(String code, Optional<String> redirectUrl) {
+        String body = OAuthUtil.buildTokenRequestBody(code, properties.clientId(),
+            redirectUrl.orElseGet(properties::redirectUri));
 
         return restClient.post()
                 .uri(properties.tokenUri())
@@ -96,8 +99,8 @@ public class OAuthService {
     }
 
     @Transactional
-    public KaKaoLoginResponse login(String code) {
-        KaKaoTokenResponse token = requestToken(code);
+    public KaKaoLoginResponse login(String code, Optional<String> redirectUrl) {
+        KaKaoTokenResponse token = requestToken(code, redirectUrl);
         User user = registerOrLogin(token.accessToken());
 
         String accessToken = jwtProvider.generateAccessToken(user.getId());
