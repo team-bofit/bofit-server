@@ -17,6 +17,7 @@ public interface PostRepository extends PostJpaRepository, PostCustomRepository{
 		""")
     void increaseLikeCount(@Param("requestPost") Post post);
 
+    @Modifying
     @Query("""
         UPDATE Post p
         SET p.likeCount = p.likeCount - 1
