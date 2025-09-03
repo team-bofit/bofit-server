@@ -91,6 +91,12 @@ dependencies {
 	//Cache
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
+
+	//AWS
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation 'software.amazon.awssdk:s3:2.25.66'
+	implementation 'software.amazon.awssdk:auth:2.25.66'
+	implementation 'software.amazon.awssdk:regions:2.25.66'
 }
 
 def generated = "build/generated/querydsl"
