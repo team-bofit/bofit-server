@@ -20,4 +20,7 @@ public class PostLikeWriter {
         return postLike;
     }
 
+    public void delete(PostLike postLike){
+        postLikeRepository.delete(postLike);
+    }
 }
