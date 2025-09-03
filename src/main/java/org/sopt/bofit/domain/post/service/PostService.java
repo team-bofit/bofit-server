@@ -38,5 +38,4 @@ public class PostService {
         return postReader.getPostById(postId);
     }
 
-
 }
