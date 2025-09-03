@@ -13,6 +13,7 @@ import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.KAKAO_USER
 import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_CONTENT_BLANK;
 import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_CONTENT_LONG;
 import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_LIKE_CREATE_CONFLICT;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_LIKE_NOT_FOUND;
 import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_NOT_FOUND;
 import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_TITLE_BLANK;
 import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_TITLE_LONG;
@@ -94,6 +95,11 @@ public enum SwaggerResponseDescription {
         USER_NOT_FOUND,
         POST_NOT_FOUND,
         POST_LIKE_CREATE_CONFLICT
+    ))),
+    DELETE_POST_LIKE(new LinkedHashSet<>(Set.of(
+        USER_NOT_FOUND,
+        POST_NOT_FOUND,
+        POST_LIKE_NOT_FOUND
     )))
     ;
     private final Set<ErrorCode> errorCodeList;

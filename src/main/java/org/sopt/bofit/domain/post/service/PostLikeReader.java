@@ -21,6 +21,6 @@ public class PostLikeReader {
 
     public PostLike findByPostAnsUser(Post post, User user){
         return postLikeRepository.findByPostAndUser(post, user)
-            .orElseThrow(() -> new NotFoundException(PostErrorCode.POST_LIKE_DELETE_CONFLICT));
+            .orElseThrow(() -> new NotFoundException(PostErrorCode.POST_LIKE_NOT_FOUND));
     }
 }
