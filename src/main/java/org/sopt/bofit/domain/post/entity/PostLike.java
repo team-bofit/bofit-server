@@ -6,8 +6,11 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,6 +21,9 @@ import org.sopt.bofit.global.entity.BaseEntity;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(indexes = {
+    @Index(name = "uk_post_user", columnList = "post_id, user_id", unique = true),
+})
 public class PostLike extends BaseEntity {
 
     @Id
@@ -41,5 +47,22 @@ public class PostLike extends BaseEntity {
     private PostLike(Post post, User user) {
         this.post = post;
         this.user = user;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || !(o instanceof PostLike postLike)) {
+            return false;
+        }
+        return Objects.equals(id, postLike.id) || (Objects.equals(post,
+            postLike.post) && Objects.equals(user, postLike.user));
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, post, user);
     }
 }
