@@ -148,11 +148,12 @@ public class PostController {
     @Operation(summary = "게시글 좋아요 생성", description = "유저가 커뮤니티 게시글에 좋아요를 생성합니다.")
     @CustomExceptionDescription(CREATE_POST_LIKE)
     @PostMapping("/{post-id}/likes")
-    public BaseResponse<?> createPostLike(
+    public BaseResponse<Void> createPostLike(
         @PathVariable(name = "post-id") Long postId,
         @Parameter(hidden = true) @LoginUserId Long userId
     ){
         postLikeService.createPostLike(userId, postId);
         return BaseResponse.create("좋아요 추가 성공");
     }
+
 }
