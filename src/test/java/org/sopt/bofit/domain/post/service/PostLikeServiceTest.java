@@ -15,8 +15,10 @@ import org.sopt.bofit.domain.post.repository.PostRepository;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserRepository;
+import org.sopt.bofit.global.exception.constant.ErrorCode;
 import org.sopt.bofit.global.exception.constant.PostErrorCode;
 import org.sopt.bofit.global.exception.customexception.ConflictException;
+import org.sopt.bofit.global.exception.customexception.CustomException;
 import org.sopt.bofit.global.exception.customexception.NotFoundException;
 import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +43,17 @@ class PostLikeServiceTest extends IntegrationTestSupport {
         postRepository.deleteAllInBatch();
         userRepository.deleteAllInBatch();
     }
+
+    private <T extends CustomException> void assertExceptionAndErrorCode(
+        Runnable action,
+        ErrorCode errorCode,
+        Class<T> customException)
+    {
+        assertThatThrownBy(action::run)
+            .isInstanceOf(customException)
+            .satisfies(e -> assertThat(((T)e).getErrorCode()).isEqualTo(errorCode));
+    }
+
 
     @DisplayName("게시글 좋아요가 정상적으로 생성됨")
     @Test
@@ -85,12 +98,10 @@ class PostLikeServiceTest extends IntegrationTestSupport {
         postLikeRepository.save(postLike);
 
         // when // then
-        assertThatThrownBy(() -> postLikeService.createPostLike(user.getId(), post.getId()))
-            .isInstanceOf(ConflictException.class)
-            .satisfies(e -> {
-                ConflictException exception = (ConflictException) e;
-                assertThat(exception.getErrorCode()).isEqualTo(PostErrorCode.POST_LIKE_CREATE_CONFLICT);
-            });
+        assertExceptionAndErrorCode(
+            ()-> postLikeService.createPostLike(user.getId(), post.getId()),
+            PostErrorCode.POST_LIKE_CREATE_CONFLICT,
+            ConflictException.class);
     }
 
     @DisplayName("게시글 좋아요가 정상적으로 삭제됨")
@@ -137,12 +148,10 @@ class PostLikeServiceTest extends IntegrationTestSupport {
         postRepository.save(post);
 
         // when // then
-        assertThatThrownBy(() -> postLikeService.deletePostLike(user.getId(), post.getId()))
-            .isInstanceOf(NotFoundException.class)
-            .satisfies(e -> {
-                NotFoundException exception = (NotFoundException) e;
-                assertThat(exception.getErrorCode()).isEqualTo(PostErrorCode.POST_LIKE_NOT_FOUND);
-            });
+        assertExceptionAndErrorCode(
+            () -> postLikeService.deletePostLike(user.getId(), post.getId()),
+            PostErrorCode.POST_LIKE_NOT_FOUND,
+            NotFoundException.class);
     }
 
 }
