@@ -27,6 +27,6 @@ public class S3Controller {
     @CustomExceptionDescription(UPLOAD_IMAGE)
     @PostMapping("upload")
     public BaseResponse<PresignedUrlResponse> createdUrls(@RequestBody PresignedUrlRequest req){
-        return BaseResponse.ok(s3Service.generatePresignedUrls(req.mediaType()),"이미지 업로드가 완료되었습니다.");
+        return BaseResponse.ok(s3Service.generatePresignedUrls(req.mediaType()),"presigned URL 발급이 완료되었습니다.");
     }
 }
