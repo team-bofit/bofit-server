@@ -19,7 +19,7 @@ public class PostLikeReader {
         return postLikeRepository.existsByPostAndUser(post, user);
     }
 
-    public PostLike findByPostAnsUser(Post post, User user){
+    public PostLike findByPostAndUser(Post post, User user){
         return postLikeRepository.findByPostAndUser(post, user)
             .orElseThrow(() -> new NotFoundException(PostErrorCode.POST_LIKE_NOT_FOUND));
     }

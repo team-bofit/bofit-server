@@ -42,7 +42,7 @@ public class PostLikeService {
         Post post = postReader.findById(postId);
         User user = userReader.findById(userId);
 
-        PostLike postLike = postLikeReader.findByPostAnsUser(post, user);
+        PostLike postLike = postLikeReader.findByPostAndUser(post, user);
 
         postLikeWriter.delete(postLike);
 
