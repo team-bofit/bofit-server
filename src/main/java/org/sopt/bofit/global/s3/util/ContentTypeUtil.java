@@ -1,6 +1,6 @@
 package org.sopt.bofit.global.s3.util;
 
-import org.sopt.bofit.global.exception.customexception.S3Exception;
+import org.sopt.bofit.global.exception.customexception.BadRequestException;
 import org.sopt.bofit.global.s3.constant.ContentTypeConstants;
 
 import java.util.Locale;
@@ -20,17 +20,17 @@ public class ContentTypeUtil {
         switch (category) {
             case IMAGE -> {
                 if (!ALLOWED_IMAGES.contains(contentType)) {
-                    throw new S3Exception(UNSUPPORTED_IMAGE_TYPE);
+                    throw new BadRequestException(UNSUPPORTED_IMAGE_TYPE);
                 }
             }
-            default -> throw new S3Exception(UNSUPPORTED_MEDIA_TYPE);
+            default -> throw new BadRequestException(UNSUPPORTED_MEDIA_TYPE);
         }
     }
 
     public static String extensionOf(String contentType) {
         int idx = contentType.lastIndexOf('/');
         if (idx < 0 || idx == contentType.length() - 1) {
-            throw new S3Exception(UNSUPPORTED_MEDIA_TYPE);
+            throw new BadRequestException(UNSUPPORTED_MEDIA_TYPE);
         }
         return contentType.substring(idx + 1).toLowerCase(Locale.ROOT);
     }
