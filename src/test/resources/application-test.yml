@@ -46,3 +46,15 @@ openai:
 kakao:
   client-id: test-client-id
   redirect-uri: http://localhost:8080/test
+
+cloud:
+  aws:
+    credentials:
+      access-key: test
+      secret-key: test
+    region:
+      static: ap-northeast-2
+    s3:
+      bucket: bofit-bucket
+    stack:
+      auto: false
