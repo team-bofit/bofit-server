@@ -26,6 +26,20 @@ import lombok.Getter;
 import org.sopt.bofit.global.exception.constant.ErrorCode;
 import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+import static org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErrorCode.INVALID_REPORT_SECTION;
+import static org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErrorCode.NOT_FOUND_INSURANCE_REPORT;
+import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_ALREADY_DELETED;
+import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_NOT_FOUND;
+import static org.sopt.bofit.global.exception.constant.InsuranceErrorCode.NOT_FOUND_INSURANCE_TOTAL_AVERAGE;
+import static org.sopt.bofit.global.exception.constant.InsuranceErrorCode.NOT_FOUND_RECOMMENDED_STATUS_INSURANCE;
+import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.*;
+import static org.sopt.bofit.global.exception.constant.S3ErrorCode.*;
+import static org.sopt.bofit.global.exception.constant.UserErrorCode.USER_NOT_FOUND;
+
 
 @Getter
 public enum SwaggerResponseDescription {
@@ -100,6 +114,11 @@ public enum SwaggerResponseDescription {
         USER_NOT_FOUND,
         POST_NOT_FOUND,
         POST_LIKE_NOT_FOUND
+    ))),
+    UPLOAD_IMAGE(new LinkedHashSet<>(Set.of(
+            NOT_IMAGE,
+            UNSUPPORTED_MEDIA_TYPE,
+            UNSUPPORTED_IMAGE_TYPE
     )))
     ;
     private final Set<ErrorCode> errorCodeList;
