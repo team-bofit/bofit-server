@@ -1,28 +1,24 @@
 package org.sopt.bofit.global.oauth.controller;
 
-import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
-import static org.sopt.bofit.global.constant.SwaggerConstant.*;
-
-import java.util.Optional;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
+import org.sopt.bofit.global.annotation.LoginUserId;
 import org.sopt.bofit.global.dto.response.BaseResponse;
 import org.sopt.bofit.global.oauth.dto.request.OAuthLoginRequest;
 import org.sopt.bofit.global.oauth.dto.response.KaKaoLoginResponse;
 import org.sopt.bofit.global.oauth.dto.response.TokenReissueResponse;
 import org.sopt.bofit.global.oauth.service.OAuthService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import java.util.Optional;
+
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.KAKAO_TOKEN_REQUEST;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.TOKEN_REISSUE;
+import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_DESCRIPTION_KAKAO_LOGIN;
+import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_NAME_KAKAO_LOGIN;
 
 @RestController
 @RequiredArgsConstructor
@@ -57,5 +53,14 @@ public class OAuthController {
     public BaseResponse<TokenReissueResponse> reissue(@Parameter(hidden = true) @RequestHeader("Authorization") String refreshToken) {
         return BaseResponse.ok(oAuthService.reissue(refreshToken), "토큰 재발급 성공");
     }
+    @Tag(name = TAG_NAME_KAKAO_LOGIN, description = TAG_DESCRIPTION_KAKAO_LOGIN)
+    @Operation(summary = "로그아웃")
+    @PostMapping("/kakao/logout")
+    public BaseResponse<String> logout(
+           @LoginUserId @Parameter(hidden = true) Long userId,
+           @RequestParam(value = "redirect-url", required = false) String redirectUrl){
+        return BaseResponse.ok(oAuthService.logout(userId, redirectUrl), "카카오 로그아웃 성공, 반환된 URL로 리다이렉트 시켜주세요");
+    }
+
 
 }

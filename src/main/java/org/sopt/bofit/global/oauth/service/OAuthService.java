@@ -1,13 +1,7 @@
 package org.sopt.bofit.global.oauth.service;
 
-import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.*;
-import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
-import static org.sopt.bofit.global.oauth.dto.response.KakaoUserResponse.*;
-import static org.sopt.bofit.global.oauth.dto.response.KakaoUserResponse.KakaoAccount.*;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Optional;
-
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserRepository;
@@ -30,8 +24,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClient;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.nio.charset.StandardCharsets;
+import java.util.Optional;
+
+import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.JWT_INVALID;
+import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
+import static org.sopt.bofit.global.oauth.dto.response.KakaoUserResponse.KakaoAccount;
+import static org.sopt.bofit.global.oauth.dto.response.KakaoUserResponse.KakaoAccount.UserProfile;
 
 @Slf4j
 @Service
@@ -153,6 +152,14 @@ public class OAuthService {
         refreshTokenRepository.save(savedToken);
 
         return TokenReissueResponse.of(newAccessToken, newRefreshToken);
+    }
+
+    @Transactional
+    public String logout(Long userId, String redirectUri) {
+        refreshTokenRepository.findByUserId(userId)
+                .ifPresent(refreshTokenRepository::delete);
+
+        return OAuthUtil.buildKakaoLogoutRedirectUrl(properties.logoutUri(), properties.clientId(), redirectUri).toString();
     }
 }
 
