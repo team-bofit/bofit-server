@@ -58,8 +58,13 @@ public class PostWriter {
         commentRepository.findAllByPostIdAndStatus(postId, CommentStatus.ACTIVE).forEach(Comment::softDelete);
 
     }
-
+    @Transactional
     public void increaseLikeCount(Post post){
         postRepository.increaseLikeCount(post);
+    }
+
+    @Transactional
+    public void decreaseLikeCount(Post post){
+        postRepository.decreaseLikeCount(post);
     }
 }

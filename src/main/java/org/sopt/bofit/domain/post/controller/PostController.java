@@ -7,6 +7,7 @@ import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CR
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CREATE_POST_LIKE;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DELETE_COMMENT;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DELETE_POST;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DELETE_POST_LIKE;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.POST_DETAIL;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.UPDATE_POST;
 import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_DESCRIPTION_COMMUNITY;
@@ -154,6 +155,18 @@ public class PostController {
     ){
         postLikeService.createPostLike(userId, postId);
         return BaseResponse.create("좋아요 추가 성공");
+    }
+
+    @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
+    @Operation(summary = "게시글 좋아요 삭제", description = "유저가 커뮤니티 게시글에 생성했던 좋아요를 삭제합니다.")
+    @CustomExceptionDescription(DELETE_POST_LIKE)
+    @DeleteMapping("/{post-id}/likes")
+    public BaseResponse<Void> deletePostLike(
+        @PathVariable(name = "post-id") Long postId,
+        @Parameter(hidden = true) @LoginUserId Long userId
+    ){
+        postLikeService.deletePostLike(userId, postId);
+        return BaseResponse.create("좋아요 삭제 성공");
     }
 
 }

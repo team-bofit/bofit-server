@@ -37,4 +37,15 @@ public class PostLikeService {
         postWriter.increaseLikeCount(post);
     }
 
+    @Transactional
+    public void deletePostLike(Long userId, Long postId){
+        Post post = postReader.findById(postId);
+        User user = userReader.findById(userId);
+
+        PostLike postLike = postLikeReader.findByPostAndUser(post, user);
+
+        postLikeWriter.delete(postLike);
+
+        postWriter.decreaseLikeCount(post);
+    }
 }
