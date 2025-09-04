@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class S3Service {
+public class FileService {
 
     private final KeyGenerator keyGenerator;
 
