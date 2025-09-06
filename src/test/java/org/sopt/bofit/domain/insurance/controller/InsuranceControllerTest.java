@@ -1,19 +1,5 @@
 package org.sopt.bofit.domain.insurance.controller;
 
-import static org.mockito.Mockito.*;
-import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.*;
-import static org.sopt.bofit.domain.user.entity.constant.CoveragePreference.*;
-import static org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sopt.bofit.domain.insurancereport.dto.request.InsuranceReportRequest;
@@ -24,6 +10,22 @@ import org.sopt.bofit.domain.user.entity.constant.Job;
 import org.sopt.bofit.support.ControllerTestSupport;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import static org.mockito.Mockito.*;
+import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.PREMIUM_RANGE;
+import static org.sopt.bofit.domain.user.entity.constant.CoveragePreference.*;
+import static org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease.CANCER;
+import static org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease.RIVER;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class InsuranceControllerTest extends ControllerTestSupport {
 
@@ -202,7 +204,11 @@ class InsuranceControllerTest extends ControllerTestSupport {
 			.maxPremium(50000)
 			.diseaseHistory(List.of())
 			.familyHistory(List.of(CANCER, RIVER))
-			.coveragePreferences(Map.of(DEATH_BENEFIT, 1, ESSENTIAL_ONLY,2, SURGERY_COVERAGE, 3, RECOMMENDED_OPTION, 4))
+			.coveragePreferences(Map.of(
+					DEATH_BENEFIT, 1,
+					ESSENTIAL_ONLY,2,
+					SURGERY_COVERAGE, 3
+			))
 			.build();
 
 		User mockUser = User.builder().id(1L).build();
