@@ -58,3 +58,4 @@ cloud:
       bucket: bofit-bucket
     stack:
       auto: false
+  logout-uri: https://kauth.kakao.com/oauth/logout
