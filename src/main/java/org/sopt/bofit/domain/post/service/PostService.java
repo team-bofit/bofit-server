@@ -8,6 +8,8 @@ import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -16,8 +18,8 @@ public class PostService {
 
     private final PostWriter postWriter;
 
-    public PostCreateResponse createPost(Long userId, String title, String content) {
-        return postWriter.createPost(userId, title, content);
+    public PostCreateResponse createPost(Long userId, String title, String content, List<String> imageUrls) {
+        return postWriter.createPost(userId, title, content, imageUrls);
     }
 
     @Transactional
