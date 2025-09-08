@@ -1,25 +1,12 @@
 package org.sopt.bofit.domain.post.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import java.util.Objects;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
 import org.sopt.bofit.domain.post.entity.constant.PostStatus;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.global.entity.BaseEntity;
+
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -62,7 +49,7 @@ public class Post extends BaseEntity {
                 .build();
     }
 
-    public void updatePost(String title, String content){
+    public void updateTitleAndContent(String title, String content){
         this.title = title;
         this.content = content;
     }

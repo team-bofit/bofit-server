@@ -31,4 +31,12 @@ public class PostImage {
                 .sequence(sequence)
                 .build();
     }
+
+    public void updateImageUrl(String imageUrl){
+        this.imageUrl = imageUrl;
+    }
+
+    public void updateSequence(int sequence){
+        this.sequence = sequence;
+    }
 }
