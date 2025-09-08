@@ -9,6 +9,7 @@ import org.sopt.bofit.domain.comment.dto.request.CommentCreateRequest;
 import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
 import org.sopt.bofit.domain.comment.service.CommentService;
 import org.sopt.bofit.domain.post.dto.request.PostCreateRequest;
+import org.sopt.bofit.domain.post.dto.request.PostUpdateRequest;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
@@ -53,11 +54,12 @@ public class PostController {
     @CustomExceptionDescription(UPDATE_POST)
     @PutMapping("{post-id}")
     public BaseResponse<PostCreateResponse> updatePost(
-            @RequestBody @Valid PostCreateRequest request,
+            @RequestBody @Valid PostUpdateRequest request,
             @Parameter(hidden = true) @LoginUserId Long userId,
             @PathVariable(name = "post-id") Long postId
     ){
-        return BaseResponse.ok(postService.updatePost(userId,postId,request.title(), request.content()),"게시물 수정 완료");
+        return BaseResponse.ok(postService.updatePost(userId, postId, request.newTitle(), request.newContent(), request.newImages(),
+                request.updateImages(), request.deleteImageIds()),"게시물 수정 완료");
     }
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)

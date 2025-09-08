@@ -1,6 +1,8 @@
 package org.sopt.bofit.domain.post.service;
 
 import lombok.RequiredArgsConstructor;
+import org.sopt.bofit.domain.post.dto.request.NewImageRequest;
+import org.sopt.bofit.domain.post.dto.request.UpdateImageRequest;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
@@ -23,8 +25,10 @@ public class PostService {
     }
 
     @Transactional
-    public PostCreateResponse updatePost (Long userId, Long postId, String title, String content) {
-        return postWriter.updatePost(userId, postId, title, content);
+    public PostCreateResponse updatePost (Long userId, Long postId, String title, String content,
+                                          List<NewImageRequest> newImages, List<UpdateImageRequest> updateImages,
+                                          List<Long> deleteImageIds) {
+        return postWriter.updatePost(userId, postId, title, content, newImages, updateImages, deleteImageIds);
     }
 
     @Transactional
