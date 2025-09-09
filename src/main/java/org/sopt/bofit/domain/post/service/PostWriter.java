@@ -72,16 +72,40 @@ public class PostWriter {
 
         List<PostImage> currentImages = postImageRepository.findByPostIdOrderBySequenceAsc(postId);
 
-        if(deleteImageIds != null && !deleteImageIds.isEmpty()) {
-            for(Long imageId : deleteImageIds) {
-                if(currentImages.stream().noneMatch(image -> image.getId().equals(imageId))) {
-                    throw new BadRequestException(POST_IMAGE_MISMATCH);
-                }
+        deleteImages(postId, deleteImageIds, currentImages);
+
+        updateImages(updateImages, currentImages);
+
+        addImages(newImages, currentImages, post);
+
+        int seq = 1;
+        for(PostImage pi : currentImages) {
+            if(pi.getSequence() != seq){
+                pi.updateSequence(seq);
             }
-            postImageRepository.deleteAllByPostIdAndIdIn(postId, deleteImageIds);
-            currentImages.removeIf(image -> deleteImageIds.contains(image.getId()));
+            seq++;
         }
 
+        return PostCreateResponse.from(post.getId());
+    }
+
+    private void addImages(List<NewImageRequest> newImages, List<PostImage> currentImages, Post post) {
+        if(newImages != null){
+            for(NewImageRequest req : newImages) {
+                int sequence = req.sequence() == null ? (currentImages.size() + 1) : req.sequence();
+
+                if(sequence < 1) sequence = 1;
+                if(sequence > currentImages.size() + 1) sequence = currentImages.size() + 1;
+
+                PostImage created = PostImage.create(req.imageUrl(), post, sequence);
+                postImageRepository.save(created);
+
+                currentImages.add(sequence - 1 ,created);
+            }
+        }
+    }
+
+    private void updateImages(List<UpdateImageRequest> updateImages, List<PostImage> currentImages) {
         if (updateImages != null && !updateImages.isEmpty()) {
             Map<Long, Integer> indexById = new HashMap<>();
             for (int i = 0; i < currentImages.size(); i++) {
@@ -100,7 +124,7 @@ public class PostWriter {
 
                 if (req.newSequence() != null) {
                     int to = Math.max(0, Math.min(req.newSequence() - 1, currentImages.size() - 1));
-                    move(currentImages, from, to);
+                    moveSequence(currentImages, from, to);
 
                     indexById.clear();
                     for (int i = 0; i < currentImages.size(); i++) {
@@ -109,33 +133,21 @@ public class PostWriter {
                 }
             }
         }
-
-        if(newImages != null){
-            for(NewImageRequest req : newImages) {
-                int sequence = req.sequence() == null ? (currentImages.size() + 1) : req.sequence();
-
-                if(sequence < 1) sequence = 1;
-                if(sequence > currentImages.size() + 1) sequence = currentImages.size() + 1;
-
-                PostImage created = PostImage.create(req.imageUrl(), post, sequence);
-                postImageRepository.save(created);
-
-                currentImages.add(sequence -1 ,created);
-            }
-        }
-
-        int seq = 1;
-        for(PostImage pi : currentImages) {
-            if(pi.getSequence() != seq){
-                pi.updateSequence(seq);
-            }
-            seq++;
-        }
-
-        return PostCreateResponse.from(post.getId());
     }
 
-    private static <T> void move(List<T> list, int fromIdx, int toIdx) {
+    private void deleteImages(Long postId, List<Long> deleteImageIds, List<PostImage> currentImages) {
+        if(deleteImageIds != null && !deleteImageIds.isEmpty()) {
+            for(Long imageId : deleteImageIds) {
+                if(currentImages.stream().noneMatch(image -> image.getId().equals(imageId))) {
+                    throw new BadRequestException(POST_IMAGE_MISMATCH);
+                }
+            }
+            postImageRepository.deleteAllByPostIdAndIdIn(postId, deleteImageIds);
+            currentImages.removeIf(image -> deleteImageIds.contains(image.getId()));
+        }
+    }
+
+    private static <T> void moveSequence(List<T> list, int fromIdx, int toIdx) {
         if (fromIdx == toIdx) return;
         T e = list.remove(fromIdx);
         list.add(toIdx, e);
