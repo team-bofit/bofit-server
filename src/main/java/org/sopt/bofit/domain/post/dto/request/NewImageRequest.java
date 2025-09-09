@@ -9,7 +9,7 @@ public record NewImageRequest(
         @NotBlank
         String imageUrl,
 
-        @Schema(description = "순서 (null이면 맨 뒤에 추가)", example = "3")
+        @Schema(description = "순서 (null이면 맨 뒤에 추가, 1부터 시작)", example = "3")
         @Positive
         Integer sequence
 ) {

@@ -12,7 +12,7 @@ public record UpdateImageRequest(
         @Schema(description = "새 이미지 URL (변경 없으면 null)")
         String newImageUrl,
 
-        @Schema(description = "새 순서")
+        @Schema(description = "새 순서, 1부터 시작")
         @Positive
         Integer newSequence
 ) {
