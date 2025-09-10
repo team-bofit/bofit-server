@@ -1,23 +1,34 @@
 package org.sopt.bofit.global.config.swagger;
 
-import lombok.Getter;
-import org.sopt.bofit.global.exception.constant.ErrorCode;
-import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
-
 import static org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErrorCode.INVALID_REPORT_SECTION;
 import static org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErrorCode.NOT_FOUND_INSURANCE_REPORT;
 import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_ALREADY_DELETED;
 import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_NOT_FOUND;
+import static org.sopt.bofit.global.exception.constant.CommentErrorCode.UNMATCHED_COMMENT_POST;
 import static org.sopt.bofit.global.exception.constant.InsuranceErrorCode.NOT_FOUND_INSURANCE_TOTAL_AVERAGE;
 import static org.sopt.bofit.global.exception.constant.InsuranceErrorCode.NOT_FOUND_RECOMMENDED_STATUS_INSURANCE;
-import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.*;
-import static org.sopt.bofit.global.exception.constant.PostErrorCode.*;
+import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.JWT_REFRESH_NOT_FOUND;
+import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.JWT_REFRESH_TOKEN_MISMATCH;
+import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.KAKAO_TOKEN_REQUEST_FAILED;
+import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.KAKAO_USER_INFO_REQUEST_FAILED;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_CONTENT_BLANK;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_CONTENT_LONG;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_IMAGE_MISMATCH;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_LIKE_CREATE_CONFLICT;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_LIKE_NOT_FOUND;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_NOT_FOUND;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_TITLE_BLANK;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_TITLE_LONG;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
 import static org.sopt.bofit.global.exception.constant.S3ErrorCode.UNSUPPORTED_IMAGE_TYPE;
 import static org.sopt.bofit.global.exception.constant.S3ErrorCode.UNSUPPORTED_MEDIA_TYPE;
 import static org.sopt.bofit.global.exception.constant.UserErrorCode.USER_NOT_FOUND;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
+import lombok.Getter;
+import org.sopt.bofit.global.exception.constant.ErrorCode;
+import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
 
 
 @Getter
@@ -98,6 +109,12 @@ public enum SwaggerResponseDescription {
     UPLOAD_IMAGE(new LinkedHashSet<>(Set.of(
             UNSUPPORTED_MEDIA_TYPE,
             UNSUPPORTED_IMAGE_TYPE
+    ))),
+    CREATE_COMMENT_REPLY(new LinkedHashSet<>(Set.of(
+        USER_NOT_FOUND,
+        COMMENT_NOT_FOUND,
+        POST_NOT_FOUND,
+        UNMATCHED_COMMENT_POST
     )))
     ;
     private final Set<ErrorCode> errorCodeList;
