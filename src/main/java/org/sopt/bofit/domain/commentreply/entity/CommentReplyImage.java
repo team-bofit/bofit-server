@@ -19,7 +19,7 @@ public class CommentReplyImage extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_reply_id")
+    @Column(name = "comment_reply_image_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
