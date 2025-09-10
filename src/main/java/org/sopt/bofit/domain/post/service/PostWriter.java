@@ -1,11 +1,16 @@
 package org.sopt.bofit.domain.post.service;
 
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_IMAGE_MISMATCH;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.comment.entity.CommentStatus;
 import org.sopt.bofit.domain.comment.repository.CommentRepository;
-import org.sopt.bofit.domain.post.dto.request.NewImageRequest;
-import org.sopt.bofit.domain.post.dto.request.UpdateImageRequest;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.entity.PostImage;
@@ -14,16 +19,10 @@ import org.sopt.bofit.domain.post.repository.PostRepository;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.global.exception.customexception.BadRequestException;
+import org.sopt.bofit.global.file.dto.request.NewImageRequest;
+import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_IMAGE_MISMATCH;
-import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
 
 @Service
 @RequiredArgsConstructor
