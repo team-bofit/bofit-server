@@ -53,7 +53,8 @@ public enum SwaggerResponseDescription {
             POST_CONTENT_BLANK,
             POST_TITLE_BLANK,
             POST_CONTENT_LONG,
-            POST_TITLE_LONG
+            POST_TITLE_LONG,
+            POST_IMAGE_MISMATCH
     ))),
     DELETE_POST(new LinkedHashSet<>(Set.of(
             USER_NOT_FOUND,

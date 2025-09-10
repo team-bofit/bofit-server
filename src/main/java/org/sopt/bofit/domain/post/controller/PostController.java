@@ -1,28 +1,15 @@
 package org.sopt.bofit.domain.post.controller;
 
-import static org.sopt.bofit.domain.comment.constant.CommentConstant.COMMENTS_DEFAULT_SIZE;
-import static org.sopt.bofit.domain.post.constant.PostConstant.POSTS_DEFAULT_SIZE;
-import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CREATE_COMMENT;
-import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CREATE_POST;
-import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CREATE_POST_LIKE;
-import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DELETE_COMMENT;
-import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DELETE_POST;
-import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DELETE_POST_LIKE;
-import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.POST_DETAIL;
-import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.UPDATE_POST;
-import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_DESCRIPTION_COMMUNITY;
-import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_NAME_COMMUNITY;
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.dto.request.CommentCreateRequest;
 import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
 import org.sopt.bofit.domain.comment.service.CommentService;
 import org.sopt.bofit.domain.post.dto.request.PostCreateRequest;
+import org.sopt.bofit.domain.post.dto.request.PostUpdateRequest;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
@@ -32,15 +19,15 @@ import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.annotation.LoginUserId;
 import org.sopt.bofit.global.dto.response.BaseResponse;
 import org.sopt.bofit.global.dto.response.SliceResponse;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+import static org.sopt.bofit.domain.comment.constant.CommentConstant.COMMENTS_DEFAULT_SIZE;
+import static org.sopt.bofit.domain.post.constant.PostConstant.POSTS_DEFAULT_SIZE;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
+import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_DESCRIPTION_COMMUNITY;
+import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_NAME_COMMUNITY;
 
 @RestController
 @RequiredArgsConstructor
@@ -59,7 +46,7 @@ public class PostController {
             @RequestBody @Valid PostCreateRequest request,
             @Parameter(hidden = true) @LoginUserId Long userId
     ){
-        return BaseResponse.create(postService.createPost(userId, request.title(), request.content()),"게시물 생성 완료");
+        return BaseResponse.create(postService.createPost(userId, request.title(), request.content(), request.imageUrls()),"게시물 생성 완료");
     }
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
@@ -67,11 +54,12 @@ public class PostController {
     @CustomExceptionDescription(UPDATE_POST)
     @PutMapping("{post-id}")
     public BaseResponse<PostCreateResponse> updatePost(
-            @RequestBody @Valid PostCreateRequest request,
+            @RequestBody @Valid PostUpdateRequest request,
             @Parameter(hidden = true) @LoginUserId Long userId,
             @PathVariable(name = "post-id") Long postId
     ){
-        return BaseResponse.ok(postService.updatePost(userId,postId,request.title(), request.content()),"게시물 수정 완료");
+        return BaseResponse.ok(postService.updatePost(userId, postId, request.newTitle(), request.newContent(), request.newImages(),
+                request.updateImages(), request.deleteImageIds()),"게시물 수정 완료");
     }
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
