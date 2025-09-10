@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.dto.request.CommentCreateRequest;
 import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
 import org.sopt.bofit.domain.comment.service.CommentService;
-import org.sopt.bofit.domain.commentreply.dto.request.CommentReplyRequest;
+import org.sopt.bofit.domain.commentreply.dto.request.CommentReplyCreateRequest;
 import org.sopt.bofit.domain.commentreply.service.CommentReplyService;
 import org.sopt.bofit.domain.post.dto.request.PostCreateRequest;
 import org.sopt.bofit.domain.post.dto.request.PostUpdateRequest;
@@ -183,7 +183,7 @@ public class PostController {
         @PathVariable(name = "post-id") Long postId,
         @PathVariable(name = "comment-id") Long commentId,
         @Parameter(hidden = true) @LoginUserId Long userId,
-        @RequestBody CommentReplyRequest request
+        @RequestBody CommentReplyCreateRequest request
     ){
         commentReplyService.create(userId, postId, commentId, request.toCommand());
         return BaseResponse.create("대댓글 작성 성공");
