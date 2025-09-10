@@ -1,13 +1,12 @@
-package org.sopt.bofit.global.s3.util;
-
-import org.sopt.bofit.global.exception.customexception.BadRequestException;
-import org.sopt.bofit.global.s3.constant.ContentTypeConstants;
-
-import java.util.Locale;
-import java.util.Set;
+package org.sopt.bofit.global.file.util;
 
 import static org.sopt.bofit.global.exception.constant.S3ErrorCode.UNSUPPORTED_IMAGE_TYPE;
 import static org.sopt.bofit.global.exception.constant.S3ErrorCode.UNSUPPORTED_MEDIA_TYPE;
+
+import java.util.Locale;
+import java.util.Set;
+import org.sopt.bofit.global.exception.customexception.BadRequestException;
+import org.sopt.bofit.global.file.constant.ContentTypeConstants;
 
 public class ContentTypeUtil {
     private static final Set<String> ALLOWED_IMAGES = Set.of(

@@ -1,9 +1,8 @@
-package org.sopt.bofit.global.s3.util;
-
-import org.sopt.bofit.global.s3.constant.ContentTypeConstants;
-import org.springframework.stereotype.Component;
+package org.sopt.bofit.global.file.util;
 
 import java.util.UUID;
+import org.sopt.bofit.global.file.constant.ContentTypeConstants;
+import org.springframework.stereotype.Component;
 
 @Component
 public class KeyGenerator {
