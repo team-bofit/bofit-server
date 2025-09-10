@@ -183,7 +183,7 @@ public class PostController {
         @PathVariable(name = "post-id") Long postId,
         @PathVariable(name = "comment-id") Long commentId,
         @Parameter(hidden = true) @LoginUserId Long userId,
-        @RequestBody CommentReplyCreateRequest request
+        @RequestBody @Valid CommentReplyCreateRequest request
     ){
         commentReplyService.create(userId, postId, commentId, request.toCommand());
         return BaseResponse.create("대댓글 작성 성공");
