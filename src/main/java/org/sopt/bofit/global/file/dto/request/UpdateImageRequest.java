@@ -1,4 +1,4 @@
-package org.sopt.bofit.domain.post.dto.request;
+package org.sopt.bofit.global.file.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
