@@ -27,7 +27,7 @@ public class CommentReplyService {
         comment.checkPost(postId);
 
         CommentReply commentReply = commentReplyWriter.create(comment, user, content);
-        imageUrl.ifPresent((url) -> commentReplyImageWriter.create(commentReply, user, url));
+        imageUrl.ifPresent((url) -> commentReplyImageWriter.create(commentReply, url));
         return commentReply;
     }
 
