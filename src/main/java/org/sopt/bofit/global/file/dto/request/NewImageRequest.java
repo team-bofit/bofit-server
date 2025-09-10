@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.Length;
 
 public record NewImageRequest(
         @Schema(description = "이미지 URL")
-        @Length(max = MAX_IMAGE_URL_LENGTH, message = "이미지 url 의 최대 길이를 초과했습니다.")
+        @Length(max = MAX_IMAGE_URL_LENGTH, message = "이미지 url 의 최대 길이 ({max}) 를 초과했습니다.")
         @NotBlank
         String imageUrl,
 
