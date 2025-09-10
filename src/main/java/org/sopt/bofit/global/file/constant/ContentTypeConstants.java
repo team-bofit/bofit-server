@@ -1,12 +1,11 @@
-package org.sopt.bofit.global.s3.constant;
+package org.sopt.bofit.global.file.constant;
 
+import static org.sopt.bofit.global.exception.constant.S3ErrorCode.UNSUPPORTED_MEDIA_TYPE;
+
+import java.util.Arrays;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.sopt.bofit.global.exception.customexception.BadRequestException;
-
-import java.util.Arrays;
-
-import static org.sopt.bofit.global.exception.constant.S3ErrorCode.UNSUPPORTED_MEDIA_TYPE;
 
 @Getter
 @AllArgsConstructor

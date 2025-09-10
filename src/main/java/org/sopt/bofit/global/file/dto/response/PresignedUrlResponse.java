@@ -1,4 +1,4 @@
-package org.sopt.bofit.global.s3.dto.response;
+package org.sopt.bofit.global.file.dto.response;
 
 import java.util.List;
 

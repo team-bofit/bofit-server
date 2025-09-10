@@ -1,14 +1,13 @@
-package org.sopt.bofit.global.s3.service;
-
-import lombok.RequiredArgsConstructor;
-import org.sopt.bofit.global.s3.constant.ContentTypeConstants;
-import org.sopt.bofit.global.s3.dto.response.PresignedUrlResponse;
-import org.sopt.bofit.global.s3.util.ContentTypeUtil;
-import org.sopt.bofit.global.s3.util.KeyGenerator;
-import org.sopt.bofit.global.s3.util.PresignedUrlCreator;
-import org.springframework.stereotype.Service;
+package org.sopt.bofit.global.file.service;
 
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.sopt.bofit.global.file.constant.ContentTypeConstants;
+import org.sopt.bofit.global.file.dto.response.PresignedUrlResponse;
+import org.sopt.bofit.global.file.util.ContentTypeUtil;
+import org.sopt.bofit.global.file.util.KeyGenerator;
+import org.sopt.bofit.global.file.util.PresignedUrlCreator;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
