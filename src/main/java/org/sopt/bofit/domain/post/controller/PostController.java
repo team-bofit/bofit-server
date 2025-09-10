@@ -120,7 +120,7 @@ public class PostController {
         @PathVariable(name = "post-id") Long postId,
         @Parameter(hidden = true) @LoginUserId Long userId
     ){
-        commentService.createComment(userId, postId, request);
+        commentService.createComment(userId, postId, request.toCommand());
         return BaseResponse.create("댓글 생성 성공");
     }
 
