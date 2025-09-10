@@ -1,9 +1,12 @@
 package org.sopt.bofit.domain.comment.service;
 
+import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_UNAUTHORIZED;
+
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.sopt.bofit.domain.comment.dto.request.CommentCreateRequest;
 import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
 import org.sopt.bofit.domain.comment.entity.Comment;
+import org.sopt.bofit.domain.comment.service.dto.request.CommentCreateCommand;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.service.PostReader;
 import org.sopt.bofit.domain.user.entity.User;
@@ -12,10 +15,6 @@ import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
-
-import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_UNAUTHORIZED;
 
 
 @Service
@@ -28,12 +27,17 @@ public class CommentService {
 
 	private final UserReader userReader;
 
+	private final CommentImageWriter commentImageWriter;
+
 	@Transactional
-	public void createComment(Long userId, Long postId, CommentCreateRequest request){
+	public Comment createComment(Long userId, Long postId, CommentCreateCommand command){
 		Post post = postReader.findById(postId);
 		User user = userReader.findById(userId);
 
-		Comment comment = commentWriter.create(post, user, request.content());
+		Comment comment = commentWriter.create(post, user, command.content());
+		command.imageUrl().ifPresent((url) -> commentImageWriter.create(comment, url));
+
+		return comment;
 	}
 
 	@Transactional
