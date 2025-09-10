@@ -10,7 +10,6 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.global.entity.BaseEntity;
 import org.sopt.bofit.global.file.constant.ImageConstant;
 
@@ -26,24 +25,20 @@ public class CommentReplyImage extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private CommentReply commentReply;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
 
     @Column(length = ImageConstant.MAX_IMAGE_URL_LENGTH)
     String imageUrl;
 
-    public static CommentReplyImage create(CommentReply commentReply, User user, String imageUrl){
+    public static CommentReplyImage create(CommentReply commentReply, String imageUrl){
         return CommentReplyImage.builder()
             .commentReply(commentReply)
             .imageUrl(imageUrl)
-            .user(user)
             .build();
     }
 
     @Builder
-    private CommentReplyImage(CommentReply commentReply, User user, String imageUrl) {
+    private CommentReplyImage(CommentReply commentReply, String imageUrl) {
         this.commentReply = commentReply;
         this.imageUrl = imageUrl;
-        this.user = user;
     }
 }
