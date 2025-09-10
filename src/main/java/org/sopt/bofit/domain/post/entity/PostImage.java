@@ -1,7 +1,20 @@
 package org.sopt.bofit.domain.post.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import static org.sopt.bofit.global.file.constant.ImageConstant.MAX_IMAGE_URL_LENGTH;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
@@ -18,7 +31,7 @@ public class PostImage {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(nullable = false, length = MAX_IMAGE_URL_LENGTH)
     private String imageUrl;
 
     @Column(nullable = false)
