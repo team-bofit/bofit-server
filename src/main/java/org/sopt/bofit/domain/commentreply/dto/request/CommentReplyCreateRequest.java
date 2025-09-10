@@ -9,7 +9,7 @@ import java.util.Optional;
 import org.hibernate.validator.constraints.Length;
 import org.sopt.bofit.domain.commentreply.service.dto.request.CommentReplyCreateCommand;
 
-public record CommentReplyRequest (
+public record CommentReplyCreateRequest(
     @Schema(description = "본문", example = "대댓글 작성하기 ~")
     @NotBlank(message = "본문은 비어있을 수 없습니다.")
     @Length(max = MAX_CONTENT_LENGTH, message = "대댓글의 최대 길이 ({max}) 를 초과했습니다.")
