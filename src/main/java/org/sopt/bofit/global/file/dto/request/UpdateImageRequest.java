@@ -12,7 +12,7 @@ public record UpdateImageRequest(
         @NotNull
         Long id,
 
-        @Length(max = MAX_IMAGE_URL_LENGTH, message = "이미지 url 의 최대 길이를 초과했습니다.")
+        @Length(max = MAX_IMAGE_URL_LENGTH, message = "이미지 url 의 최대 길이 ({max}) 를 초과했습니다.")
         @Schema(description = "새 이미지 URL (변경 없으면 null)")
         String newImageUrl,
 
