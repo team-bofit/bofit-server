@@ -183,12 +183,9 @@ public class PostController {
         @PathVariable(name = "post-id") Long postId,
         @PathVariable(name = "comment-id") Long commentId,
         @Parameter(hidden = true) @LoginUserId Long userId,
-        @RequestBody CommentReplyRequest commentReplyRequest
+        @RequestBody CommentReplyRequest request
     ){
-        commentReplyService.create(
-            userId, postId, commentId,
-            commentReplyRequest.content(),
-            Optional.of(commentReplyRequest.imageUrl()));
+        commentReplyService.create(userId, postId, commentId, request.toCommand());
         return BaseResponse.create("대댓글 작성 성공");
     }
 
