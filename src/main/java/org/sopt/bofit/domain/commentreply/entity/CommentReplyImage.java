@@ -25,9 +25,8 @@ public class CommentReplyImage extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private CommentReply commentReply;
 
-
     @Column(length = ImageConstant.MAX_IMAGE_URL_LENGTH)
-    String imageUrl;
+    private String imageUrl;
 
     public static CommentReplyImage create(CommentReply commentReply, String imageUrl){
         return CommentReplyImage.builder()
