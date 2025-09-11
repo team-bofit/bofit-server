@@ -25,7 +25,7 @@ public class PostLikeService {
     @Transactional
     public void createPostLike(Long userId, Long postId){
         Post post = postReader.findById(postId);
-        User user = userReader.findById(userId);
+        User user = userReader.getActiveById(userId);
 
         boolean isExistLike = postLikeReader.isExistsByPostAndUser(post, user);
 
@@ -40,7 +40,7 @@ public class PostLikeService {
     @Transactional
     public void deletePostLike(Long userId, Long postId){
         Post post = postReader.findById(postId);
-        User user = userReader.findById(userId);
+        User user = userReader.getActiveById(userId);
 
         PostLike postLike = postLikeReader.findByPostAndUser(post, user);
 

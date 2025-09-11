@@ -32,7 +32,7 @@ public class CommentService {
 	@Transactional
 	public Comment createComment(Long userId, Long postId, CommentCreateCommand command){
 		Post post = postReader.findById(postId);
-		User user = userReader.findById(userId);
+		User user = userReader.getActiveById(userId);
 
 		Comment comment = commentWriter.create(post, user, command.content());
 		command.imageUrls()

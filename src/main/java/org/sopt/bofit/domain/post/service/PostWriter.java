@@ -41,7 +41,7 @@ public class PostWriter {
 
     @Transactional
     public PostCreateResponse createPost(Long userId, String title, String content, List<String> imageUrls) {
-        User user = userReader.findById(userId);
+        User user = userReader.getActiveById(userId);
         Post newPost = Post.create(user, title, content);
         postRepository.save(newPost);
 
@@ -63,7 +63,7 @@ public class PostWriter {
     public PostCreateResponse updatePost (Long userId, Long postId, String newTitle, String newContent,
                                           List<NewImageRequest> newImages, List<UpdateImageRequest> updateImages,
                                           List<Long> deleteImageIds) {
-        User user = userReader.findById(userId);
+        User user = userReader.getActiveById(userId);
         Post post = postReader.findById(postId);
 
         post.getUser().checkIsWriter(userId, POST_UNAUTHORIZED);
@@ -154,7 +154,7 @@ public class PostWriter {
 
     @Transactional
     public void deletePost(Long userId, Long postId) {
-        User user = userReader.findById(userId);
+        User user = userReader.getActiveById(userId);
         Post post = postReader.findById(postId);
         post.getUser().checkIsWriter(userId, POST_UNAUTHORIZED);
 
