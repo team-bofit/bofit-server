@@ -61,6 +61,7 @@ public class PostReader {
     }
 
     public Post getActiveById(Long postId) {
-        return postRepository.findByIdAndStatus(postId, PostStatus.ACTIVE).orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
+        return postRepository.findByIdAndStatus(postId, PostStatus.ACTIVE)
+            .orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
     }
 }
