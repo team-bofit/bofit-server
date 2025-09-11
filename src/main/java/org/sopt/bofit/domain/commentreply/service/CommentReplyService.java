@@ -21,7 +21,7 @@ public class CommentReplyService {
 
     @Transactional
     public CommentReply create(Long userId, Long postId, Long commentId, CommentReplyCreateCommand command){
-        Comment comment = commentReader.findById(commentId);
+        Comment comment = commentReader.getActiveById(commentId);
         User user = userReader.findById(userId);
 
         comment.checkPost(postId);
