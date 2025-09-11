@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.sopt.bofit.domain.post.entity.constant.PostInfoConstant;
+import org.sopt.bofit.domain.post.service.dto.request.PostUpdateCommand;
 import org.sopt.bofit.global.annotation.ValidPostCategory;
 import org.sopt.bofit.global.file.dto.request.NewImageRequest;
 import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
@@ -41,4 +42,7 @@ public record PostUpdateRequest(
         List<@NotNull Long> deleteImageIds
 
 ) {
+   public PostUpdateCommand toCommand(){
+        return new PostUpdateCommand(this.newTitle, this.newContent, this.newCategory, this.newImages, this.updateImages, this.deleteImageIds);
+   }
 }

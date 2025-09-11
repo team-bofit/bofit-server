@@ -9,6 +9,7 @@ import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.entity.PostImage;
 import org.sopt.bofit.domain.post.repository.PostImageRepository;
 import org.sopt.bofit.domain.post.repository.PostRepository;
+import org.sopt.bofit.domain.post.service.dto.request.PostUpdateCommand;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.global.exception.customexception.BadRequestException;
@@ -61,22 +62,20 @@ public class PostWriter {
     }
 
     @Transactional
-    public PostCreateResponse updatePost (Long userId, Long postId, String newTitle, String newContent, String newCategory,
-                                          List<NewImageRequest> newImages, List<UpdateImageRequest> updateImages,
-                                          List<Long> deleteImageIds) {
+    public PostCreateResponse updatePost (Long userId, Long postId, PostUpdateCommand command) {
         User user = userReader.getActiveById(userId);
         Post post = postReader.getActiveById(postId);
 
         post.getUser().checkIsWriter(userId, POST_UNAUTHORIZED);
-        post.updatePost(newTitle, newContent, newCategory);
+        post.updatePost(command.newTitle(), command.newContent(), command.newCategory());
 
         List<PostImage> currentImages = postImageRepository.findByPostIdOrderBySequenceAsc(postId);
 
-        deleteImages(postId, deleteImageIds, currentImages);
+        deleteImages(postId, command.deleteImageIds(), currentImages);
 
-        updateImages(updateImages, currentImages);
+        updateImages(command.updateImages(), currentImages);
 
-        addImages(newImages, currentImages, post);
+        addImages(command.newImages(), currentImages, post);
 
         int seq = 1;
         for(PostImage pi : currentImages) {
