@@ -1,9 +1,6 @@
 package org.sopt.bofit.domain.user.service;
 
-import java.time.LocalDate;
-
 import lombok.RequiredArgsConstructor;
-
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.Gender;
 import org.sopt.bofit.domain.user.entity.constant.Job;
@@ -11,11 +8,15 @@ import org.sopt.bofit.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Service
 @RequiredArgsConstructor
 public class UserWriter {
 
     private final UserRepository userRepository;
+
+	private final UserReader userReader;
 
     @Transactional
     public User updateUser(
@@ -38,5 +39,12 @@ public class UserWriter {
 
     	return user;
     }
+
+	@Transactional
+	public void updateUserNickname(Long userId, String newNickname) {
+		User user = userReader.findById(userId);
+
+		user.updateNickname(newNickname);
+	}
 
 }

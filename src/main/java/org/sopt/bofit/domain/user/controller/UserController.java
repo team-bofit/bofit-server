@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportSummaryResponse;
 import org.sopt.bofit.domain.insurancereport.service.InsuranceReportService;
+import org.sopt.bofit.domain.user.dto.request.UpdateNicknameRequest;
 import org.sopt.bofit.domain.user.dto.response.MyCommentSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.MyPostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
@@ -14,10 +15,7 @@ import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.annotation.LoginUserId;
 import org.sopt.bofit.global.dto.response.BaseResponse;
 import org.sopt.bofit.global.dto.response.SliceResponse;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.sopt.bofit.domain.comment.constant.CommentConstant.*;
 import static org.sopt.bofit.domain.post.constant.PostConstant.*;
@@ -77,5 +75,18 @@ public class UserController {
             = insuranceReportService.findUsersLastReportSummary(userId);
         return BaseResponse.ok(response, "최근 추천 리포트 요약 조회");
     }
+
+    @Tag(name = TAG_NAME_USER_INFO, description = TAG_DESCRIPTION_USER_INFO)
+    @CustomExceptionDescription(UPDATE_NICKNAME)
+    @Operation(summary = "유저 닉네임 수정", description = "유저의 닉네임을 수정합니다.")
+    @PatchMapping("nickname")
+    public BaseResponse<Void> updateNickname(
+            @Parameter(hidden = true) @LoginUserId Long userId,
+            UpdateNicknameRequest req
+    ){
+        userService.updateUserNickname(userId, req.newNickname());
+        return BaseResponse.ok("닉네임 수정 성공");
+    }
+
 
 }

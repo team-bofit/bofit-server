@@ -65,4 +65,8 @@ public class UserService {
 	public SliceResponse<MyCommentSummaryResponse, Long> getMyComments(Long userId, Long cursorId, int size) {
 		return userReader.getMyComments(userId, cursorId, size);
 	}
+
+	public void updateUserNickname(Long userId, String newNickname) {
+		userWriter.updateUserNickname(userId, newNickname);
+	}
 }
