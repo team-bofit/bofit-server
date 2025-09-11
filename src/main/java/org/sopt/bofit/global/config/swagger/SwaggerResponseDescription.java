@@ -106,6 +106,9 @@ public enum SwaggerResponseDescription {
     ))),
     UPDATE_NICKNAME(new LinkedHashSet<>(Set.of(
         USER_NOT_FOUND
+    ))),
+    UPDATE_PROFILE_IMAGE(new LinkedHashSet<>(Set.of(
+        USER_NOT_FOUND
     )))
     ;
     private final Set<ErrorCode> errorCodeList;

@@ -47,4 +47,11 @@ public class UserWriter {
 		user.updateNickname(newNickname);
 	}
 
+	@Transactional
+	public void updateUserProfileImage(Long userId, String newProfileImageUrl) {
+		User user = userReader.findById(userId);
+
+		user.updateProfileImageUrl(newProfileImageUrl);
+	}
+
 }

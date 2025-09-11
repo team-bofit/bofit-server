@@ -69,4 +69,8 @@ public class UserService {
 	public void updateUserNickname(Long userId, String newNickname) {
 		userWriter.updateUserNickname(userId, newNickname);
 	}
+
+	public void updateUserProfileImage(Long userId, String newProfileImageUrl) {
+		userWriter.updateUserProfileImage(userId, newProfileImageUrl);
+	}
 }
