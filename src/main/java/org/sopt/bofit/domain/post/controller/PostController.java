@@ -61,7 +61,7 @@ public class PostController {
             @Parameter(hidden = true) @LoginUserId Long userId,
             @PathVariable(name = "post-id") Long postId
     ){
-        return BaseResponse.ok(postService.updatePost(userId, postId, request.newTitle(), request.newContent(), request.newImages(),
+        return BaseResponse.ok(postService.updatePost(userId, postId, request.newTitle(), request.newContent(), request.newCategory(), request.newImages(),
                 request.updateImages(), request.deleteImageIds()),"게시물 수정 완료");
     }
 

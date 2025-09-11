@@ -25,10 +25,10 @@ public class PostService {
     }
 
     @Transactional
-    public PostCreateResponse updatePost (Long userId, Long postId, String title, String content,
+    public PostCreateResponse updatePost (Long userId, Long postId, String title, String content, String newCategory,
                                           List<NewImageRequest> newImages, List<UpdateImageRequest> updateImages,
                                           List<Long> deleteImageIds) {
-        return postWriter.updatePost(userId, postId, title, content, newImages, updateImages, deleteImageIds);
+        return postWriter.updatePost(userId, postId, title, content, newCategory, newImages, updateImages, deleteImageIds);
     }
 
     @Transactional

@@ -61,14 +61,14 @@ public class PostWriter {
     }
 
     @Transactional
-    public PostCreateResponse updatePost (Long userId, Long postId, String newTitle, String newContent,
+    public PostCreateResponse updatePost (Long userId, Long postId, String newTitle, String newContent, String newCategory,
                                           List<NewImageRequest> newImages, List<UpdateImageRequest> updateImages,
                                           List<Long> deleteImageIds) {
         User user = userReader.getActiveById(userId);
         Post post = postReader.getActiveById(postId);
 
         post.getUser().checkIsWriter(userId, POST_UNAUTHORIZED);
-        post.updateTitleAndContent(newTitle, newContent);
+        post.updatePost(newTitle, newContent, newCategory);
 
         List<PostImage> currentImages = postImageRepository.findByPostIdOrderBySequenceAsc(postId);
 
