@@ -2,7 +2,7 @@ package org.sopt.bofit.domain.insurancereport.service;
 
 import java.util.List;
 import java.util.UUID;
-
+import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurance.service.InsuranceProductReader;
@@ -22,8 +22,6 @@ import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.domain.user.util.UserUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -88,7 +86,7 @@ public class InsuranceReportService {
 
 	@Transactional(readOnly = true)
 	public InsuranceReportSummaryResponse findUsersLastReportSummary(Long userId){
-		User user = userReader.findById(userId);
+		User user = userReader.getActiveById(userId);
 		InsuranceReport report = insuranceReportReader.findLastByUser(user);
 		return InsuranceReportSummaryResponse.from(report);
 	}
