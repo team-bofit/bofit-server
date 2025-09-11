@@ -35,7 +35,8 @@ public class CommentService {
 		User user = userReader.findById(userId);
 
 		Comment comment = commentWriter.create(post, user, command.content());
-		command.imageUrl().ifPresent((url) -> commentImageWriter.create(comment, url));
+		command.imageUrls()
+			.forEach(url -> commentImageWriter.create(comment, url));
 
 		return comment;
 	}
