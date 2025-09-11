@@ -31,7 +31,7 @@ public class CommentService {
 
 	@Transactional
 	public Comment createComment(Long userId, Long postId, CommentCreateCommand command){
-		Post post = postReader.findById(postId);
+		Post post = postReader.getActiveById(postId);
 		User user = userReader.getActiveById(userId);
 
 		Comment comment = commentWriter.create(post, user, command.content());
@@ -52,7 +52,7 @@ public class CommentService {
 	}
 
 	public SliceResponse<CommentResponse, Long> findAllByPostIdAndCursor(Long postId, Long userId, Optional<Long> cursor, int size) {
-		Post post = postReader.findById(postId);
+		Post post = postReader.getActiveById(postId);
 
 		Slice<CommentResponse> commentsByCursorId = commentReader.findCommentsByCursorId(postId, cursor, size);
 

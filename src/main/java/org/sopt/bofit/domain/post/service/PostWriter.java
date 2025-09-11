@@ -64,7 +64,7 @@ public class PostWriter {
                                           List<NewImageRequest> newImages, List<UpdateImageRequest> updateImages,
                                           List<Long> deleteImageIds) {
         User user = userReader.getActiveById(userId);
-        Post post = postReader.findById(postId);
+        Post post = postReader.getActiveById(postId);
 
         post.getUser().checkIsWriter(userId, POST_UNAUTHORIZED);
         post.updateTitleAndContent(newTitle, newContent);
@@ -155,7 +155,7 @@ public class PostWriter {
     @Transactional
     public void deletePost(Long userId, Long postId) {
         User user = userReader.getActiveById(userId);
-        Post post = postReader.findById(postId);
+        Post post = postReader.getActiveById(postId);
         post.getUser().checkIsWriter(userId, POST_UNAUTHORIZED);
 
         postRepository.deletePostByPostId(postId);
