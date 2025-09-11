@@ -55,9 +55,10 @@ public class Post extends BaseEntity {
                 .build();
     }
 
-    public void updateTitleAndContent(String title, String content){
+    public void updatePost(String title, String content, String category){
         this.title = title;
         this.content = content;
+        this.postCategory = Enum.valueOf(PostCategory.class, category);
     }
 
     @Override
