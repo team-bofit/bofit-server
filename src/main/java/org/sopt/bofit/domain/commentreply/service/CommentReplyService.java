@@ -5,6 +5,8 @@ import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.comment.service.CommentReader;
 import org.sopt.bofit.domain.commentreply.entity.CommentReply;
 import org.sopt.bofit.domain.commentreply.service.dto.request.CommentReplyCreateCommand;
+import org.sopt.bofit.domain.post.entity.Post;
+import org.sopt.bofit.domain.post.service.PostReader;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReader;
 import org.springframework.stereotype.Service;
@@ -18,13 +20,15 @@ public class CommentReplyService {
     private CommentReplyImageWriter commentReplyImageWriter;
     private CommentReader commentReader;
     private UserReader userReader;
+    private PostReader postReader;
 
     @Transactional
     public CommentReply create(Long userId, Long postId, Long commentId, CommentReplyCreateCommand command){
         Comment comment = commentReader.getActiveById(commentId);
         User user = userReader.getActiveById(userId);
+        Post post = postReader.getActiveById(postId);
 
-        comment.checkPost(postId);
+        comment.checkPost(post);
 
         CommentReply commentReply = commentReplyWriter.create(comment, user, command.content());
         command.imageUrls().stream()

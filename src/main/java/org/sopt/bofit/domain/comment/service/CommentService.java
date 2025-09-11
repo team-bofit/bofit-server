@@ -44,9 +44,10 @@ public class CommentService {
 	@Transactional
 	public void deleteComment(Long userId, Long postId, Long commentId) {
 		Comment comment = commentReader.getActiveById(commentId);
+		Post post = postReader.getActiveById(postId);
 
 		comment.getUser().checkIsWriter(userId, COMMENT_UNAUTHORIZED);
-		comment.checkPost(postId);
+		comment.checkPost(post);
 
 		commentWriter.softDelete(comment);
 	}
