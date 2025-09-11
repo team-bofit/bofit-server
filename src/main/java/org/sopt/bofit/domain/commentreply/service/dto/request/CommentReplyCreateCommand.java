@@ -1,10 +1,10 @@
 package org.sopt.bofit.domain.commentreply.service.dto.request;
 
-import java.util.Optional;
+import java.util.List;
 
 public record CommentReplyCreateCommand(
     String content,
-    Optional<String> imageUrl
+    List<String> imageUrls
 ) {
 
 }
