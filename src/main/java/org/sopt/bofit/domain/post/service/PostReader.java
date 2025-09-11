@@ -1,7 +1,6 @@
 
 package org.sopt.bofit.domain.post.service;
 
-import static org.sopt.bofit.domain.post.dto.response.PostDetailResponse.builder;
 import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_NOT_FOUND;
 
 import java.util.List;
@@ -44,7 +43,7 @@ public class PostReader {
 
         long postCommentCount = activeComments.size();
 
-        return builder()
+        return PostDetailResponse.builder()
                 .writerId(writer.getId())
                 .writerNickname(writer.getNickname())
                 .profileImage(writer.getProfileImage())
