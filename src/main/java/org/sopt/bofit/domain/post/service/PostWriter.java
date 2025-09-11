@@ -1,12 +1,5 @@
 package org.sopt.bofit.domain.post.service;
 
-import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_IMAGE_MISMATCH;
-import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.comment.entity.CommentStatus;
@@ -24,6 +17,14 @@ import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_IMAGE_MISMATCH;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
+
 @Service
 @RequiredArgsConstructor
 public class PostWriter {
@@ -40,9 +41,9 @@ public class PostWriter {
 
 
     @Transactional
-    public PostCreateResponse createPost(Long userId, String title, String content, List<String> imageUrls) {
+    public PostCreateResponse createPost(Long userId, String title, String content, String category, List<String> imageUrls) {
         User user = userReader.getActiveById(userId);
-        Post newPost = Post.create(user, title, content);
+        Post newPost = Post.create(user, title, content, category);
         postRepository.save(newPost);
 
         int sequence = 1;

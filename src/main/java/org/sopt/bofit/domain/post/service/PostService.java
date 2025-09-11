@@ -1,6 +1,5 @@
 package org.sopt.bofit.domain.post.service;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
@@ -11,6 +10,8 @@ import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
@@ -19,8 +20,8 @@ public class PostService {
 
     private final PostWriter postWriter;
 
-    public PostCreateResponse createPost(Long userId, String title, String content, List<String> imageUrls) {
-        return postWriter.createPost(userId, title, content, imageUrls);
+    public PostCreateResponse createPost(Long userId, String title, String content, String category, List<String> imageUrls) {
+        return postWriter.createPost(userId, title, content, category, imageUrls);
     }
 
     @Transactional
