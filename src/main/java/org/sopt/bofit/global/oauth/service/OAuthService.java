@@ -18,13 +18,11 @@ import org.sopt.bofit.global.oauth.entity.RefreshToken;
 import org.sopt.bofit.global.oauth.jwt.JwtProvider;
 import org.sopt.bofit.global.oauth.jwt.JwtUtil;
 import org.sopt.bofit.global.oauth.repository.RefreshTokenRepository;
+import org.sopt.bofit.global.oauth.util.OAuthClient;
 import org.sopt.bofit.global.oauth.util.OAuthUtil;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestClient;
 
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.JWT_INVALID;
@@ -47,36 +45,10 @@ public class OAuthService {
 
     private final KakaoProperties properties;
 
-    private final RestClient restClient = RestClient.builder().baseUrl("").build();
-
-    private KaKaoTokenResponse requestToken(String code, Optional<String> redirectUrl) {
-        String body = OAuthUtil.buildTokenRequestBody(code, properties.clientId(),
-            redirectUrl.orElseGet(properties::redirectUri));
-
-        return restClient.post()
-                .uri(properties.tokenUri())
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .body(body)
-                .retrieve()
-                .onStatus(status -> status.is4xxClientError() || status.is5xxServerError(),
-                        (req, res) -> {
-                            String errorBody = new String(res.getBody().readAllBytes(), StandardCharsets.UTF_8);
-                            log.error("❌ Kakao 토큰 요청 실패: {}", errorBody);
-                            throw new BadRequestException(KAKAO_TOKEN_REQUEST_FAILED);
-                        })
-                .body(KaKaoTokenResponse.class);
-    }
-
-    private KakaoUserResponse getUserInfo(String accessToken) {
-        return restClient.get()
-                .uri(properties.userInfoUri())
-                .headers(h -> h.setBearerAuth(accessToken))
-                .retrieve()
-                .body(KakaoUserResponse.class);
-    }
+    private final OAuthClient oAuthClient;
 
     private User registerOrLogin(String accessToken) {
-        KakaoUserResponse kakaoUser = getUserInfo(accessToken);
+        KakaoUserResponse kakaoUser = oAuthClient.getUserInfo(accessToken);
         KakaoAccount account = kakaoUser.kakaoAccount();
         if (account == null) {
             throw new BadRequestException(KAKAO_USER_INFO_REQUEST_FAILED);
@@ -100,7 +72,7 @@ public class OAuthService {
 
     @Transactional
     public KaKaoLoginResponse login(String code, Optional<String> redirectUrl) {
-        KaKaoTokenResponse token = requestToken(code, redirectUrl);
+        KaKaoTokenResponse token = oAuthClient.requestToken(code, redirectUrl);
         User user = registerOrLogin(token.accessToken());
 
         String accessToken = jwtProvider.generateAccessToken(user.getId());
@@ -116,7 +88,7 @@ public class OAuthService {
 
     @Transactional
     public KaKaoLoginResponse login(OAuthLoginRequest request) {
-        KaKaoTokenResponse token = requestToken(request.code(), Optional.ofNullable(request.redirectUrl()));
+        KaKaoTokenResponse token = oAuthClient.requestToken(request.code(), Optional.ofNullable(request.redirectUrl()));
         User user = registerOrLogin(token.accessToken());
 
         String accessToken = jwtProvider.generateAccessToken(user.getId());
