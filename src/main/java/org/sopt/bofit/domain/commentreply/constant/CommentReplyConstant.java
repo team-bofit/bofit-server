@@ -7,5 +7,6 @@ import lombok.NoArgsConstructor;
 public class CommentReplyConstant {
 
     public static final int MAX_CONTENT_LENGTH = 300;
+    public static final int MAX_IMAGE_COUNT = 1;
 
 }

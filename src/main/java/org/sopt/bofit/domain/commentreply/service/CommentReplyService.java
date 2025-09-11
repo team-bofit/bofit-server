@@ -27,7 +27,8 @@ public class CommentReplyService {
         comment.checkPost(postId);
 
         CommentReply commentReply = commentReplyWriter.create(comment, user, command.content());
-        command.imageUrl().ifPresent((url) -> commentReplyImageWriter.create(commentReply, url));
+        command.imageUrls().stream()
+            .forEach(url -> commentReplyImageWriter.create(commentReply, url)); // 추후 이미지 개수가 많아지면 AllInBatch 등으로 수정하기
         return commentReply;
     }
 
