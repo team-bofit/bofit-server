@@ -92,7 +92,7 @@ public class UserController {
     @Tag(name = TAG_NAME_USER_INFO, description = TAG_DESCRIPTION_USER_INFO)
     @CustomExceptionDescription(UPDATE_PROFILE_IMAGE)
     @Operation(summary = "유저 프로필 이미지 수정", description = "유저의 프로필 이미지를 수정합니다.")
-    @PatchMapping("profile_image")
+    @PatchMapping("profile-image")
     public BaseResponse<Void> updateProfileImage(
             @Parameter(hidden = true) @LoginUserId Long userId,
             UpdateProfileImageRequest req
