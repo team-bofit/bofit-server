@@ -2,6 +2,8 @@ package org.sopt.bofit.domain.comment.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,16 +30,21 @@ public class CommentImage extends BaseEntity {
     @Column(length = ImageConstant.MAX_IMAGE_URL_LENGTH)
     private String imageUrl;
 
+    @Enumerated(EnumType.STRING)
+    private CommentImageStatus status;
+
     public static CommentImage create(Comment comment, String imageUrl){
         return CommentImage.builder()
             .comment(comment)
             .imageUrl(imageUrl)
+            .status(CommentImageStatus.ACTIVE)
             .build();
     }
 
     @Builder
-    private CommentImage(Comment comment, String imageUrl) {
+    private CommentImage(Comment comment, String imageUrl, CommentImageStatus status) {
         this.comment = comment;
         this.imageUrl = imageUrl;
+        this.status = status;
     }
 }
