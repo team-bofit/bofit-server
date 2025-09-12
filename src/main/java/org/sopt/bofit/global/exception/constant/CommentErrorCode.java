@@ -10,6 +10,7 @@ public enum CommentErrorCode implements ErrorCode{
 
 	UNMATCHED_COMMENT_POST(HttpStatus.BAD_REQUEST.value(), "댓글의 게시글이 일치하지 않습니다"),
     COMMENT_IMAGE_EXCEED(HttpStatus.BAD_REQUEST.value(), "댓글의 이미지 개수를 초과했습니다."),
+    UNMATCHED_COMMENT_IMAGE(HttpStatus.BAD_REQUEST.value(), "요청한 댓글과 이미지가 일치하지 않습니다."),
 
 	COMMENT_UNAUTHORIZED(HttpStatus.FORBIDDEN.value(), "본인의 댓글만 수정/삭제할 수 있습니다."),
 

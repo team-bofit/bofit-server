@@ -4,6 +4,7 @@ import static org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErr
 import static org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErrorCode.NOT_FOUND_INSURANCE_REPORT;
 import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_ALREADY_DELETED;
 import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_NOT_FOUND;
+import static org.sopt.bofit.global.exception.constant.CommentErrorCode.UNMATCHED_COMMENT_IMAGE;
 import static org.sopt.bofit.global.exception.constant.CommentErrorCode.UNMATCHED_COMMENT_POST;
 import static org.sopt.bofit.global.exception.constant.InsuranceErrorCode.NOT_FOUND_INSURANCE_TOTAL_AVERAGE;
 import static org.sopt.bofit.global.exception.constant.InsuranceErrorCode.NOT_FOUND_RECOMMENDED_STATUS_INSURANCE;
@@ -93,7 +94,9 @@ public enum SwaggerResponseDescription {
     UPDATE_COMMENT(new LinkedHashSet<>(Set.of(
         USER_NOT_FOUND,
         POST_NOT_FOUND,
-        COMMENT_NOT_FOUND
+        COMMENT_NOT_FOUND,
+        UNMATCHED_COMMENT_POST,
+        UNMATCHED_COMMENT_IMAGE
     ))),
     DELETE_COMMENT(new LinkedHashSet<>(Set.of(
         USER_NOT_FOUND,

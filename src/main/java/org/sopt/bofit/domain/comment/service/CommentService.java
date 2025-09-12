@@ -3,8 +3,10 @@ package org.sopt.bofit.domain.comment.service;
 import static org.sopt.bofit.domain.comment.constant.CommentConstant.MAX_IMAGE_COUNT;
 import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_UNAUTHORIZED;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
@@ -19,6 +21,7 @@ import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.sopt.bofit.global.exception.constant.CommentErrorCode;
 import org.sopt.bofit.global.exception.customexception.BadRequestException;
+import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,7 +64,10 @@ public class CommentService {
         comment.checkPost(post);
 
         Map<Long, CommentImage> commentImageMap = commentImageReader.getActiveImagesAsMap(comment);
-        checkImageCount(command.updatedImages().size());
+        validImageCount(command.updatedImages().size());
+        validImageIds(commentImageMap.keySet(), command.deleteImageIds());
+        validImageIds(commentImageMap.keySet(), command.updatedImages().stream()
+            .filter(image -> image.id() != null).map(UpdateImageRequest::id).toList());
 
         commentImageWriter.softDelete(commentImageMap, command.deleteImageIds());
         commentImageWriter.updateAll(comment, commentImageMap, command.updatedImages());
@@ -89,10 +95,16 @@ public class CommentService {
 		return SliceResponse.from(commentsByCursorId);
 	}
 
-    private void checkImageCount(int existImageCount){
+    private void validImageCount(int existImageCount){
         if(MAX_IMAGE_COUNT < existImageCount){
             throw new BadRequestException(CommentErrorCode.COMMENT_IMAGE_EXCEED);
         }
     }
 
+    private void validImageIds(Set<Long> currentImageIds, List<Long> imageIds){
+        if (!currentImageIds.containsAll(imageIds)){
+            throw new BadRequestException(CommentErrorCode.UNMATCHED_COMMENT_IMAGE);
+        }
+
+    }
 }
