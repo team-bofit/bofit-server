@@ -8,7 +8,6 @@ import org.sopt.bofit.domain.comment.repository.CommentRepository;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.entity.Post;
-import org.sopt.bofit.domain.post.entity.PostImage;
 import org.sopt.bofit.domain.post.entity.constant.PostStatus;
 import org.sopt.bofit.domain.post.repository.PostImageRepository;
 import org.sopt.bofit.domain.post.repository.PostRepository;
@@ -21,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static org.sopt.bofit.domain.post.dto.response.PostDetailResponse.PostDetailImageResponse;
 import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_NOT_FOUND;
 
 @Service
@@ -46,10 +46,11 @@ public class PostReader {
 
         List<Comment> activeComments = commentRepository.findAllByPostIdAndStatus(postId, CommentStatus.ACTIVE);
 
-        List<String> imageUrls = postImageRepository.findByPostIdOrderBySequenceAsc(postId).stream()
-                .map(PostImage::getImageUrl)
+        List<PostDetailImageResponse> imageUrls = postImageRepository.findByPostIdOrderBySequenceAsc(postId).stream()
+                .map(image -> new PostDetailImageResponse(image.getId(), image.getImageUrl()))
                 .toList();
-        
+
+
 
         long postCommentCount = activeComments.size();
 
