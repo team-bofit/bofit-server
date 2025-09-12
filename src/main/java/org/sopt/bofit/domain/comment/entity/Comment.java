@@ -1,8 +1,18 @@
 package org.sopt.bofit.domain.comment.entity;
 
-import static org.sopt.bofit.global.exception.constant.CommentErrorCode.*;
+import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_ALREADY_DELETED;
+import static org.sopt.bofit.global.exception.constant.CommentErrorCode.UNMATCHED_COMMENT_POST;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -74,6 +84,10 @@ public class Comment extends BaseEntity {
         this.status = CommentStatus.INACTIVE;
 
         return this;
+    }
+
+    public void updateContent (String content){
+        this.content = content;
     }
 
 }
