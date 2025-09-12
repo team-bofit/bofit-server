@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.dto.request.CommentCreateRequest;
 import org.sopt.bofit.domain.comment.dto.request.CommentUpdateRequest;
@@ -37,15 +38,15 @@ import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.annotation.LoginUserId;
 import org.sopt.bofit.global.dto.response.BaseResponse;
 import org.sopt.bofit.global.dto.response.SliceResponse;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
-
-import static org.sopt.bofit.domain.comment.constant.CommentConstant.COMMENTS_DEFAULT_SIZE;
-import static org.sopt.bofit.domain.post.constant.PostConstant.POSTS_DEFAULT_SIZE;
-import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
-import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_DESCRIPTION_COMMUNITY;
-import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_NAME_COMMUNITY;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -127,7 +128,7 @@ public class PostController {
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
     @Operation(summary = "댓글 수정", description = "커뮤니티 게시글의 댓글을 수정합니다.")
     @CustomExceptionDescription(UPDATE_COMMENT)
-    @PostMapping("/{post-id}/comments/{comment-id}")
+    @PutMapping("/{post-id}/comments/{comment-id}")
     public BaseResponse<PostCreateResponse> updateComment(
         @RequestBody @Valid CommentUpdateRequest request,
         @PathVariable(name = "post-id") Long postId,
