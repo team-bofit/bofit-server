@@ -105,7 +105,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         QPost post = QPost.post;
         QComment comment = QComment.comment;
 
-        NumberExpression<Double> relevanceScore = getFullTextTemplate(keyword, post);
+        NumberExpression<Double> relevanceScore = getRelevanceScore(keyword, post);
 
         List<PostSummaryResponse> content = queryFactory
                 .select(Projections.constructor(PostSummaryResponse.class,
@@ -135,7 +135,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         return new SliceImpl<>(content, PageRequest.of(0, size), hasNext);
     }
 
-    private NumberExpression<Double> getFullTextTemplate(String keyword, QPost post) {
+    private NumberExpression<Double> getRelevanceScore(String keyword, QPost post) {
         return Expressions.numberTemplate(Double.class,
                 "function('match_language_mode',{0},{1},{2},{3})",
                 post.title, post.content, post.writerNickname, keyword
