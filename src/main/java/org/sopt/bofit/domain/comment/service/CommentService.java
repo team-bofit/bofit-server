@@ -51,6 +51,25 @@ public class CommentService {
 		return comment;
 	}
 
+    @Transactional
+    public Comment updateComment(Long userId, Long postId, Long commentId, CommentUpdateCommand command){
+        Post post = postReader.getActiveById(postId);
+        User user = userReader.getActiveById(userId);
+        Comment comment = commentReader.getActiveById(commentId);
+
+        comment.getUser().checkIsWriter(userId, COMMENT_UNAUTHORIZED);
+        comment.checkPost(post);
+
+        Map<Long, CommentImage> commentImageMap = commentImageReader.getActiveImagesAsMap(comment);
+        checkImageCount(command.updatedImages().size());
+
+        commentImageWriter.softDelete(commentImageMap, command.deleteImageIds());
+        commentImageWriter.updateAll(comment, commentImageMap, command.updatedImages());
+        command.content().ifPresent(comment::updateContent);
+
+        return comment;
+    }
+
 	@Transactional
 	public void deleteComment(Long userId, Long postId, Long commentId) {
 		Comment comment = commentReader.getActiveById(commentId);
@@ -69,4 +88,11 @@ public class CommentService {
 
 		return SliceResponse.from(commentsByCursorId);
 	}
+
+    private void checkImageCount(int existImageCount){
+        if(MAX_IMAGE_COUNT < existImageCount){
+            throw new BadRequestException(CommentErrorCode.COMMENT_IMAGE_EXCEED);
+        }
+    }
+
 }
