@@ -30,7 +30,15 @@ public record PostDetailResponse(
         LocalDateTime createdAt,
 
         @Schema(description = "이미지 url")
-        List<String> imageUrl
+        List<PostDetailImageResponse> imageUrl
 ) {
+        public record PostDetailImageResponse(
+                @Schema(description = "이미지 ID")
+                Long imageId,
 
+                @Schema(description = "이미지 url")
+                String imageUrl
+        ){
+
+        }
 }
