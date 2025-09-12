@@ -34,6 +34,9 @@ import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
 
 @Getter
 public enum SwaggerResponseDescription {
+    DEFAULT(new LinkedHashSet<>(Set.of(
+    )))
+    ,
     KAKAO_TOKEN_REQUEST(new LinkedHashSet<>(Set.of(
             KAKAO_TOKEN_REQUEST_FAILED,
             KAKAO_USER_INFO_REQUEST_FAILED

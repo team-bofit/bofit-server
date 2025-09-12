@@ -75,4 +75,10 @@ public class PostReader {
         return postRepository.findByIdAndStatus(postId, PostStatus.ACTIVE)
             .orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
     }
+
+    public SliceResponse<PostSummaryResponse, Long> findPostsByKeywordAndCursorId(String keyword, Long cursorId, int size) {
+        Slice<PostSummaryResponse> postList = postRepository.findAllByKeywordAndCursorId(keyword, cursorId, size);
+
+        return SliceResponse.from(postList);
+    }
 }

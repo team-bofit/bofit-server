@@ -205,4 +205,16 @@ public class PostController {
         return BaseResponse.create("대댓글 작성 성공");
     }
 
+    @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
+    @Operation(summary = "게시물 검색", description = "검색 키워드를 기반으로 게시물을 검색합니다.")
+    @CustomExceptionDescription(DEFAULT)
+    @GetMapping("search")
+    public BaseResponse<SliceResponse<PostSummaryResponse, Long>> searchPosts(
+            @RequestParam(name = "keyword") String keyword,
+            @RequestParam(required = false, name = "cursor") Long cursorId,
+            @RequestParam(required = false, defaultValue = POSTS_DEFAULT_SIZE) int size
+    ){
+        return BaseResponse.ok(postService.searchPosts(keyword, cursorId, size),"게시물 검색 성공");
+    }
+
 }

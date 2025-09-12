@@ -41,4 +41,8 @@ public class PostService {
         return postReader.getPostById(postId);
     }
 
+    public SliceResponse<PostSummaryResponse, Long> searchPosts(String keyword, Long cursorId, int size){
+        return postReader.findPostsByKeywordAndCursorId(keyword, cursorId, size);
+    }
+
 }
