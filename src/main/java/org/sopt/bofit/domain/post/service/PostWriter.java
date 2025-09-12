@@ -1,12 +1,5 @@
 package org.sopt.bofit.domain.post.service;
 
-import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_IMAGE_MISMATCH;
-import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.comment.entity.CommentStatus;
@@ -16,6 +9,7 @@ import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.entity.PostImage;
 import org.sopt.bofit.domain.post.repository.PostImageRepository;
 import org.sopt.bofit.domain.post.repository.PostRepository;
+import org.sopt.bofit.domain.post.service.dto.request.PostUpdateCommand;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.global.exception.customexception.BadRequestException;
@@ -23,6 +17,14 @@ import org.sopt.bofit.global.file.dto.request.NewImageRequest;
 import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_IMAGE_MISMATCH;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
 
 @Service
 @RequiredArgsConstructor
@@ -40,9 +42,9 @@ public class PostWriter {
 
 
     @Transactional
-    public PostCreateResponse createPost(Long userId, String title, String content, List<String> imageUrls) {
+    public PostCreateResponse createPost(Long userId, String title, String content, String category, List<String> imageUrls) {
         User user = userReader.getActiveById(userId);
-        Post newPost = Post.create(user, title, content);
+        Post newPost = Post.create(user, title, content, category);
         postRepository.save(newPost);
 
         int sequence = 1;
@@ -60,22 +62,20 @@ public class PostWriter {
     }
 
     @Transactional
-    public PostCreateResponse updatePost (Long userId, Long postId, String newTitle, String newContent,
-                                          List<NewImageRequest> newImages, List<UpdateImageRequest> updateImages,
-                                          List<Long> deleteImageIds) {
+    public PostCreateResponse updatePost (Long userId, Long postId, PostUpdateCommand command) {
         User user = userReader.getActiveById(userId);
         Post post = postReader.getActiveById(postId);
 
         post.getUser().checkIsWriter(userId, POST_UNAUTHORIZED);
-        post.updateTitleAndContent(newTitle, newContent);
+        post.updatePost(command.newTitle(), command.newContent(), command.newCategory());
 
         List<PostImage> currentImages = postImageRepository.findByPostIdOrderBySequenceAsc(postId);
 
-        deleteImages(postId, deleteImageIds, currentImages);
+        deleteImages(postId, command.deleteImageIds(), currentImages);
 
-        updateImages(updateImages, currentImages);
+        updateImages(command.updateImages(), currentImages);
 
-        addImages(newImages, currentImages, post);
+        addImages(command.newImages(), currentImages, post);
 
         int seq = 1;
         for(PostImage pi : currentImages) {

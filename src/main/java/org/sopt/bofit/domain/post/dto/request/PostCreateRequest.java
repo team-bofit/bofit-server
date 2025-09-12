@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import org.sopt.bofit.domain.post.entity.constant.PostInfoConstant;
+import org.sopt.bofit.global.annotation.ValidPostCategory;
 
 import java.util.List;
 
@@ -17,6 +18,11 @@ public record PostCreateRequest(
         @NotBlank(message = "본문은 비어있을 수 없습니다.")
         @Length(max = PostInfoConstant.MAX_CONTENT_LENGTH, message = "내용은 {max}자 미만으로 작성해주세요.")
         String content,
+
+        @Schema(description = "카테고리", example = "QNA")
+        @NotBlank(message = "카테고리는 비어있을 수 없습니다.")
+        @ValidPostCategory
+        String category,
 
         @Schema(description = "이미지 url")
         List<String> imageUrls
