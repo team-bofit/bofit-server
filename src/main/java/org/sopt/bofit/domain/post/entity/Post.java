@@ -2,6 +2,7 @@ package org.sopt.bofit.domain.post.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.sopt.bofit.domain.post.entity.constant.PostCategory;
 import org.sopt.bofit.domain.post.entity.constant.PostStatus;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.global.entity.BaseEntity;
@@ -39,19 +40,25 @@ public class Post extends BaseEntity {
     @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
     private Long likeCount;
 
-    public static Post create(User user, String title, String content) {
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PostCategory postCategory;
+
+    public static Post create(User user, String title, String content, String category) {
         return Post.builder()
                 .user(user)
                 .title(title)
                 .content(content)
                 .likeCount(0L)
+                .postCategory(Enum.valueOf(PostCategory.class, category))
                 .status(PostStatus.ACTIVE)
                 .build();
     }
 
-    public void updateTitleAndContent(String title, String content){
+    public void updatePost(String title, String content, String category){
         this.title = title;
         this.content = content;
+        this.postCategory = Enum.valueOf(PostCategory.class, category);
     }
 
     @Override
