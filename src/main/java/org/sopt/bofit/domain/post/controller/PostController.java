@@ -10,6 +10,7 @@ import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DE
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DELETE_POST;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DELETE_POST_LIKE;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.POST_DETAIL;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.UPDATE_COMMENT;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.UPDATE_POST;
 import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_DESCRIPTION_COMMUNITY;
 import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_NAME_COMMUNITY;
@@ -21,6 +22,7 @@ import jakarta.validation.Valid;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.dto.request.CommentCreateRequest;
+import org.sopt.bofit.domain.comment.dto.request.CommentUpdateRequest;
 import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
 import org.sopt.bofit.domain.comment.service.CommentService;
 import org.sopt.bofit.domain.commentreply.dto.request.CommentReplyCreateRequest;
@@ -122,6 +124,20 @@ public class PostController {
     ){
         commentService.createComment(userId, postId, request.toCommand());
         return BaseResponse.create("댓글 생성 성공");
+    }
+
+    @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
+    @Operation(summary = "댓글 수정", description = "커뮤니티 게시글의 댓글을 수정합니다.")
+    @CustomExceptionDescription(UPDATE_COMMENT)
+    @PostMapping("/{post-id}/comments/{comment-id}")
+    public BaseResponse<PostCreateResponse> updateComment(
+        @RequestBody @Valid CommentUpdateRequest request,
+        @PathVariable(name = "post-id") Long postId,
+        @PathVariable(name = "comment-id") Long commentId,
+        @Parameter(hidden = true) @LoginUserId Long userId
+    ){
+        commentService.updateComment(userId, postId, commentId, request.toCommand());
+        return BaseResponse.create("댓글 수정 성공");
     }
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
