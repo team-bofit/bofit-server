@@ -1,17 +1,24 @@
 package org.sopt.bofit.domain.comment.service;
 
+import static org.sopt.bofit.domain.comment.constant.CommentConstant.MAX_IMAGE_COUNT;
 import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_UNAUTHORIZED;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
 import org.sopt.bofit.domain.comment.entity.Comment;
+import org.sopt.bofit.domain.comment.entity.CommentImage;
 import org.sopt.bofit.domain.comment.service.dto.request.CommentCreateCommand;
+import org.sopt.bofit.domain.comment.service.dto.request.CommentUpdateCommand;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.service.PostReader;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.global.dto.response.SliceResponse;
+import org.sopt.bofit.global.exception.constant.CommentErrorCode;
+import org.sopt.bofit.global.exception.customexception.BadRequestException;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +35,7 @@ public class CommentService {
 	private final UserReader userReader;
 
 	private final CommentImageWriter commentImageWriter;
+    private final CommentImageReader commentImageReader;
 
 	@Transactional
 	public Comment createComment(Long userId, Long postId, CommentCreateCommand command){
@@ -35,8 +43,10 @@ public class CommentService {
 		User user = userReader.getActiveById(userId);
 
 		Comment comment = commentWriter.create(post, user, command.content());
-		command.imageUrls()
-			.forEach(url -> commentImageWriter.create(comment, url));
+
+        IntStream.range(0, command.imageUrls().size())
+                .forEach(sequence -> commentImageWriter
+                    .create(comment, command.imageUrls().get(sequence), sequence + 1));
 
 		return comment;
 	}
