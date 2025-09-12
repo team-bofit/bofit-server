@@ -28,6 +28,9 @@ public class Post extends BaseEntity {
     @Column(nullable = false, length = 3000)
     private String content;
 
+    @Column(nullable = false)
+    private String writerNickname;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
@@ -44,7 +47,7 @@ public class Post extends BaseEntity {
     @Column(nullable = false)
     private PostCategory postCategory;
 
-    public static Post create(User user, String title, String content, String category) {
+    public static Post create(User user, String title, String content, String category, String writerNickname) {
         return Post.builder()
                 .user(user)
                 .title(title)
@@ -52,6 +55,7 @@ public class Post extends BaseEntity {
                 .likeCount(0L)
                 .postCategory(Enum.valueOf(PostCategory.class, category))
                 .status(PostStatus.ACTIVE)
+                .writerNickname(writerNickname)
                 .build();
     }
 

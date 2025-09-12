@@ -44,7 +44,7 @@ public class PostWriter {
     @Transactional
     public PostCreateResponse createPost(Long userId, String title, String content, String category, List<String> imageUrls) {
         User user = userReader.getActiveById(userId);
-        Post newPost = Post.create(user, title, content, category);
+        Post newPost = Post.create(user, title, content, category, user.getNickname());
         postRepository.save(newPost);
 
         int sequence = 1;
