@@ -1,6 +1,8 @@
 package org.sopt.bofit.domain.post.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.CommentStatus;
@@ -97,5 +99,48 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 
         return new SliceImpl<>(content, PageRequest.of(0, size), hasNext);
     }
+
+    @Override
+    public Slice<PostSummaryResponse> findAllByKeywordAndCursorId(String keyword, Long cursorId, int size) {
+        QPost post = QPost.post;
+        QComment comment = QComment.comment;
+
+        NumberExpression<Double> relevanceScore = getFullTextTemplate(keyword, post);
+
+        List<PostSummaryResponse> content = queryFactory
+                .select(Projections.constructor(PostSummaryResponse.class,
+                        post.id,
+                        post.user.id,
+                        post.title,
+                        post.content,
+                        post.user.nickname,
+                        post.user.profileImage,
+                        comment.id.count().intValue(),
+                        post.createdAt
+                ))
+                .from(post)
+                .leftJoin(comment).on(comment.post.eq(post), comment.status.eq(CommentStatus.ACTIVE))
+                .where(relevanceScore.gt(0),
+                        post.status.eq(PostStatus.ACTIVE),
+                        cursorId != null ? post.id.lt(cursorId) : null
+                        )
+                .groupBy(post.id)
+                .orderBy(relevanceScore.desc())
+                .limit(size + 1)
+                .fetch();
+
+        boolean hasNext = content.size() > size;
+        if (hasNext) content.remove(size);
+
+        return new SliceImpl<>(content, PageRequest.of(0, size), hasNext);
+    }
+
+    private NumberExpression<Double> getFullTextTemplate(String keyword, QPost post) {
+        return Expressions.numberTemplate(Double.class,
+                "function('match_language_mode',{0},{1},{2},{3})",
+                post.title, post.content, post.writerNickname, keyword
+        );
+    }
+
 }
 

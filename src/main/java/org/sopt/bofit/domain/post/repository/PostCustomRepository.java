@@ -10,4 +10,6 @@ public interface PostCustomRepository {
     void deletePostByPostId(Long postId);
 
     Slice<PostSummaryResponse> findAllByCursorId(Long cursorId, int size);
+
+    Slice<PostSummaryResponse> findAllByKeywordAndCursorId(String keyword, Long cursorId, int size);
 }
