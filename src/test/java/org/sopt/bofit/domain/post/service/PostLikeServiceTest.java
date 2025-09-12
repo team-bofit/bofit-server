@@ -1,10 +1,5 @@
 package org.sopt.bofit.domain.post.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +17,11 @@ import org.sopt.bofit.global.exception.customexception.CustomException;
 import org.sopt.bofit.global.exception.customexception.NotFoundException;
 import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PostLikeServiceTest extends IntegrationTestSupport {
 
@@ -66,7 +66,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
             .build();
         userRepository.save(user);
 
-        Post post = Post.create(user, "testTitle", "testComment");
+        Post post = Post.create(user, "testTitle", "testComment", "QNA");
         postRepository.save(post);
 
         assertThat(post.getLikeCount()).isEqualTo(0);
@@ -91,7 +91,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
             .build();
         userRepository.save(user);
 
-        Post post = Post.create(user, "testTitle", "testComment");
+        Post post = Post.create(user, "testTitle", "testComment", "QNA");
         postRepository.save(post);
 
         PostLike postLike = PostLike.create(post, user);
@@ -115,7 +115,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
             .build();
         userRepository.save(user);
 
-        Post post = Post.create(user, "testTitle", "testComment");
+        Post post = Post.create(user, "testTitle", "testComment","QNA");
         postRepository.save(post);
 
         postLikeService.createPostLike(user.getId(), post.getId());
@@ -144,7 +144,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
             .build();
         userRepository.save(user);
 
-        Post post = Post.create(user, "testTitle", "testComment");
+        Post post = Post.create(user, "testTitle", "testComment","QNA");
         postRepository.save(post);
 
         // when // then

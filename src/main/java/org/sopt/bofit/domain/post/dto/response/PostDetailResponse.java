@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 public record PostDetailResponse(
@@ -26,7 +27,10 @@ public record PostDetailResponse(
         long commentCount,
 
         @Schema(description = "생성 시간")
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+
+        @Schema(description = "이미지 url")
+        List<String> imageUrl
 ) {
 
 }
