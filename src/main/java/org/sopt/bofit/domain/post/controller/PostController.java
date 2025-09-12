@@ -40,6 +40,7 @@ import org.sopt.bofit.global.dto.response.BaseResponse;
 import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -128,7 +129,7 @@ public class PostController {
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
     @Operation(summary = "댓글 수정", description = "커뮤니티 게시글의 댓글을 수정합니다.")
     @CustomExceptionDescription(UPDATE_COMMENT)
-    @PutMapping("/{post-id}/comments/{comment-id}")
+    @PatchMapping("/{post-id}/comments/{comment-id}")
     public BaseResponse<PostCreateResponse> updateComment(
         @RequestBody @Valid CommentUpdateRequest request,
         @PathVariable(name = "post-id") Long postId,

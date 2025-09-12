@@ -20,20 +20,20 @@ public record CommentUpdateRequest(
 
     @Schema(description = "수정된 이미지 목록")
     @Size(max = MAX_IMAGE_COUNT, message = "이미지 url 의 최대 개수({max}) 를 초과했습니다.")
-    @NotNull(message = "url 목록은  null 일 수 없습니다.")
+    @NotNull(message = "수정된 url 목록은  null 일 수 없습니다.")
     @Valid
-    List<UpdateImageRequest> updateImages,
+    List<UpdateImageRequest> updatedImages,
 
     @Schema(description = "삭제할 이미지 ID 목록")
     @Size(max = MAX_IMAGE_COUNT, message = "이미지 url 의 최대 개수({max}) 를 초과했습니다.")
-    @NotNull(message = "url 목록은  null 일 수 없습니다.")
+    @NotNull(message = "삭제된 url 목록은  null 일 수 없습니다.")
     @Valid
     List<@NotNull Long> deleteImageIds
 ) {
     public CommentUpdateCommand toCommand(){
         return new CommentUpdateCommand(
             Optional.of(content),
-            updateImages,
+            updatedImages,
             deleteImageIds
         );
     }
