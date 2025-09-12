@@ -24,4 +24,14 @@ public interface PostRepository extends PostJpaRepository, PostCustomRepository{
         WHERE p = :requestPost
         """)
     void decreaseLikeCount(@Param("requestPost") Post post);
+
+    @Modifying
+    @Query("""
+        UPDATE Post p
+        SET p.writerNickname = :writerNickname
+        WHERE p.user.id = :userId""")
+    void updateWriterNicknameByUserId(@Param("writerNickname") String writerNickname,
+                                      @Param("userId") Long userId
+    );
+
 }

@@ -1,6 +1,7 @@
 package org.sopt.bofit.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
+import org.sopt.bofit.domain.post.repository.PostRepository;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.Gender;
 import org.sopt.bofit.domain.user.entity.constant.Job;
@@ -15,6 +16,8 @@ import java.time.LocalDate;
 public class UserWriter {
 
     private final UserRepository userRepository;
+
+	private final PostRepository postRepository;
 
 	private final UserReader userReader;
 
@@ -43,6 +46,8 @@ public class UserWriter {
 	@Transactional
 	public void updateUserNickname(Long userId, String newNickname) {
 		User user = userReader.findById(userId);
+
+		postRepository.updateWriterNicknameByUserId(newNickname, user.getId());
 
 		user.updateNickname(newNickname);
 	}
