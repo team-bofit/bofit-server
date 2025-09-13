@@ -11,10 +11,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sopt.bofit.global.entity.BaseEntity;
 import org.sopt.bofit.global.file.constant.ImageConstant;
 
+@Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentReplyImage extends BaseEntity {
@@ -33,16 +35,20 @@ public class CommentReplyImage extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private CommentReplyImageStatus status;
 
-    public static CommentReplyImage create(CommentReply commentReply, String imageUrl){
+    private Integer sequence;
+
+    public static CommentReplyImage create(CommentReply commentReply, String imageUrl, Integer sequence) {
         return CommentReplyImage.builder()
             .commentReply(commentReply)
             .imageUrl(imageUrl)
+            .sequence(sequence)
             .build();
     }
 
     @Builder
-    private CommentReplyImage(CommentReply commentReply, String imageUrl) {
+    private CommentReplyImage(CommentReply commentReply, String imageUrl, Integer sequence) {
         this.commentReply = commentReply;
         this.imageUrl = imageUrl;
+        this.sequence = sequence;
     }
 }
