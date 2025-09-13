@@ -1,0 +1,22 @@
+package org.sopt.bofit.domain.commentreply.service;
+
+import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.sopt.bofit.domain.commentreply.entity.CommentReply;
+import org.sopt.bofit.domain.commentreply.entity.CommentReplyImage;
+import org.sopt.bofit.domain.commentreply.entity.CommentReplyImageStatus;
+import org.sopt.bofit.domain.commentreply.repository.CommentReplyImageRepository;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class CommentReplyImageReader {
+
+    private final CommentReplyImageRepository commentReplyImageRepository;
+
+    public Map<Long, CommentReplyImage> getActiveImagesAsMap(
+        CommentReply commentReply){
+        return commentReplyImageRepository
+            .findAllByCommentReplyAndStatusAsMap(commentReply, CommentReplyImageStatus.ACTIVE);
+    }
+}
