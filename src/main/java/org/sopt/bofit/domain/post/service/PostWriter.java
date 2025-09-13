@@ -117,12 +117,12 @@ public class PostWriter {
 
                 PostImage img = currentImages.get(from);
 
-                if (req.newImageUrl() != null && !req.newImageUrl().isBlank()) {
-                    img.updateImageUrl(req.newImageUrl());
+                if (req.imageUrl() != null && !req.imageUrl().isBlank()) {
+                    img.updateImageUrl(req.imageUrl());
                 }
 
-                if (req.newSequence() != null) {
-                    int to = Math.max(0, Math.min(req.newSequence() - 1, currentImages.size() - 1));
+                if (req.sequence() != null) {
+                    int to = Math.max(0, Math.min(req.sequence() - 1, currentImages.size() - 1));
                     moveSequence(currentImages, from, to);
 
                     indexById.clear();
