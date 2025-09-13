@@ -2,6 +2,8 @@ package org.sopt.bofit.domain.commentreply.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -40,7 +42,10 @@ public class CommentReply extends BaseEntity {
     private User user;
 
     @Column(nullable = false, length = CommentReplyConstant.MAX_CONTENT_LENGTH)
-    String content;
+    private String content;
+
+    @Enumerated(EnumType.STRING)
+    private CommentReplyStatus status;
 
     public static CommentReply create(Comment comment, User user, String content){
         return CommentReply.builder()
