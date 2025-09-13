@@ -28,15 +28,15 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CommentReplyService {
 
-    private CommentReplyReader commentReplyReader;
-    private CommentReplyWriter commentReplyWriter;
+    private final CommentReplyReader commentReplyReader;
+    private final CommentReplyWriter commentReplyWriter;
 
-    private CommentReplyImageReader commentReplyImageReader;
-    private CommentReplyImageWriter commentReplyImageWriter;
+    private final CommentReplyImageReader commentReplyImageReader;
+    private final CommentReplyImageWriter commentReplyImageWriter;
 
-    private CommentReader commentReader;
-    private UserReader userReader;
-    private PostReader postReader;
+    private final CommentReader commentReader;
+    private final UserReader userReader;
+    private final PostReader postReader;
 
     /**
      *  추후 이미지 개수가 많아지면 AllInBatch 등으로 수정하기

@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CommentReplyReader {
 
-    private CommentReplyRepository commentReplyRepository;
+    private final CommentReplyRepository commentReplyRepository;
 
     public CommentReply getActiveById(Long commentReplyId) {
         return commentReplyRepository.findByIdAndStatus(commentReplyId, CommentReplyStatus.ACTIVE)
