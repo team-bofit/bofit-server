@@ -61,8 +61,7 @@ public class CommentService {
         User user = userReader.getActiveById(userId);
         Comment comment = commentReader.getActiveById(commentId);
 
-        comment.getUser().checkIsWriter(userId, COMMENT_UNAUTHORIZED);
-        comment.checkPost(post);
+        validRelation(user, post, comment);
 
         Map<Long, CommentImage> commentImageMap = commentImageReader.getActiveImagesAsMap(comment);
         validImageCount(command.updatedImages().size());
@@ -112,5 +111,10 @@ public class CommentService {
         if(!currentImageIds.equals(expectedIds)){
             throw new BadRequestException(CommentErrorCode.UNMATCHED_COMMENT_IMAGE);
         }
+    }
+
+    private void validRelation(User user, Post post, Comment comment){
+        comment.getUser().checkIsWriter(user, COMMENT_UNAUTHORIZED);
+        comment.checkPost(post);
     }
 }

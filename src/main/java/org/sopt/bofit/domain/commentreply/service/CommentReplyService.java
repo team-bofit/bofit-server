@@ -69,9 +69,7 @@ public class CommentReplyService {
         Post post = postReader.getActiveById(postId);
         CommentReply commentReply = commentReplyReader.getActiveById(commentReplyId);
 
-        comment.checkPost(post);
-        commentReply.checkComment(comment);
-        commentReply.getUser().checkIsWriter(requestUser, CommentReplyErrorCode.COMMENT_REPLY_UNAUTHORIZED);
+        validRelation(requestUser, post, comment, commentReply);
 
         Map<Long, CommentReplyImage> commentReplyImageMap = commentReplyImageReader.getActiveImagesAsMap(commentReply);
 
@@ -85,6 +83,12 @@ public class CommentReplyService {
         command.content().ifPresent(commentReply::updateContent);
 
         return commentReply;
+    }
+
+    private void validRelation(User requestUser, Post post, Comment comment, CommentReply commentReply){
+        comment.checkPost(post);
+        commentReply.checkComment(comment);
+        commentReply.getUser().checkIsWriter(requestUser, CommentReplyErrorCode.COMMENT_REPLY_UNAUTHORIZED);
     }
 
     /**
