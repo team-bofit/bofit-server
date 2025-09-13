@@ -39,19 +39,21 @@ public class CommentImage extends BaseEntity {
 
     private Integer sequence;
 
-    public static CommentImage create(Comment comment, String imageUrl){
+    public static CommentImage create(Comment comment, String imageUrl, Integer sequence){
         return CommentImage.builder()
             .comment(comment)
             .imageUrl(imageUrl)
+            .sequence(sequence)
             .status(CommentImageStatus.ACTIVE)
             .build();
     }
 
     @Builder
-    private CommentImage(Comment comment, String imageUrl, CommentImageStatus status) {
+    private CommentImage(Comment comment, String imageUrl, CommentImageStatus status, Integer sequence) {
         this.comment = comment;
         this.imageUrl = imageUrl;
         this.status = status;
+        this.sequence = sequence;
     }
 
     public void softDelete(){

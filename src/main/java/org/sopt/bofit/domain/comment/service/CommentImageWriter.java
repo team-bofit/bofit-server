@@ -16,7 +16,7 @@ public class CommentImageWriter {
     private final CommentImageRepository commentImageRepository;
 
     public CommentImage create(Comment comment, String url, Integer sequence){
-        CommentImage commentImage = CommentImage.create(comment, url);
+        CommentImage commentImage = CommentImage.create(comment, url, sequence);
         return commentImageRepository.save(commentImage);
     }
 
