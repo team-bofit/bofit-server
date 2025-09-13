@@ -72,4 +72,8 @@ public class CommentReply extends BaseEntity {
         }
     }
 
+    public void updateContent(String content){
+        this.content = content;
+    }
+
 }
