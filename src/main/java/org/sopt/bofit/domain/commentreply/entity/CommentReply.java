@@ -64,6 +64,7 @@ public class CommentReply extends BaseEntity {
         this.comment = comment;
         this.user = user;
         this.content = content;
+        this.status = CommentReplyStatus.ACTIVE;
     }
 
     public void checkComment(Comment comment){

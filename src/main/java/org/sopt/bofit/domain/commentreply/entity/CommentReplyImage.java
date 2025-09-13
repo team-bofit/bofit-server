@@ -8,6 +8,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -27,6 +28,7 @@ public class CommentReplyImage extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "comment_reply_id")
     private CommentReply commentReply;
 
     @Column(length = ImageConstant.MAX_IMAGE_URL_LENGTH)
@@ -46,10 +48,11 @@ public class CommentReplyImage extends BaseEntity {
     }
 
     @Builder
-    private CommentReplyImage(CommentReply commentReply, String imageUrl, Integer sequence) {
+    private CommentReplyImage(CommentReply commentReply, String imageUrl, Integer sequence, CommentReplyImageStatus status) {
         this.commentReply = commentReply;
         this.imageUrl = imageUrl;
         this.sequence = sequence;
+        this.status = CommentReplyImageStatus.ACTIVE;
     }
 
     public void softDelete(){
