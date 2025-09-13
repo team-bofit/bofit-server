@@ -51,4 +51,13 @@ public class CommentReplyImage extends BaseEntity {
         this.imageUrl = imageUrl;
         this.sequence = sequence;
     }
+
+    public void softDelete(){
+        this.sequence = null;
+        this.status = CommentReplyImageStatus.INACTIVE;
+    }
+
+    public void updateSequence(Integer sequence){
+        this.sequence = sequence;
+    }
 }
