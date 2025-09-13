@@ -6,6 +6,8 @@ import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_
 import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_NOT_FOUND;
 import static org.sopt.bofit.global.exception.constant.CommentErrorCode.UNMATCHED_COMMENT_IMAGE;
 import static org.sopt.bofit.global.exception.constant.CommentErrorCode.UNMATCHED_COMMENT_POST;
+import static org.sopt.bofit.global.exception.constant.CommentReplyErrorCode.COMMENT_REPLY_NOT_FOUND;
+import static org.sopt.bofit.global.exception.constant.CommentReplyErrorCode.COMMENT_REPLY_UNAUTHORIZED;
 import static org.sopt.bofit.global.exception.constant.InsuranceErrorCode.NOT_FOUND_INSURANCE_TOTAL_AVERAGE;
 import static org.sopt.bofit.global.exception.constant.InsuranceErrorCode.NOT_FOUND_RECOMMENDED_STATUS_INSURANCE;
 import static org.sopt.bofit.global.exception.constant.OAuthErrorCode.JWT_REFRESH_NOT_FOUND;
@@ -123,6 +125,13 @@ public enum SwaggerResponseDescription {
         COMMENT_NOT_FOUND,
         POST_NOT_FOUND,
         UNMATCHED_COMMENT_POST
+    ))),
+    UPDATE_COMMENT_REPLY(new LinkedHashSet<>(Set.of(
+        USER_NOT_FOUND,
+        COMMENT_NOT_FOUND,
+        POST_NOT_FOUND,
+        COMMENT_REPLY_NOT_FOUND,
+        COMMENT_REPLY_UNAUTHORIZED
     ))),
     UPDATE_NICKNAME(new LinkedHashSet<>(Set.of(
         USER_NOT_FOUND
