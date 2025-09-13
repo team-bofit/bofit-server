@@ -14,12 +14,16 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.commentreply.constant.CommentReplyConstant;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.global.entity.BaseEntity;
+import org.sopt.bofit.global.exception.constant.CommentReplyErrorCode;
+import org.sopt.bofit.global.exception.customexception.BadRequestException;
 
+@Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(indexes = {
@@ -61,4 +65,11 @@ public class CommentReply extends BaseEntity {
         this.user = user;
         this.content = content;
     }
+
+    public void checkComment(Comment comment){
+        if (! this.comment.equals(comment)){
+            throw new BadRequestException(CommentReplyErrorCode.UNMATCHED_COMMENT_REPLY_COMMENT);
+        }
+    }
+
 }
