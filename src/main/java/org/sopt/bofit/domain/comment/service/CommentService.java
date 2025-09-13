@@ -3,6 +3,7 @@ package org.sopt.bofit.domain.comment.service;
 import static org.sopt.bofit.domain.comment.constant.CommentConstant.MAX_IMAGE_COUNT;
 import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_UNAUTHORIZED;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -65,9 +66,9 @@ public class CommentService {
 
         Map<Long, CommentImage> commentImageMap = commentImageReader.getActiveImagesAsMap(comment);
         validImageCount(command.updatedImages().size());
-        validImageIds(commentImageMap.keySet(), command.deleteImageIds());
         validImageIds(commentImageMap.keySet(), command.updatedImages().stream()
-            .filter(image -> image.id() != null).map(UpdateImageRequest::id).toList());
+            .filter(image -> image.id() != null).map(UpdateImageRequest::id).toList(),
+            command.deleteImageIds());
 
         commentImageWriter.softDelete(commentImageMap, command.deleteImageIds());
         commentImageWriter.updateAll(comment, commentImageMap, command.updatedImages());
@@ -101,10 +102,15 @@ public class CommentService {
         }
     }
 
-    private void validImageIds(Set<Long> currentImageIds, List<Long> imageIds){
-        if (!currentImageIds.containsAll(imageIds)){
+    /**
+     * 기존 comment의 이미지가 수정 + 삭제하려는 이미지와 동일한지 검증
+     */
+    private void validImageIds(Set<Long> currentImageIds, List<Long> existIds, List<Long> deletedIds){
+        Set<Long> expectedIds = new HashSet<>(existIds);
+        expectedIds.addAll(deletedIds);
+
+        if(!currentImageIds.equals(expectedIds)){
             throw new BadRequestException(CommentErrorCode.UNMATCHED_COMMENT_IMAGE);
         }
-
     }
 }
