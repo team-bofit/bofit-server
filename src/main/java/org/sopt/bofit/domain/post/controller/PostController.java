@@ -98,9 +98,10 @@ public class PostController {
     @Operation(summary = "게시물 전체 조회", description = "커뮤니티에서 모든 글을 조회합니다.")
     @GetMapping()
     public BaseResponse<SliceResponse<PostSummaryResponse, Long>> getAllPosts(
+            @Parameter(hidden = true) @LoginUserId Long userId,
             @RequestParam(required = false, name = "cursor") Long cursorId,
             @RequestParam(required = false, defaultValue = POSTS_DEFAULT_SIZE) int size){
-        return BaseResponse.ok(postService.getAllPosts(cursorId, size), "게시물 전체 조회 성공");
+        return BaseResponse.ok(postService.getAllPosts(userId, cursorId, size), "게시물 전체 조회 성공");
     }
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
@@ -108,9 +109,10 @@ public class PostController {
     @CustomExceptionDescription(POST_DETAIL)
     @GetMapping("{post-id}")
     public BaseResponse<PostDetailResponse> getPostDetail(
-            @PathVariable(name = "post-id") Long postId
+            @PathVariable(name = "post-id") Long postId,
+             @Parameter(hidden = true) @LoginUserId Long userId
     ){
-        return BaseResponse.ok(postService.getPostDetail(postId),"글 상세 조회 성공");
+        return BaseResponse.ok(postService.getPostDetail(userId, postId),"글 상세 조회 성공");
     }
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
@@ -211,10 +213,11 @@ public class PostController {
     @GetMapping("search")
     public BaseResponse<SliceResponse<PostSummaryResponse, Long>> searchPosts(
             @RequestParam(name = "keyword") String keyword,
+            @Parameter(hidden = true) @LoginUserId Long userId,
             @RequestParam(required = false, name = "cursor") Long cursorId,
             @RequestParam(required = false, defaultValue = POSTS_DEFAULT_SIZE) int size
     ){
-        return BaseResponse.ok(postService.searchPosts(keyword, cursorId, size),"게시물 검색 성공");
+        return BaseResponse.ok(postService.searchPosts(userId, keyword, cursorId, size),"게시물 검색 성공");
     }
 
 }

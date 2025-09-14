@@ -1,6 +1,7 @@
 package org.sopt.bofit.domain.post.repository;
 
 import org.sopt.bofit.domain.post.entity.Post;
+import org.sopt.bofit.domain.user.entity.User;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -52,4 +53,5 @@ public interface PostRepository extends PostJpaRepository, PostCustomRepository{
     )
     void decreaseCommentCount(@Param("requestPost") Post post);
 
+    boolean existsByIdAndUser(Long postId, User user);
 }

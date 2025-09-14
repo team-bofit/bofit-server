@@ -33,16 +33,16 @@ public class PostService {
         postWriter.deletePost(userId, postId);
     }
 
-    public SliceResponse<PostSummaryResponse, Long> getAllPosts(Long cursorId, int size){
-        return postReader.getAllPosts(cursorId, size);
+    public SliceResponse<PostSummaryResponse, Long> getAllPosts(Long userId, Long cursorId, int size){
+        return postReader.getAllPosts(userId, cursorId, size);
     }
 
-    public PostDetailResponse getPostDetail(Long postId){
-        return postReader.getPostById(postId);
+    public PostDetailResponse getPostDetail(Long userId, Long postId){
+        return postReader.getPostById(userId, postId);
     }
 
-    public SliceResponse<PostSummaryResponse, Long> searchPosts(String keyword, Long cursorId, int size){
-        return postReader.findPostsByKeywordAndCursorId(keyword, cursorId, size);
+    public SliceResponse<PostSummaryResponse, Long> searchPosts(Long userId, String keyword, Long cursorId, int size){
+        return postReader.findPostsByKeywordAndCursorId(userId, keyword, cursorId, size);
     }
 
 }

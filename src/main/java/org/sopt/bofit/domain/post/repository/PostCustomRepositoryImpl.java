@@ -1,13 +1,15 @@
 package org.sopt.bofit.domain.post.repository;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.sopt.bofit.domain.comment.entity.QComment;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.entity.QPost;
+import org.sopt.bofit.domain.post.entity.QPostLike;
 import org.sopt.bofit.domain.post.entity.constant.PostStatus;
 import org.sopt.bofit.domain.user.dto.response.MyPostSummaryResponse;
 import org.springframework.data.domain.PageRequest;
@@ -27,7 +29,9 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
     @Override
     public Slice<MyPostSummaryResponse> findPostsByCursorId(Long userId, Long cursorId, int size) {
         QPost post = QPost.post;
-        QComment comment = QComment.comment;
+        QPostLike postLike = QPostLike.postLike;
+
+        BooleanExpression likedByCurrentUser = getLikedByCurrentUser(userId, postLike, post);
 
         List<MyPostSummaryResponse> content = queryFactory
                 .select(Projections.constructor(MyPostSummaryResponse.class,
@@ -35,7 +39,9 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                         post.title,
                         post.content,
                         post.commentCount,
-                        post.createdAt
+                        post.createdAt,
+                        post.likeCount,
+                        likedByCurrentUser
                 ))
                 .from(post)
                 .where(
@@ -65,9 +71,11 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
     }
 
     @Override
-    public Slice<PostSummaryResponse> findAllByCursorId(Long cursorId, int size) {
+    public Slice<PostSummaryResponse> findAllByCursorId(Long userId, Long cursorId, int size) {
         QPost post = QPost.post;
-        QComment comment = QComment.comment;
+        QPostLike postLike = QPostLike.postLike;
+
+        BooleanExpression likedByCurrentUser = getLikedByCurrentUser(userId, postLike, post);
 
         List<PostSummaryResponse> content = queryFactory
                 .select(Projections.constructor(PostSummaryResponse.class,
@@ -78,7 +86,9 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                         post.user.nickname,
                         post.user.profileImage,
                         post.commentCount,
-                        post.createdAt
+                        post.createdAt,
+                        post.likeCount,
+                        likedByCurrentUser
                 ))
                 .from(post)
                 .where(
@@ -95,10 +105,21 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         return new SliceImpl<>(content, PageRequest.of(0, size), hasNext);
     }
 
+    private BooleanExpression getLikedByCurrentUser(Long userId, QPostLike postLike, QPost post) {
+        return JPAExpressions
+                .selectOne()
+                .from(postLike)
+                .where(postLike.post.eq(post),
+                        postLike.user.id.eq(userId))
+                .exists();
+    }
+
     @Override
-    public Slice<PostSummaryResponse> findAllByKeywordAndCursorId(String keyword, Long cursorId, int size) {
+    public Slice<PostSummaryResponse> findAllByKeywordAndCursorId(Long userId, String keyword, Long cursorId, int size) {
         QPost post = QPost.post;
-        QComment comment = QComment.comment;
+        QPostLike postLike = QPostLike.postLike;
+
+        BooleanExpression likedByCurrentUser = getLikedByCurrentUser(userId, postLike, post);
 
         NumberExpression<Double> relevanceScore = getRelevanceScore(keyword, post);
 
@@ -111,7 +132,9 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                         post.user.nickname,
                         post.user.profileImage,
                         post.commentCount,
-                        post.createdAt
+                        post.createdAt,
+                        post.likeCount,
+                        likedByCurrentUser
                 ))
                 .from(post)
                 .where(relevanceScore.gt(0),
