@@ -34,4 +34,22 @@ public interface PostRepository extends PostJpaRepository, PostCustomRepository{
                                       @Param("userId") Long userId
     );
 
+    @Modifying
+    @Query("""
+        UPDATE Post p
+        SET p.commentCount = p.commentCount + 1
+        WHERE p = :requestPost
+        """
+    )
+    void increaseCommentCount(@Param("requestPost") Post post);
+
+    @Modifying
+    @Query("""
+        UPDATE Post p
+        SET p.commentCount = p.commentCount - 1
+        WHERE p = :requestPost
+        """
+    )
+    void decreaseCommentCount(@Param("requestPost") Post post);
+
 }

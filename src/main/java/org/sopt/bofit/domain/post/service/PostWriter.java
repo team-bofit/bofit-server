@@ -172,4 +172,14 @@ public class PostWriter {
     public void decreaseLikeCount(Post post){
         postRepository.decreaseLikeCount(post);
     }
+
+    @Transactional
+    public void increaseCommentCount(Post post){
+        postRepository.increaseCommentCount(post);
+    }
+
+    @Transactional
+    public void decreaseCommentCount(Post post){
+        postRepository.decreaseCommentCount(post);
+    }
 }
