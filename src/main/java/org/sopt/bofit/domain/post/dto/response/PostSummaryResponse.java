@@ -28,7 +28,13 @@ public record PostSummaryResponse (
         int commentCount,
 
         @Schema(description = "게시물 작성 시각")
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+
+        @Schema(description = "좋아요 수")
+        Long likeCount,
+
+        @Schema(description = "사용자의 좋아요 여부")
+        boolean likedByCurrentUser
 
 ) implements CursorProvider<Long>{
         @Override

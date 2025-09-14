@@ -17,6 +17,7 @@ import org.sopt.bofit.domain.comment.service.dto.request.CommentCreateCommand;
 import org.sopt.bofit.domain.comment.service.dto.request.CommentUpdateCommand;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.service.PostReader;
+import org.sopt.bofit.domain.post.service.PostWriter;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.global.dto.response.SliceResponse;
@@ -27,11 +28,20 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import static org.sopt.bofit.domain.comment.constant.CommentConstant.MAX_IMAGE_COUNT;
+import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_UNAUTHORIZED;
+
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
 	private final CommentReader commentReader;
+
 	private final CommentWriter commentWriter;
 
 	private final PostReader postReader;
@@ -40,6 +50,9 @@ public class CommentService {
 
 	private final CommentImageWriter commentImageWriter;
     private final CommentImageReader commentImageReader;
+
+	private final PostWriter postWriter;
+
 
 	@Transactional
 	public Comment createComment(Long userId, Long postId, CommentCreateCommand command){
@@ -51,6 +64,8 @@ public class CommentService {
         IntStream.range(0, command.imageUrls().size())
                 .forEach(sequence -> commentImageWriter
                     .create(comment, command.imageUrls().get(sequence), sequence + 1));
+
+		postWriter.increaseCommentCount(post);
 
 		return comment;
 	}
@@ -84,6 +99,8 @@ public class CommentService {
 
 		comment.getUser().checkIsWriter(userId, COMMENT_UNAUTHORIZED);
 		comment.checkPost(post);
+
+		postWriter.decreaseCommentCount(post);
 
 		commentWriter.softDelete(comment);
 	}
