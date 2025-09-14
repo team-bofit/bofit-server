@@ -5,7 +5,6 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.sopt.bofit.domain.comment.entity.CommentStatus;
 import org.sopt.bofit.domain.comment.entity.QComment;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.entity.QPost;
@@ -35,17 +34,15 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                         post.id,
                         post.title,
                         post.content,
-                        comment.id.count().intValue(),
+                        post.commentCount,
                         post.createdAt
                 ))
                 .from(post)
-                .leftJoin(comment).on(comment.post.eq(post), comment.status.eq(CommentStatus.ACTIVE))
                 .where(
                         post.user.id.eq(userId),
                         post.status.eq(PostStatus.ACTIVE),
                         cursorId != null ? post.id.lt(cursorId) : null
                 )
-                .groupBy(post.id)
                 .orderBy(post.id.desc())
                 .limit(size + 1)
                 .fetch();
@@ -80,16 +77,14 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                         post.content,
                         post.user.nickname,
                         post.user.profileImage,
-                        comment.id.count().intValue(),
+                        post.commentCount,
                         post.createdAt
                 ))
                 .from(post)
-                .leftJoin(comment).on(comment.post.eq(post), comment.status.eq(CommentStatus.ACTIVE))
                 .where(
                         post.status.eq(PostStatus.ACTIVE),
                         cursorId != null ? post.id.lt(cursorId) : null
                 )
-                .groupBy(post.id)
                 .orderBy(post.id.desc())
                 .limit(size + 1)
                 .fetch();
@@ -115,16 +110,14 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                         post.content,
                         post.user.nickname,
                         post.user.profileImage,
-                        comment.id.count().intValue(),
+                        post.commentCount,
                         post.createdAt
                 ))
                 .from(post)
-                .leftJoin(comment).on(comment.post.eq(post), comment.status.eq(CommentStatus.ACTIVE))
                 .where(relevanceScore.gt(0),
                         post.status.eq(PostStatus.ACTIVE),
                         cursorId != null ? post.id.lt(cursorId) : null
                         )
-                .groupBy(post.id)
                 .orderBy(relevanceScore.desc())
                 .limit(size + 1)
                 .fetch();
