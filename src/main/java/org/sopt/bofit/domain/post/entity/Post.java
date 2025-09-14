@@ -47,6 +47,9 @@ public class Post extends BaseEntity {
     @Column(nullable = false)
     private PostCategory postCategory;
 
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+    private int commentCount;
+
     public static Post create(User user, String title, String content, String category, String writerNickname) {
         return Post.builder()
                 .user(user)
