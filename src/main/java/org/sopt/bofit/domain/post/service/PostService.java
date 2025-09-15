@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.IntStream;
 
 import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
@@ -55,15 +54,16 @@ public class PostService {
 
         post.getUser().checkIsWriter(userId, POST_UNAUTHORIZED);
 
+        post.updatePost(command.title(),command.content(), command.category());
+
         Map<Long, PostImage> postImageMap = postImageReader.getActiveImageAsMap(post);
 
         postImageWriter.softDelete(postImageMap, command.deleteImageIds());
         postImageWriter.updateAll(post, postImageMap, command.updatedImages());
 
         ImageValidator.validImageIds(postImageMap.keySet(), command.updatedImages().stream()
-                .map(UpdateImageRequest::id).filter(Objects::nonNull).toList(),
-                command.deleteImageIds()
-        );
+                        .filter(image -> image.id() != null).map(UpdateImageRequest::id).toList(),
+                command.deleteImageIds());
 
         return PostCreateResponse.from(post.getId());
     }
