@@ -49,6 +49,9 @@ public class Comment extends BaseEntity {
     @Column(nullable = false)
     private CommentStatus status;
 
+    @Column(nullable = false, columnDefinition = "BIGINT DEFAULT 0")
+    private int replyCount;
+
     public static Comment create(Post post, User user, String content){
         return Comment.builder()
             .content(content)
@@ -64,6 +67,7 @@ public class Comment extends BaseEntity {
         this.status = status;
         this.user = user;
         this.post = post;
+        this.replyCount = 0;
     }
 
     public void checkPost(Post post){
