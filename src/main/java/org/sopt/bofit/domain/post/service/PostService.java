@@ -5,15 +5,22 @@ import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.entity.Post;
+import org.sopt.bofit.domain.post.entity.PostImage;
 import org.sopt.bofit.domain.post.service.dto.request.PostCreateCommand;
 import org.sopt.bofit.domain.post.service.dto.request.PostUpdateCommand;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.global.dto.response.SliceResponse;
+import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
+import org.sopt.bofit.global.file.util.ImageValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.IntStream;
+
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +33,7 @@ public class PostService {
     private final UserReader userReader;
 
     private final PostImageWriter postImageWriter;
+    private final PostImageReader postImageReader;
 
     @Transactional
     public PostCreateResponse createPost(Long userId, PostCreateCommand command) {
@@ -42,7 +50,22 @@ public class PostService {
 
     @Transactional
     public PostCreateResponse updatePost (Long userId, Long postId, PostUpdateCommand command) {
-        return postWriter.updatePost(userId, postId, command);
+        User user =  userReader.getActiveById(userId);
+        Post post = postReader.getActiveById(postId);
+
+        post.getUser().checkIsWriter(userId, POST_UNAUTHORIZED);
+
+        Map<Long, PostImage> postImageMap = postImageReader.getActiveImageAsMap(post);
+
+        postImageWriter.softDelete(postImageMap, command.deleteImageIds());
+        postImageWriter.updateAll(post, postImageMap, command.updatedImages());
+
+        ImageValidator.validImageIds(postImageMap.keySet(), command.updatedImages().stream()
+                .map(UpdateImageRequest::id).filter(Objects::nonNull).toList(),
+                command.deleteImageIds()
+        );
+
+        return PostCreateResponse.from(post.getId());
     }
 
     @Transactional
