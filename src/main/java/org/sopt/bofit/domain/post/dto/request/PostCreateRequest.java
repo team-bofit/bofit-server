@@ -27,5 +27,4 @@ public record PostCreateRequest(
         @Schema(description = "이미지 url")
         List<String> imageUrls
 ) {
-
 }
