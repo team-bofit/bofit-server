@@ -9,6 +9,7 @@ import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.comment.service.CommentReader;
+import org.sopt.bofit.domain.comment.service.CommentWriter;
 import org.sopt.bofit.domain.commentreply.entity.CommentReply;
 import org.sopt.bofit.domain.commentreply.entity.CommentReplyImage;
 import org.sopt.bofit.domain.commentreply.service.dto.request.CommentReplyCreateCommand;
@@ -35,6 +36,7 @@ public class CommentReplyService {
     private final CommentReplyImageWriter commentReplyImageWriter;
 
     private final CommentReader commentReader;
+    private final CommentWriter commentWriter;
     private final UserReader userReader;
     private final PostReader postReader;
 
@@ -53,6 +55,7 @@ public class CommentReplyService {
         IntStream.range(0, command.imageUrls().size())
                 .forEach(sequence ->
                     commentReplyImageWriter.create(commentReply, command.imageUrls().get(sequence), sequence+ 1));
+        commentWriter.increaseReplyCount(comment);
         return commentReply;
     }
 
