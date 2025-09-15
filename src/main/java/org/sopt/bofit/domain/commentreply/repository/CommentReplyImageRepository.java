@@ -1,9 +1,6 @@
 package org.sopt.bofit.domain.commentreply.repository;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import org.sopt.bofit.domain.commentreply.entity.CommentReply;
 import org.sopt.bofit.domain.commentreply.entity.CommentReplyImage;
 import org.sopt.bofit.domain.commentreply.entity.CommentReplyImageStatus;
@@ -15,10 +12,4 @@ public interface CommentReplyImageRepository extends JpaRepository<CommentReplyI
 
     List<CommentReplyImage> findAllByCommentReplyAndStatus(CommentReply commentReply, CommentReplyImageStatus status);
 
-    default Map<Long, CommentReplyImage> findAllByCommentReplyAndStatusAsMap(
-        CommentReply commentReply, CommentReplyImageStatus status
-    ){
-        return findAllByCommentReplyAndStatus(commentReply, status).stream()
-            .collect(Collectors.toMap(CommentReplyImage::getId, Function.identity()));
-    }
 }

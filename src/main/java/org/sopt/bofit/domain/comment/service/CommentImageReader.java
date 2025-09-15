@@ -1,6 +1,8 @@
 package org.sopt.bofit.domain.comment.service;
 
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.comment.entity.CommentImage;
@@ -14,6 +16,7 @@ public class CommentImageReader {
     private final CommentImageRepository commentImageRepository;
 
     public Map<Long, CommentImage> getActiveImagesAsMap(Comment comment){
-        return commentImageRepository.findAllByCommentAndStatusAsMap(comment, CommentImageStatus.ACTIVE);
+        return commentImageRepository.findAllByCommentAndStatus(comment,CommentImageStatus.ACTIVE).stream()
+            .collect(Collectors.toMap(CommentImage::getId, Function.identity()));
     }
 }

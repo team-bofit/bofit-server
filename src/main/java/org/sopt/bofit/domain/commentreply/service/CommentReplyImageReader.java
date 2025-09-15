@@ -1,6 +1,8 @@
 package org.sopt.bofit.domain.commentreply.service;
 
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.commentreply.entity.CommentReply;
 import org.sopt.bofit.domain.commentreply.entity.CommentReplyImage;
@@ -14,9 +16,8 @@ public class CommentReplyImageReader {
 
     private final CommentReplyImageRepository commentReplyImageRepository;
 
-    public Map<Long, CommentReplyImage> getActiveImagesAsMap(
-        CommentReply commentReply){
-        return commentReplyImageRepository
-            .findAllByCommentReplyAndStatusAsMap(commentReply, CommentReplyImageStatus.ACTIVE);
+    public Map<Long, CommentReplyImage> getActiveImagesAsMap(CommentReply commentReply){
+        return commentReplyImageRepository.findAllByCommentReplyAndStatus(commentReply, CommentReplyImageStatus.ACTIVE).stream()
+            .collect(Collectors.toMap(CommentReplyImage::getId, Function.identity()));
     }
 }
