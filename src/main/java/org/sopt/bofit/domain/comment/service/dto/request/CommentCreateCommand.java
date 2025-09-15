@@ -6,5 +6,4 @@ public record CommentCreateCommand(
     String content,
     List<String> imageUrls
 ) {
-
 }
