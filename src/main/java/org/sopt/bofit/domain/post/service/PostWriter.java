@@ -42,23 +42,11 @@ public class PostWriter {
 
 
     @Transactional
-    public PostCreateResponse createPost(Long userId, String title, String content, String category, List<String> imageUrls) {
+    public Post createPost(Long userId, String title, String content, String category) {
         User user = userReader.getActiveById(userId);
-        Post newPost = Post.create(user, title, content, category, user.getNickname());
-        postRepository.save(newPost);
+        Post post = Post.create(user, title, content, category, user.getNickname());
 
-        int sequence = 1;
-        List<PostImage> postImages = new ArrayList<>();
-
-        if(imageUrls != null && !imageUrls.isEmpty()) {
-            for (String imageUrl : imageUrls) {
-                postImages.add(PostImage.create(imageUrl, newPost, sequence++));
-            }
-        }
-
-        postImageRepository.saveAll(postImages);
-
-        return PostCreateResponse.from(newPost.getId());
+        return postRepository.save(post);
     }
 
     @Transactional
