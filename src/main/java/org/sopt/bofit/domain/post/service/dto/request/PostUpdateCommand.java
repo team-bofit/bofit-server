@@ -5,9 +5,9 @@ import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 import java.util.List;
 
 public record PostUpdateCommand(
-        String newTitle,
-        String newContent,
-        String newCategory,
+        String title,
+        String content,
+        String category,
         List<UpdateImageRequest> updatedImages,
         List<Long> deleteImageIds
 ) {

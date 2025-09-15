@@ -63,4 +63,5 @@ public class CommentReplyImage extends BaseEntity {
     public void updateSequence(Integer sequence){
         this.sequence = sequence;
     }
+
 }
