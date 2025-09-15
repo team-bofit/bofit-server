@@ -66,7 +66,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
             .build();
         userRepository.save(user);
 
-        Post post = Post.create(user, "testTitle", "testComment", "QNA");
+        Post post = Post.create(user, "testTitle", "testComment", "QNA", "test");
         postRepository.save(post);
 
         assertThat(post.getLikeCount()).isEqualTo(0);
@@ -91,7 +91,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
             .build();
         userRepository.save(user);
 
-        Post post = Post.create(user, "testTitle", "testComment", "QNA");
+        Post post = Post.create(user, "testTitle", "testComment", "QNA","test");
         postRepository.save(post);
 
         PostLike postLike = PostLike.create(post, user);
@@ -115,7 +115,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
             .build();
         userRepository.save(user);
 
-        Post post = Post.create(user, "testTitle", "testComment","QNA");
+        Post post = Post.create(user, "testTitle", "testComment","QNA","test");
         postRepository.save(post);
 
         postLikeService.createPostLike(user.getId(), post.getId());
@@ -144,7 +144,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
             .build();
         userRepository.save(user);
 
-        Post post = Post.create(user, "testTitle", "testComment","QNA");
+        Post post = Post.create(user, "testTitle", "testComment","QNA", "test");
         postRepository.save(post);
 
         // when // then

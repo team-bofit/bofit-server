@@ -32,15 +32,15 @@ public class PostReader {
 
     private final PostImageRepository postImageRepository;
 
-    public SliceResponse<PostSummaryResponse, Long> getAllPosts(Long cursorId, int size){
+    public SliceResponse<PostSummaryResponse, Long> getAllPosts(Long userId, Long cursorId, int size){
 
-        Slice<PostSummaryResponse> postList = postRepository.findAllByCursorId(cursorId, size);
+        Slice<PostSummaryResponse> postList = postRepository.findAllByCursorId(userId, cursorId, size);
 
         return SliceResponse.from(postList);
     }
 
     @Transactional(readOnly = true)
-    public PostDetailResponse getPostById(Long postId) {
+    public PostDetailResponse getPostById(Long userId, Long postId) {
         Post post = getActiveById(postId);
         User writer = post.getUser();
 
@@ -50,7 +50,7 @@ public class PostReader {
                 .map(image -> new PostDetailImageResponse(image.getId(), image.getImageUrl()))
                 .toList();
 
-
+        boolean isLike = postRepository.existsByIdAndUser(postId, writer);
 
         long postCommentCount = activeComments.size();
 
@@ -63,6 +63,8 @@ public class PostReader {
                 .commentCount(postCommentCount)
                 .createdAt(post.getCreatedAt())
                 .imageUrl(imageUrls)
+                .likeCount(post.getLikeCount())
+                .likedByCurrentUser(isLike)
                 .build();
 
     }
@@ -74,5 +76,11 @@ public class PostReader {
     public Post getActiveById(Long postId) {
         return postRepository.findByIdAndStatus(postId, PostStatus.ACTIVE)
             .orElseThrow(() -> new NotFoundException(POST_NOT_FOUND));
+    }
+
+    public SliceResponse<PostSummaryResponse, Long> findPostsByKeywordAndCursorId(Long userId, String keyword, Long cursorId, int size) {
+        Slice<PostSummaryResponse> postList = postRepository.findAllByKeywordAndCursorId(userId, keyword, cursorId, size);
+
+        return SliceResponse.from(postList);
     }
 }
