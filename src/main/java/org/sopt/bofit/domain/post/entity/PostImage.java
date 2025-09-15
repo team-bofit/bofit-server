@@ -25,7 +25,7 @@ public class PostImage {
     private String imageUrl;
 
     @Column(nullable = false)
-    private int sequence;
+    private Integer sequence;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -46,5 +46,10 @@ public class PostImage {
 
     public void updateSequence(int sequence){
         this.sequence = sequence;
+    }
+
+    public void softDelete(){
+        this.status = PostImageStatus.INACTIVE;
+        this.sequence = null;
     }
 }
