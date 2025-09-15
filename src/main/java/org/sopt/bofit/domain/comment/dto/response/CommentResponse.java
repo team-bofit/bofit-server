@@ -2,9 +2,8 @@ package org.sopt.bofit.domain.comment.dto.response;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.sopt.bofit.global.dto.response.CursorProvider;
-
 import java.time.LocalDateTime;
+import org.sopt.bofit.global.dto.response.CursorProvider;
 
 public record CommentResponse (
 	@Schema(description = "게시글 id")
@@ -21,6 +20,9 @@ public record CommentResponse (
 
 	@Schema(description = "댓글 내용")
 	String content,
+
+    @Schema(description = "대댓글 개수")
+    Integer replyCount,
 
 	@Schema(description = "생성 시간")
 	LocalDateTime createdAt,
