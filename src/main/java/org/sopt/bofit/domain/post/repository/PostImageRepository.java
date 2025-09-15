@@ -2,7 +2,7 @@ package org.sopt.bofit.domain.post.repository;
 
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.entity.PostImage;
-import org.sopt.bofit.domain.post.entity.constant.PostStatus;
+import org.sopt.bofit.domain.post.entity.constant.PostImageStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -19,5 +19,5 @@ public interface PostImageRepository extends JpaRepository<PostImage, Long> {
 
     boolean existsByIdAndPostId(Long id, Long postId);
 
-    List<PostImage> findAllByPostAndStatus(Post post, PostStatus status);
+    List<PostImage> findAllByPostAndStatus(Post post, PostImageStatus status);
 }
