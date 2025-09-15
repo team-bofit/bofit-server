@@ -1,5 +1,21 @@
 package org.sopt.bofit.domain.post.controller;
 
+import static org.sopt.bofit.domain.comment.constant.CommentConstant.COMMENTS_DEFAULT_SIZE;
+import static org.sopt.bofit.domain.post.constant.PostConstant.POSTS_DEFAULT_SIZE;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CREATE_COMMENT;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CREATE_COMMENT_REPLY;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CREATE_POST;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CREATE_POST_LIKE;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DELETE_COMMENT;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DELETE_POST;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DELETE_POST_LIKE;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.POST_DETAIL;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.UPDATE_COMMENT;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.UPDATE_COMMENT_REPLY;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.UPDATE_POST;
+import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_DESCRIPTION_COMMUNITY;
+import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_NAME_COMMUNITY;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,6 +26,7 @@ import org.sopt.bofit.domain.comment.dto.request.CommentUpdateRequest;
 import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
 import org.sopt.bofit.domain.comment.service.CommentService;
 import org.sopt.bofit.domain.commentreply.dto.request.CommentReplyCreateRequest;
+import org.sopt.bofit.domain.commentreply.dto.request.CommentReplyUpdateRequest;
 import org.sopt.bofit.domain.commentreply.service.CommentReplyService;
 import org.sopt.bofit.domain.post.dto.request.PostCreateRequest;
 import org.sopt.bofit.domain.post.dto.request.PostUpdateRequest;
@@ -188,6 +205,21 @@ public class PostController {
     ){
         commentReplyService.create(userId, postId, commentId, request.toCommand());
         return BaseResponse.create("대댓글 작성 성공");
+    }
+
+    @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
+    @Operation(summary = "대댓글 수정", description = "유저가 커뮤니티 댓글의 대댓글을 수정합니다.")
+    @CustomExceptionDescription(UPDATE_COMMENT_REPLY)
+    @PatchMapping("/{post-id}/comments/{comment-id}/reply/{comment-reply-id}")
+    public BaseResponse<Void> updateCommentReply(
+        @PathVariable(name = "post-id") Long postId,
+        @PathVariable(name = "comment-id") Long commentId,
+        @PathVariable(name = "comment-reply-id") Long commentReplyId,
+        @Parameter(hidden = true) @LoginUserId Long userId,
+        @RequestBody @Valid CommentReplyUpdateRequest request
+    ){
+        commentReplyService.update(userId, postId, commentId, commentReplyId, request.toCommand());
+        return BaseResponse.create("대댓글 수정 성공");
     }
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)

@@ -2,6 +2,8 @@ package org.sopt.bofit.domain.commentreply.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,12 +14,16 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.commentreply.constant.CommentReplyConstant;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.global.entity.BaseEntity;
+import org.sopt.bofit.global.exception.constant.CommentReplyErrorCode;
+import org.sopt.bofit.global.exception.customexception.BadRequestException;
 
+@Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(indexes = {
@@ -40,7 +46,10 @@ public class CommentReply extends BaseEntity {
     private User user;
 
     @Column(nullable = false, length = CommentReplyConstant.MAX_CONTENT_LENGTH)
-    String content;
+    private String content;
+
+    @Enumerated(EnumType.STRING)
+    private CommentReplyStatus status;
 
     public static CommentReply create(Comment comment, User user, String content){
         return CommentReply.builder()
@@ -55,5 +64,17 @@ public class CommentReply extends BaseEntity {
         this.comment = comment;
         this.user = user;
         this.content = content;
+        this.status = CommentReplyStatus.ACTIVE;
     }
+
+    public void checkComment(Comment comment){
+        if (! this.comment.equals(comment)){
+            throw new BadRequestException(CommentReplyErrorCode.UNMATCHED_COMMENT_REPLY_COMMENT);
+        }
+    }
+
+    public void updateContent(String content){
+        this.content = content;
+    }
+
 }
