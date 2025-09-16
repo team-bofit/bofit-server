@@ -3,6 +3,7 @@ package org.sopt.bofit.domain.comment.service;
 import static org.sopt.bofit.domain.comment.constant.CommentConstant.MAX_IMAGE_COUNT;
 import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_UNAUTHORIZED;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import java.util.Set;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
+import org.sopt.bofit.domain.comment.dto.response.CommentWithImagesResponse;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.comment.entity.CommentImage;
 import org.sopt.bofit.domain.comment.service.dto.request.CommentCreateCommand;
@@ -27,14 +29,6 @@ import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import static org.sopt.bofit.domain.comment.constant.CommentConstant.MAX_IMAGE_COUNT;
-import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_UNAUTHORIZED;
 
 
 @Service
@@ -104,12 +98,19 @@ public class CommentService {
 		commentWriter.softDelete(comment);
 	}
 
-	public SliceResponse<CommentResponse, Long> findAllByPostIdAndCursor(Long postId, Long userId, Optional<Long> cursor, int size) {
+    @Transactional(readOnly = true)
+	public SliceResponse<CommentWithImagesResponse, Long> findAllByPostIdAndCursor(Long postId, Long userId, Optional<Long> cursor, int size) {
 		Post post = postReader.getActiveById(postId);
 
 		Slice<CommentResponse> commentsByCursorId = commentReader.findCommentsByCursorId(postId, cursor, size);
+        Map<Long, List<CommentImage>> imagesOfComments = commentImageReader.groupActiveImagesByCommentIds(
+            commentsByCursorId.getContent().stream()
+                .map(CommentResponse::commentId).toList());
 
-		return SliceResponse.from(commentsByCursorId);
+        Slice<CommentWithImagesResponse> commentWithImages = commentsByCursorId.map( commentResponse ->
+            CommentWithImagesResponse.of(commentResponse, imagesOfComments.getOrDefault(commentResponse.commentId(), Collections.emptyList())));
+
+        return SliceResponse.from(commentWithImages);
 	}
 
     private void validImageCount(int existImageCount){
