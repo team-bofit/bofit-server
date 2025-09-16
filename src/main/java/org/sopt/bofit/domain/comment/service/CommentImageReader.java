@@ -21,10 +21,10 @@ public class CommentImageReader {
             .collect(Collectors.toMap(CommentImage::getId, Function.identity()));
     }
 
-    public Map<Comment, List<CommentImage>> groupActiveImagesByComments(List<Comment> comments){
-        return commentImageRepository.findAllByStatusAndCommentIn(CommentImageStatus.ACTIVE, comments).stream()
+    public Map<Long, List<CommentImage>> groupActiveImagesByCommentIds(List<Long> commentIds){
+        return commentImageRepository.findAllByStatusAndCommentIdIn(CommentImageStatus.ACTIVE, commentIds).stream()
             .sorted(CommentImage::compareTo)
-            .collect(Collectors.groupingBy(CommentImage::getComment));
+            .collect(Collectors.groupingBy(commentImage -> commentImage.getComment().getId()));
     }
 
 }

@@ -12,6 +12,5 @@ import org.springframework.stereotype.Repository;
 public interface CommentImageRepository extends JpaRepository<CommentImage, Long> {
     List<CommentImage> findAllByCommentAndStatus(Comment comment, CommentImageStatus status);
 
-    List<CommentImage> findAllByStatusAndCommentIn(CommentImageStatus status, Collection<Comment> comments);
-
+    List<CommentImage> findAllByStatusAndCommentIdIn(CommentImageStatus status, Collection<Long> commentIds);
 }
