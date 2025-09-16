@@ -1,13 +1,14 @@
 package org.sopt.bofit.domain.insurancereport.service;
 
-import static org.sopt.bofit.global.constant.CacheConstant.*;
-import static org.sopt.bofit.global.external.openai.constant.OpenAiRole.*;
+import static org.sopt.bofit.global.constant.CacheConstant.INSURANCE_REPORT_CACHE_NAME;
+import static org.sopt.bofit.global.external.openai.constant.OpenAiRole.SYSTEM;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.sopt.bofit.domain.insurance.entity.benefit.InsuranceBenefit;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
@@ -29,9 +30,6 @@ import org.sopt.bofit.global.external.openai.template.OpenAiPromptManager;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -67,75 +65,83 @@ public class InsuranceReportWriter {
 		return scoringRuledProduct.orElseGet(insuranceProductReader::getRecommendedStatusProducts);
 	}
 
+    public InsuranceReport createReport(
+        InsuranceStatistic average,
+        InsuranceProduct product,
+        User user,
+        UserInfo userInfo,
+        int age
+    ){
+        CoverageStatus cancerStatus = cancerCoverageStatus(product, average);
+        CoverageStatus cerebrovascularStatus = cerebrovascularCoverageStatus(product, average);
+        CoverageStatus heartDiseaseStatus = heartDiseaseCoverageStatus(product, average);
+        CoverageStatus majorDiseaseStatus = CoverageStatus.judgeFromCoverageStatuses(
+            List.of(cancerStatus, cerebrovascularStatus, heartDiseaseStatus));
+
+        CoverageStatus diseaseSurgeryStatus = diseaseSurgeryCoverageStatus(product, average);
+        CoverageStatus diseaseTypeSurgeryStatus = diseaseTypeSurgeryCoverageStatus(product, average);
+        CoverageStatus injurySurgeryStatus = injurySurgeryCoverageStatus(product, average);
+        CoverageStatus injuryTypeSurgeryStatus = injuryTypeSurgeryCoverageStatus(product, average);
+        CoverageStatus surgeryStatus = CoverageStatus.judgeFromCoverageStatuses(
+            List.of(diseaseSurgeryStatus, diseaseTypeSurgeryStatus, injurySurgeryStatus, injuryTypeSurgeryStatus));
+
+        CoverageStatus diseaseDailyHospitalizationStatus = diseaseDailyHospitalizationCoverageStatus(product, average);
+        CoverageStatus injuryDailyHospitalizationStatus = injuryDailyHospitalizationCoverageStatus(product, average);
+        CoverageStatus dailyHospitalizationStatus = CoverageStatus.judgeFromCoverageStatuses(
+            List.of(diseaseDailyHospitalizationStatus, injuryDailyHospitalizationStatus));
+
+        CoverageStatus diseaseDisabilityStatus = diseaseDisabilityCoverageStatus(product, average);
+        CoverageStatus injuryDisabilityStatus = injuryDisabilityCoverageStatus(product, average);
+        CoverageStatus disabilityStatus = CoverageStatus.judgeFromCoverageStatuses(
+            List.of(diseaseDisabilityStatus, injuryDisabilityStatus));
+
+        CoverageStatus diseaseDeathStatus = diseaseDeathCoverageStatus(product, average);
+        CoverageStatus injuryDeathStatus = injuryDeathCoverageStatus(product, average);
+        CoverageStatus deathStatus = CoverageStatus.judgeFromCoverageStatuses(
+            List.of(diseaseDeathStatus, injuryDeathStatus));
+
+        InsuranceReport report = InsuranceReport.builder()
+            .user(user)
+            .product(product)
+            .statistic(average)
+
+            .cancer(cancerStatus)
+            .cerebrovascular(cerebrovascularStatus)
+            .heartDisease(heartDiseaseStatus)
+            .majorDisease(majorDiseaseStatus)
+
+            .diseaseSurgery(diseaseSurgeryStatus)
+            .diseaseTypeSurgery(diseaseTypeSurgeryStatus)
+            .injurySurgery(injurySurgeryStatus)
+            .injuryTypeSurgery(injuryTypeSurgeryStatus)
+            .surgery(surgeryStatus)
+
+            .diseaseDailyHospitalization(diseaseDailyHospitalizationStatus)
+            .injuryDailyHospitalization(injuryDailyHospitalizationStatus)
+            .dailyHospitalization(dailyHospitalizationStatus)
+
+            .diseaseDisability(diseaseDisabilityStatus)
+            .injuryDisability(injuryDisabilityStatus)
+            .disability(disabilityStatus)
+
+            .diseaseDeath(diseaseDeathStatus)
+            .injuryDeath(injuryDeathStatus)
+            .death(deathStatus)
+
+            .build();
+
+        report.updateRationale(generateRationale(user, userInfo, report, age));
+        return report;
+    }
+
+    @Transactional
 	@CachePut(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id", unless = "#result==null")
-	public InsuranceReport writeReport(
-		InsuranceStatistic average,
-		InsuranceProduct product,
+	public InsuranceReport saveReport(
+		InsuranceReport report,
 		User user,
-		UserInfo userInfo,
-		int age
+		UserInfo userInfo
 	){
-		CoverageStatus cancerStatus = cancerCoverageStatus(product, average);
-		CoverageStatus cerebrovascularStatus = cerebrovascularCoverageStatus(product, average);
-		CoverageStatus heartDiseaseStatus = heartDiseaseCoverageStatus(product, average);
-		CoverageStatus majorDiseaseStatus = CoverageStatus.judgeFromCoverageStatuses(
-			List.of(cancerStatus, cerebrovascularStatus, heartDiseaseStatus));
-
-		CoverageStatus diseaseSurgeryStatus = diseaseSurgeryCoverageStatus(product, average);
-		CoverageStatus diseaseTypeSurgeryStatus = diseaseTypeSurgeryCoverageStatus(product, average);
-		CoverageStatus injurySurgeryStatus = injurySurgeryCoverageStatus(product, average);
-		CoverageStatus injuryTypeSurgeryStatus = injuryTypeSurgeryCoverageStatus(product, average);
-		CoverageStatus surgeryStatus = CoverageStatus.judgeFromCoverageStatuses(
-			List.of(diseaseSurgeryStatus, diseaseTypeSurgeryStatus, injurySurgeryStatus, injuryTypeSurgeryStatus));
-
-		CoverageStatus diseaseDailyHospitalizationStatus = diseaseDailyHospitalizationCoverageStatus(product, average);
-		CoverageStatus injuryDailyHospitalizationStatus = injuryDailyHospitalizationCoverageStatus(product, average);
-		CoverageStatus dailyHospitalizationStatus = CoverageStatus.judgeFromCoverageStatuses(
-			List.of(diseaseDailyHospitalizationStatus, injuryDailyHospitalizationStatus));
-
-		CoverageStatus diseaseDisabilityStatus = diseaseDisabilityCoverageStatus(product, average);
-		CoverageStatus injuryDisabilityStatus = injuryDisabilityCoverageStatus(product, average);
-		CoverageStatus disabilityStatus = CoverageStatus.judgeFromCoverageStatuses(
-			List.of(diseaseDisabilityStatus, injuryDisabilityStatus));
-
-		CoverageStatus diseaseDeathStatus = diseaseDeathCoverageStatus(product, average);
-		CoverageStatus injuryDeathStatus = injuryDeathCoverageStatus(product, average);
-		CoverageStatus deathStatus = CoverageStatus.judgeFromCoverageStatuses(
-			List.of(diseaseDeathStatus, injuryDeathStatus));
-
-		InsuranceReport report = InsuranceReport.builder()
-			.user(user)
-			.product(product)
-			.statistic(average)
-
-			.cancer(cancerStatus)
-			.cerebrovascular(cerebrovascularStatus)
-			.heartDisease(heartDiseaseStatus)
-			.majorDisease(majorDiseaseStatus)
-
-			.diseaseSurgery(diseaseSurgeryStatus)
-			.diseaseTypeSurgery(diseaseTypeSurgeryStatus)
-			.injurySurgery(injurySurgeryStatus)
-			.injuryTypeSurgery(injuryTypeSurgeryStatus)
-			.surgery(surgeryStatus)
-
-			.diseaseDailyHospitalization(diseaseDailyHospitalizationStatus)
-			.injuryDailyHospitalization(injuryDailyHospitalizationStatus)
-			.dailyHospitalization(dailyHospitalizationStatus)
-
-			.diseaseDisability(diseaseDisabilityStatus)
-			.injuryDisability(injuryDisabilityStatus)
-			.disability(disabilityStatus)
-
-			.diseaseDeath(diseaseDeathStatus)
-			.injuryDeath(injuryDeathStatus)
-			.death(deathStatus)
-
-			.build();
-
-		report.updateRationale(generateRationale(user, userInfo, report, age));
 		user.recommendedInsurance();
-
 		InsuranceReport savedInsuranceReport = insuranceReportRepository.save(report);
 		userInfoWriter.save(userInfo.updateReport(savedInsuranceReport));
 		return savedInsuranceReport;
