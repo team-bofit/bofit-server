@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.Length;
 import org.sopt.bofit.domain.post.entity.constant.PostInfoConstant;
 import org.sopt.bofit.domain.post.service.dto.request.PostUpdateCommand;
 import org.sopt.bofit.global.annotation.ValidPostCategory;
-import org.sopt.bofit.global.file.dto.request.NewImageRequest;
 import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 
 import java.util.List;
@@ -29,20 +28,18 @@ public record PostUpdateRequest(
         @ValidPostCategory
         String newCategory,
 
-        @Schema(description = "추가할 이미지 목록")
+        @Schema(description = "수정된 이미지 목록")
+        @NotNull(message = "수정된 url 목록은  null 일 수 없습니다.")
         @Valid
-        List<NewImageRequest> newImages,
-
-        @Schema(description = "수정할 이미지 목록")
-        @Valid
-        List<UpdateImageRequest> updateImages,
+        List<UpdateImageRequest> updatedImages,
 
         @Schema(description = "삭제할 이미지 ID 목록")
+        @NotNull(message = "삭제된 url 목록은  null 일 수 없습니다.")
         @Valid
         List<@NotNull Long> deleteImageIds
 
 ) {
    public PostUpdateCommand toCommand(){
-        return new PostUpdateCommand(this.newTitle, this.newContent, this.newCategory, this.newImages, this.updateImages, this.deleteImageIds);
+        return new PostUpdateCommand(this.newTitle, this.newContent, this.newCategory, this.updatedImages, this.deleteImageIds);
    }
 }

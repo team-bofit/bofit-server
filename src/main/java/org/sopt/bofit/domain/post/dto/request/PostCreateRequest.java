@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import org.hibernate.validator.constraints.Length;
 import org.sopt.bofit.domain.post.entity.constant.PostInfoConstant;
+import org.sopt.bofit.domain.post.service.dto.request.PostCreateCommand;
 import org.sopt.bofit.global.annotation.ValidPostCategory;
 
 import java.util.List;
@@ -27,5 +28,7 @@ public record PostCreateRequest(
         @Schema(description = "이미지 url")
         List<String> imageUrls
 ) {
-
+    public PostCreateCommand toCommand() {
+        return new PostCreateCommand(title, content, category, imageUrls);
+    }
 }

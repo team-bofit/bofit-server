@@ -64,4 +64,5 @@ public class CommentImage extends BaseEntity {
     public void updateSequence(Integer newSequence){
         this.sequence = newSequence;
     }
+
 }
