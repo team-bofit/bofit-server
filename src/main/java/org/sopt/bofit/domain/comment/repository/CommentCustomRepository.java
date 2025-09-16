@@ -1,8 +1,7 @@
 package org.sopt.bofit.domain.comment.repository;
 
 import java.util.Optional;
-
-import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
+import org.sopt.bofit.domain.comment.service.dto.response.CommentResponse;
 import org.sopt.bofit.domain.user.dto.response.MyCommentSummaryResponse;
 import org.springframework.data.domain.Slice;
 

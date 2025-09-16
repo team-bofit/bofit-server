@@ -1,4 +1,4 @@
-package org.sopt.bofit.domain.comment.dto.response;
+package org.sopt.bofit.domain.comment.service.dto.response;
 
 import org.sopt.bofit.domain.comment.entity.CommentImage;
 

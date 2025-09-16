@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.Builder;
 import org.sopt.bofit.domain.comment.entity.CommentImage;
+import org.sopt.bofit.domain.comment.service.dto.response.CommentImageResponse;
+import org.sopt.bofit.domain.comment.service.dto.response.CommentResponse;
 import org.sopt.bofit.global.dto.response.CursorProvider;
 
 public record CommentWithImagesResponse (
