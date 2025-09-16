@@ -1,9 +1,8 @@
 package org.sopt.bofit.domain.post.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.sopt.bofit.global.dto.response.CursorProvider;
-
 import java.time.LocalDateTime;
+import org.sopt.bofit.global.dto.response.CursorProvider;
 
 public record PostSummaryResponse (
         @Schema(description = "게시글 ID")
@@ -38,7 +37,7 @@ public record PostSummaryResponse (
 
 ) implements CursorProvider<Long>{
         @Override
-        public Long getCursor() {
+        public Long nextCursor() {
                 return postId;
         }
 }

@@ -1,5 +1,6 @@
 package org.sopt.bofit.domain.comment.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -19,4 +20,11 @@ public class CommentImageReader {
         return commentImageRepository.findAllByCommentAndStatus(comment,CommentImageStatus.ACTIVE).stream()
             .collect(Collectors.toMap(CommentImage::getId, Function.identity()));
     }
+
+    public Map<Long, List<CommentImage>> groupActiveImagesByCommentIds(List<Long> commentIds){
+        return commentImageRepository.findAllByStatusAndCommentIdIn(CommentImageStatus.ACTIVE, commentIds).stream()
+            .sorted(CommentImage::compareTo)
+            .collect(Collectors.groupingBy(commentImage -> commentImage.getComment().getId()));
+    }
+
 }

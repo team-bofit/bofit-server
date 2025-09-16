@@ -1,9 +1,8 @@
 package org.sopt.bofit.domain.user.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import org.sopt.bofit.global.dto.response.CursorProvider;
-
 import java.time.LocalDateTime;
+import org.sopt.bofit.global.dto.response.CursorProvider;
 
 public record MyPostSummaryResponse(
 
@@ -30,7 +29,7 @@ public record MyPostSummaryResponse(
 ) implements CursorProvider<Long> {
 
         @Override
-        public Long getCursor() {
+        public Long nextCursor() {
                 return postId;
         }
 }

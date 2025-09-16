@@ -2,19 +2,18 @@ package org.sopt.bofit.domain.comment.repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.sopt.bofit.domain.comment.dto.response.CommentResponse;
 import org.sopt.bofit.domain.comment.entity.CommentStatus;
 import org.sopt.bofit.domain.comment.entity.QComment;
+import org.sopt.bofit.domain.comment.service.dto.response.CommentResponse;
 import org.sopt.bofit.domain.user.dto.response.MyCommentSummaryResponse;
 import org.sopt.bofit.domain.user.entity.QUser;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -26,7 +25,6 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
 
     @Override
     public Slice<MyCommentSummaryResponse> findCommentsByCursorId(Long userId, Long cursorId, int size) {
-
 
         List<MyCommentSummaryResponse> content = queryFactory
                 .select(Projections.constructor(MyCommentSummaryResponse.class,
@@ -66,6 +64,7 @@ public class CommentCustomRepositoryImpl implements CommentCustomRepository {
                 user.nickname,
                 user.profileImage,
                 comment.content,
+                comment.replyCount,
                 comment.createdAt,
                 comment.updatedAt
             ))
