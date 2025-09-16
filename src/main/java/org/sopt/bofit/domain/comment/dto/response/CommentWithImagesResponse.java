@@ -73,7 +73,7 @@ public record CommentWithImagesResponse (
     }
 
     @Override
-    public Long getCursor() {
+    public Long nextCursor() {
         return commentId;
     }
 }
