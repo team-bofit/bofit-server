@@ -14,7 +14,8 @@ public enum PostErrorCode implements ErrorCode {
     POST_LIKE_CREATE_CONFLICT(HttpStatus.CONFLICT.value(), "이미 좋아요를 누른 게시글입니다."),
     POST_LIKE_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 게시글의 좋아요를 찾을 수 없습니다."),
     POST_IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND.value(), "해당 게시물의 이미지를 찾을 수 없습니다."),
-    POST_IMAGE_MISMATCH(HttpStatus.BAD_REQUEST.value(), "해당 게시물에 속하지 않는 이미지입니다.")
+    POST_IMAGE_MISMATCH(HttpStatus.BAD_REQUEST.value(), "해당 게시물에 속하지 않는 이미지입니다."),
+    UNMATCHED_IMAGE(HttpStatus.BAD_REQUEST.value(), "기존 이미지와 수정/삭제하려는 이미지가 일치하지 않습니다.")
 
     ;
     private final int httpStatus;

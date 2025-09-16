@@ -70,7 +70,7 @@ public class PostController {
             @RequestBody @Valid PostCreateRequest request,
             @Parameter(hidden = true) @LoginUserId Long userId
     ){
-        return BaseResponse.create(postService.createPost(userId, request.title(), request.content(),request.category(), request.imageUrls()),"게시물 생성 완료");
+        return BaseResponse.create(postService.createPost(userId, request.toCommand()),"게시물 생성 완료");
     }
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)

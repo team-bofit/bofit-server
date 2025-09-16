@@ -1,11 +1,6 @@
 package org.sopt.bofit.domain.commentreply.service;
 
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.comment.service.CommentReader;
@@ -18,12 +13,14 @@ import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.service.PostReader;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReader;
-import org.sopt.bofit.global.exception.constant.CommentErrorCode;
 import org.sopt.bofit.global.exception.constant.CommentReplyErrorCode;
-import org.sopt.bofit.global.exception.customexception.BadRequestException;
 import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
+import org.sopt.bofit.global.file.util.ImageValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -76,11 +73,10 @@ public class CommentReplyService {
 
         Map<Long, CommentReplyImage> commentReplyImageMap = commentReplyImageReader.getActiveImagesAsMap(commentReply);
 
-        validImageIds(commentReplyImageMap.keySet(),
-            command.updatedImages().stream()
-                .filter(image -> image.id() != null)
-                .map(UpdateImageRequest::id).toList(),
-            command.deleteImageIds());
+        ImageValidator.validImageIds(commentReplyImageMap.keySet(), command.updatedImages().stream()
+                        .filter(image -> image.id() != null).map(UpdateImageRequest::id).toList(),
+                command.deleteImageIds());
+
         commentReplyImageWriter.softDelete(commentReplyImageMap, command.deleteImageIds());
         commentReplyImageWriter.updateAll(commentReply, commentReplyImageMap, command.updatedImages());
         command.content().ifPresent(commentReply::updateContent);
@@ -94,15 +90,4 @@ public class CommentReplyService {
         commentReply.getUser().checkIsWriter(requestUser, CommentReplyErrorCode.COMMENT_REPLY_UNAUTHORIZED);
     }
 
-    /**
-     * 기존 comment의 이미지가 수정 + 삭제하려는 이미지와 동일한지 검증
-     */
-    private void validImageIds(Set<Long> currentImageIds, List<Long> existIds, List<Long> deletedIds){
-        Set<Long> expectedIds = new HashSet<>(existIds);
-        expectedIds.addAll(deletedIds);
-
-        if(!currentImageIds.equals(expectedIds)){
-            throw new BadRequestException(CommentErrorCode.UNMATCHED_COMMENT_IMAGE);
-        }
-    }
 }
