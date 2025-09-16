@@ -10,7 +10,7 @@ import org.sopt.bofit.domain.comment.service.dto.response.CommentResponse;
 import org.sopt.bofit.global.dto.response.CursorProvider;
 
 public record CommentWithImagesResponse (
-    @Schema(description = "게시글 id")
+    @Schema(description = "댓글 ID")
     Long commentId,
 
     @Schema(description = "작성자 ID")
