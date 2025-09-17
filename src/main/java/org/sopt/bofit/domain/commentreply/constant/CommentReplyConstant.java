@@ -8,5 +8,6 @@ public class CommentReplyConstant {
 
     public static final int MAX_CONTENT_LENGTH = 300;
     public static final int MAX_IMAGE_COUNT = 1;
+    public static final String COMMENT_REPLY_DEFAULT_SIZE = "10";
 
 }
