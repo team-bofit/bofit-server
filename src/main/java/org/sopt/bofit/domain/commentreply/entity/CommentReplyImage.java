@@ -20,7 +20,7 @@ import org.sopt.bofit.global.file.constant.ImageConstant;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CommentReplyImage extends BaseEntity {
+public class CommentReplyImage extends BaseEntity implements Comparable<CommentReplyImage> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -64,4 +64,8 @@ public class CommentReplyImage extends BaseEntity {
         this.sequence = sequence;
     }
 
+    @Override
+    public int compareTo(CommentReplyImage commentReplyImage) {
+        return Integer.compare(this.sequence, commentReplyImage.sequence);
+    }
 }
