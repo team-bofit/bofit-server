@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserRepository;
+import org.sopt.bofit.domain.user.service.UserReader;
+import org.sopt.bofit.domain.user.service.UserWriter;
 import org.sopt.bofit.global.config.properties.KakaoProperties;
 import org.sopt.bofit.global.exception.customexception.BadRequestException;
 import org.sopt.bofit.global.exception.customexception.UnAuthorizedException;
@@ -38,6 +40,10 @@ public class OAuthService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     private final UserRepository userRepository;
+
+    private final UserReader userReader;
+
+    private final UserWriter userWriter;
 
     private final JwtProvider jwtProvider;
 
@@ -132,6 +138,20 @@ public class OAuthService {
                 .ifPresent(refreshTokenRepository::delete);
 
         return OAuthUtil.buildKakaoLogoutRedirectUrl(properties.logoutUri(), properties.clientId(), redirectUri).toString();
+    }
+
+    @Transactional
+    public void unlink(Long userId){
+        User user = userReader.getActiveById(userId);
+
+        oAuthClient.unlinkByAdminKey(user.getOauthId());
+
+        userWriter.unlinkUser(user);
+
+        //재가입 대비 oauthId 충돌 방지
+        user.updateOauthId(user.getOauthId() + ":INACTIVE");
+
+        refreshTokenRepository.findByUserId(userId).ifPresent(refreshTokenRepository::delete);
     }
 }
 

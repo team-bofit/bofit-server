@@ -62,5 +62,15 @@ public class OAuthController {
         return BaseResponse.ok(oAuthService.logout(userId, redirectUrl), "카카오 로그아웃 성공, 반환된 URL로 리다이렉트 시켜주세요");
     }
 
+    @Tag(name = TAG_NAME_KAKAO_LOGIN, description = TAG_DESCRIPTION_KAKAO_LOGIN)
+    @Operation(summary = "회원 탈퇴")
+    @DeleteMapping("/kakao/unlink")
+    public BaseResponse<Void> unlink(
+            @LoginUserId @Parameter(hidden = true) Long userId
+    ){
+        oAuthService.unlink(userId);
+        return BaseResponse.ok("회원 탈퇴 성공");
+    }
+
 
 }
