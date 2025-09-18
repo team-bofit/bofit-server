@@ -1,6 +1,7 @@
 package org.sopt.bofit.domain.post.controller;
 
 import static org.sopt.bofit.domain.comment.constant.CommentConstant.COMMENTS_DEFAULT_SIZE;
+import static org.sopt.bofit.domain.commentreply.constant.CommentReplyConstant.COMMENT_REPLY_DEFAULT_SIZE;
 import static org.sopt.bofit.domain.post.constant.PostConstant.POSTS_DEFAULT_SIZE;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CREATE_COMMENT;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CREATE_COMMENT_REPLY;
@@ -29,6 +30,7 @@ import org.sopt.bofit.domain.comment.dto.response.CommentWithImagesResponse;
 import org.sopt.bofit.domain.comment.service.CommentService;
 import org.sopt.bofit.domain.commentreply.dto.request.CommentReplyCreateRequest;
 import org.sopt.bofit.domain.commentreply.dto.request.CommentReplyUpdateRequest;
+import org.sopt.bofit.domain.commentreply.dto.response.CommentReplyWithImagesResponse;
 import org.sopt.bofit.domain.commentreply.service.CommentReplyService;
 import org.sopt.bofit.domain.post.dto.request.PostCreateRequest;
 import org.sopt.bofit.domain.post.dto.request.PostUpdateRequest;
@@ -209,6 +211,21 @@ public class PostController {
     ){
         commentReplyService.create(userId, postId, commentId, request.toCommand());
         return BaseResponse.create("대댓글 작성 성공");
+    }
+
+    @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
+    @Operation(summary = "대댓글 조회", description = "커뮤니티 댓글의 대댓글을 조회합니다.")
+    @GetMapping("/{post-id}/comments/{comment-id}/reply")
+    public BaseResponse<SliceResponse<CommentReplyWithImagesResponse, Long>> getCommentReply(
+        @PathVariable(name = "post-id") Long postId,
+        @PathVariable(name = "comment-id") Long commentId,
+        @Parameter(hidden = true) @LoginUserId Long userId,
+        @RequestParam(required = false, name = "cursor") Long cursorId,
+        @RequestParam(defaultValue = COMMENT_REPLY_DEFAULT_SIZE) int size
+    ){
+        SliceResponse<CommentReplyWithImagesResponse, Long> response =
+            commentReplyService.findAllWithCursor(postId, commentId, userId, Optional.of(cursorId), size);
+        return BaseResponse.ok(response, "대댓글 목록 조회 성공");
     }
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)

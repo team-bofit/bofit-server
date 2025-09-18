@@ -1,5 +1,6 @@
 package org.sopt.bofit.domain.commentreply.repository;
 
+import java.util.Collection;
 import java.util.List;
 import org.sopt.bofit.domain.commentreply.entity.CommentReply;
 import org.sopt.bofit.domain.commentreply.entity.CommentReplyImage;
@@ -12,4 +13,5 @@ public interface CommentReplyImageRepository extends JpaRepository<CommentReplyI
 
     List<CommentReplyImage> findAllByCommentReplyAndStatus(CommentReply commentReply, CommentReplyImageStatus status);
 
+    List<CommentReplyImage> findAllByStatusAndCommentReplyIdIn(CommentReplyImageStatus status, Collection<Long> commentReplyIds);
 }

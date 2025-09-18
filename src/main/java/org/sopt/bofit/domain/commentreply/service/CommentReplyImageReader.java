@@ -1,5 +1,7 @@
 package org.sopt.bofit.domain.commentreply.service;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -19,5 +21,11 @@ public class CommentReplyImageReader {
     public Map<Long, CommentReplyImage> getActiveImagesAsMap(CommentReply commentReply){
         return commentReplyImageRepository.findAllByCommentReplyAndStatus(commentReply, CommentReplyImageStatus.ACTIVE).stream()
             .collect(Collectors.toMap(CommentReplyImage::getId, Function.identity()));
+    }
+
+    public Map<Long, List<CommentReplyImage>> groupActiveImagesByReplyIds(Collection<Long> replyIds){
+        return commentReplyImageRepository.findAllByStatusAndCommentReplyIdIn(CommentReplyImageStatus.ACTIVE, replyIds).stream()
+            .sorted(CommentReplyImage::compareTo)
+            .collect(Collectors.groupingBy(image-> image.getCommentReply().getId()));
     }
 }
