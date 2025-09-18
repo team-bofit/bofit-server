@@ -1,12 +1,14 @@
 package org.sopt.bofit.domain.insurancereport.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.anyList;
+import static org.mockito.Mockito.when;
+import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONALE_REASONS;
+import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONAL_KEYWORD_CHIPS;
 
 import java.util.List;
 import java.util.Map;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,7 @@ import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurance.entity.statistic.StatisticRange;
 import org.sopt.bofit.domain.insurance.repository.InsuranceProductRepository;
 import org.sopt.bofit.domain.insurance.repository.InsuranceStatisticRepository;
+import org.sopt.bofit.domain.insurancereport.builder.InsuranceReportTestBuilder;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
 import org.sopt.bofit.domain.insurancereport.repository.InsuranceReportRepository;
@@ -114,9 +117,65 @@ class InsuranceReportWriterTest extends IntegrationTestSupport {
 			.containsExactly(InsuranceStatus.RECOMMENDED, "추천 상품1");
 	}
 
-	@DisplayName("리포트를 정상적으로 생성함")
+    @DisplayName("리포트를 정상적으로 생성해서 반환함.")
+    @Test
+    void createReport(){
+        // given
+        String productName = "테스트용 보험 상품";
+        InsuranceProduct product = new InsuranceProductTestBuilder()
+            .withName(productName)
+            .build();
+
+        InsuranceStatistic statistic = new InsuranceStatisticTestBuilder()
+            .withStatisticRange(StatisticRange.TOTAL_AVERAGE)
+            .build();
+
+        String userName = "유저1";
+        User user = User.builder()
+            .name(userName)
+            .loginProvider(LoginProvider.KAKAO)
+            .gender(Gender.FEMALE)
+            .job(Job.STUDENT)
+            .isMarried(false)
+            .hasChild(false)
+            .oauthId("0123456")
+            .build();
+
+        Map<CoveragePreference, Integer> selectedCoverages = Map.of(
+            CoveragePreference.MAXIMUM_COVERAGE, 1,
+            CoveragePreference.MAJOR_DISEASE, 2
+        );
+
+        UserInfo userInfo = UserInfo.builder()
+            .minPrice(10000)
+            .maxPrice(100000)
+            .familyHistory(List.of(DiagnosedDisease.NONE))
+            .diseaseHistory(List.of(DiagnosedDisease.NONE))
+            .coveragePreferences(selectedCoverages)
+            .user(user)
+            .build();
+
+        InsuranceProduct savedProduct = insuranceProductRepository.save(product);
+        InsuranceStatistic savedStatistic = insuranceStatisticRepository.save(statistic);
+        User savedUser = userRepository.save(user);
+
+        when(openAiClient.sendReportRelationalRequest(anyList()))
+            .thenReturn(new ReportRationale(DEFAULT_RATIONALE_REASONS, DEFAULT_RATIONAL_KEYWORD_CHIPS));
+
+        // when
+        InsuranceReport result = insuranceReportWriter.createReport(statistic, savedProduct, savedUser, userInfo, 30);
+
+        // then
+        assertThat(result)
+            .isNotNull()
+            .extracting("product.basicInformation.name", "user.name", "reportRationale.reasons")
+            .containsExactly(productName, userName, DEFAULT_RATIONALE_REASONS );
+
+    }
+
+	@DisplayName("리포트를 정상적으로 저장하고 유저의 리포트 발급 상태, 유저 입력 데이터 등이 정상적으로 저장됨")
 	@Test
-	void createReport(){
+	void saveReport(){
 	    // given
 		String productName = "테스트용 보험 상품";
 		InsuranceProduct product = new InsuranceProductTestBuilder()
@@ -156,20 +215,19 @@ class InsuranceReportWriterTest extends IntegrationTestSupport {
 		InsuranceStatistic savedStatistic = insuranceStatisticRepository.save(statistic);
 		User savedUser = userRepository.save(user);
 
-		when(openAiClient.sendReportRelationalRequest(anyList()))
-			.thenReturn(new ReportRationale(DEFAULT_RATIONALE_REASONS, DEFAULT_RATIONAL_KEYWORD_CHIPS));
+        InsuranceReport insuranceReport = new InsuranceReportTestBuilder()
+            .withUser(savedUser)
+            .withProduct(savedProduct)
+            .withStatistic(savedStatistic)
+            .build();
 
 	    // when
-		InsuranceReport result = insuranceReportWriter.writeReport(statistic, savedProduct, savedUser, userInfo, 30);
+		InsuranceReport result = insuranceReportWriter.saveReport(insuranceReport, savedUser, userInfo);
 
 		// then
-		assertThat(result)
-			.isNotNull()
-			.extracting("product.basicInformation.name", "user.name", "reportRationale.reasons")
-			.containsExactly(productName, userName, DEFAULT_RATIONALE_REASONS );
-
-		assertThat(userInfoRepository.findAll().size())
-			.isEqualTo(1);
+		assertThat(userInfoRepository.findAll().size()).isEqualTo(1);
+        assertThat(insuranceReportRepository.findAll().size()).isEqualTo(1);
+        assertTrue(savedUser.isRecommendInsurance());
 	}
 
 }

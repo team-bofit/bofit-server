@@ -46,9 +46,8 @@ public class InsuranceReportService {
 		InsuranceProduct recommendedProduct = insuranceReportWriter.recommendBestInsurance(
 			products, user, userInfo, age);
 
-		InsuranceReport insuranceReport = insuranceReportWriter.writeReport(
-			totalAverage, recommendedProduct, user, userInfo, age);
-		user.recommendedInsurance();
+        InsuranceReport createdReport = insuranceReportWriter.createReport(totalAverage, recommendedProduct, user, userInfo, age);
+        InsuranceReport insuranceReport = insuranceReportWriter.saveReport(createdReport, user, userInfo);
 
 		return new IssueInsuranceReportResponse(insuranceReport.getId());
 	}
