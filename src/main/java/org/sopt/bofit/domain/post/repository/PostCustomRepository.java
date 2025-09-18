@@ -12,4 +12,5 @@ public interface PostCustomRepository {
     Slice<PostSummaryResponse> findAllByCursorId(Long userId, Long cursorId, int size);
 
     Slice<PostSummaryResponse> findAllByKeywordAndCursorId(Long userId, String keyword, Long cursorId, int size);
+
 }
