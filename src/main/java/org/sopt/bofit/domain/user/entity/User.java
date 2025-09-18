@@ -104,6 +104,10 @@ public class User extends BaseEntity {
         this.isRecommendInsurance = true;
     }
 
+    public void updateOauthId(String oauthId) {
+        this.oauthId = oauthId;
+    }
+
     public void checkIsWriter(User writer, ErrorCode errorCode) {
         if (!this.equals(writer)) {
             throw new ForbiddenException(errorCode);
@@ -114,6 +118,13 @@ public class User extends BaseEntity {
         if (!this.getId().equals(writerId)) {
             throw new ForbiddenException(errorCode);
         }
+    }
+
+    public void deactivate() {
+        final String UNKNOWN_NICKNAME = "알 수 없음";
+        this.status = UserStatus.INACTIVE;
+        this.nickname = UNKNOWN_NICKNAME;
+        this.profileImage = null;
     }
 
     @Override
