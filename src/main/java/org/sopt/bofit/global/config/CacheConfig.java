@@ -1,6 +1,5 @@
 package org.sopt.bofit.global.config;
 
-import static org.sopt.bofit.domain.post.constant.TrendPostConstant.TREND_POST_CALCULATE_SIZE;
 import static org.sopt.bofit.global.constant.CacheConstant.DEFAULT_CACHE_NAME;
 import static org.sopt.bofit.global.constant.CacheConstant.DISEASE_HISTORY_SCORING_RULE_CACHE_NAME;
 import static org.sopt.bofit.global.constant.CacheConstant.FAMILY_HISTORY_SCORING_RULE_CACHE_NAME;
@@ -68,7 +67,7 @@ public class CacheConfig {
     private Caffeine<Object, Object> trendPostsCacheBuilder(){
         return Caffeine.newBuilder()
             .expireAfterWrite(30, TimeUnit.MINUTES)
-            .maximumSize(TREND_POST_CALCULATE_SIZE)
+            .maximumSize(1)
             .softValues();
     }
 
