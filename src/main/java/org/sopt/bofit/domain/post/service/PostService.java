@@ -1,24 +1,13 @@
 package org.sopt.bofit.domain.post.service;
 
-import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
-import org.sopt.bofit.domain.post.dto.response.TrendingPostsResponses;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.entity.PostImage;
-import org.sopt.bofit.domain.post.entity.TrendPost;
-import org.sopt.bofit.domain.post.entity.constant.TrendPostSort;
 import org.sopt.bofit.domain.post.service.dto.request.PostCreateCommand;
 import org.sopt.bofit.domain.post.service.dto.request.PostUpdateCommand;
-import org.sopt.bofit.domain.post.service.dto.response.TrendingPostDto;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.global.dto.response.SliceResponse;
@@ -26,6 +15,11 @@ import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 import org.sopt.bofit.global.file.util.ImageValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Map;
+import java.util.stream.IntStream;
+
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
 
 @Service
 @RequiredArgsConstructor
@@ -91,8 +85,9 @@ public class PostService {
         trendPostWriter.validDeletePost(post);
     }
 
-    public SliceResponse<PostSummaryResponse, Long> getAllPosts(Long userId, Long cursorId, int size){
-        return postReader.getAllPosts(userId, cursorId, size);
+    public SliceResponse<PostSummaryResponse, Long> getAllPosts(PostSortOrder order, PostCategoryFilter category,
+                                                                Long userId, Long cursorId, int size){
+        return postReader.getAllPosts(order, category, userId, cursorId, size);
     }
 
     public PostDetailResponse getPostDetail(Long userId, Long postId){

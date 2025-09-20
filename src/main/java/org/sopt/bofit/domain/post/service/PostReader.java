@@ -12,6 +12,8 @@ import org.sopt.bofit.domain.comment.repository.CommentRepository;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.entity.Post;
+import org.sopt.bofit.domain.post.entity.constant.PostCategoryFilter;
+import org.sopt.bofit.domain.post.entity.constant.PostSortOrder;
 import org.sopt.bofit.domain.post.entity.constant.PostStatus;
 import org.sopt.bofit.domain.post.repository.PostImageRepository;
 import org.sopt.bofit.domain.post.repository.PostRepository;
@@ -31,9 +33,10 @@ public class PostReader {
 
     private final PostImageRepository postImageRepository;
 
-    public SliceResponse<PostSummaryResponse, Long> getAllPosts(Long userId, Long cursorId, int size){
+    public SliceResponse<PostSummaryResponse, Long> getAllPosts(PostSortOrder order, PostCategoryFilter category,
+                                                                Long userId, Long cursorId, int size){
 
-        Slice<PostSummaryResponse> postList = postRepository.findAllByCursorId(userId, cursorId, size);
+        Slice<PostSummaryResponse> postList = postRepository.findAllByCursorId(order, category, userId, cursorId, size);
 
         return SliceResponse.from(postList);
     }
