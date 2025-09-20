@@ -15,5 +15,6 @@ public class TrendPostConstant {
 
     public static final int TREND_POST_COMMENT_WEIGHT = 1;
     public static final int TREND_POST_LIKE_WEIGHT = 1;
+    public static final int TREND_POST_COMMENT_REPLY_WEIGHT = 2;
 
 }
