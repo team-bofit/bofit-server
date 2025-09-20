@@ -60,8 +60,10 @@ public class UserWriter {
 	}
 
 	@Transactional
-	public void unlinkUser(User user) {
+	public void unlinkUser(Long userId) {
+		User user = userReader.findById(userId);
 		user.deactivate();
+		user.updateOauthId(user.getOauthId() + ":INACTIVE");
 
 		postRepository.updateWriterNicknameByUserId(user.getId(), user.getNickname());
 	}

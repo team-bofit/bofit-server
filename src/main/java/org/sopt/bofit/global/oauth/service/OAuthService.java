@@ -145,10 +145,9 @@ public class OAuthService {
 
         oAuthClient.unlinkByAdminKey(user.getOauthId());
 
-        userWriter.unlinkUser(user);
+        userWriter.unlinkUser(userId);
 
         //재가입 대비 oauthId 충돌 방지
-        user.updateOauthId(user.getOauthId() + ":INACTIVE");
 
         refreshTokenRepository.findByUserId(userId).ifPresent(refreshTokenRepository::delete);
     }
