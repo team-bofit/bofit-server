@@ -1,6 +1,9 @@
 package org.sopt.bofit.domain.post.repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
+import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.user.dto.response.MyPostSummaryResponse;
 import org.springframework.data.domain.Slice;
 
@@ -12,4 +15,7 @@ public interface PostCustomRepository {
     Slice<PostSummaryResponse> findAllByCursorId(Long userId, Long cursorId, int size);
 
     Slice<PostSummaryResponse> findAllByKeywordAndCursorId(Long userId, String keyword, Long cursorId, int size);
+
+    List<Post> findTrendPosts(int size, LocalDateTime now);
+
 }
