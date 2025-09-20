@@ -1,10 +1,16 @@
 package org.sopt.bofit.domain.insurance.controller;
 
-import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
-import static org.sopt.bofit.global.constant.SwaggerConstant.*;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.GET_INSURANCE_REPORT;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.ISSUE_INSURANCE_REPORT;
+import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_DESCRIPTION_INSURANCE;
+import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_NAME_INSURANCE;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.util.UUID;
-
+import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.insurancereport.dto.request.InsuranceReportRequest;
 import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportResponse;
 import org.sopt.bofit.domain.insurancereport.dto.response.IssueInsuranceReportResponse;
@@ -14,7 +20,6 @@ import org.sopt.bofit.domain.insurancereport.dto.response.disability.DisabilityS
 import org.sopt.bofit.domain.insurancereport.dto.response.majordisease.MajorDiseaseSection;
 import org.sopt.bofit.domain.insurancereport.dto.response.surgery.SurgerySection;
 import org.sopt.bofit.domain.insurancereport.service.InsuranceReportService;
-import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserService;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.annotation.LoginUserId;
@@ -26,12 +31,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,8 +47,7 @@ public class InsuranceController {
 	public BaseResponse<IssueInsuranceReportResponse> issueReport(
 		@Parameter(hidden = true) @LoginUserId Long userId,
 		@Valid @RequestBody InsuranceReportRequest request){
-		User user = userService.userUpdate(userId, request.toUserUpdate());
-		IssueInsuranceReportResponse response = insuranceReportService.recommend(user, request.toUserInfo(user));
+		IssueInsuranceReportResponse response = insuranceReportService.recommend(userId, request.toUserInfoCommand(), request.toUserUpdate());
 		return BaseResponse.create(response, "보험 추천 리포트 발급 성공");
 	}
 
