@@ -42,6 +42,7 @@ import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.entity.constant.PostCategoryFilter;
 import org.sopt.bofit.domain.post.dto.response.TrendingPostsResponses;
+import org.sopt.bofit.domain.post.entity.constant.PostSortOrder;
 import org.sopt.bofit.domain.post.service.PostLikeService;
 import org.sopt.bofit.domain.post.service.PostService;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
@@ -109,11 +110,11 @@ public class PostController {
     @GetMapping()
     public BaseResponse<SliceResponse<PostSummaryResponse, Long>> getAllPosts(
             @Parameter(hidden = true) @LoginUserId Long userId,
-            @RequestParam(required = false, defaultValue = "LATEST") String sort,
+            @RequestParam(required = false, defaultValue = "LATEST") PostSortOrder sort,
             @RequestParam (required = false, defaultValue = "ALL") PostCategoryFilter category,
             @RequestParam(required = false, name = "cursor") Long cursorId,
             @RequestParam(required = false, defaultValue = POSTS_DEFAULT_SIZE) int size){
-        return BaseResponse.ok(postService.getAllPosts(userId, cursorId, size), "게시물 전체 조회 성공");
+        return BaseResponse.ok(postService.getAllPosts(sort, category, userId, cursorId, size), "게시물 전체 조회 성공");
     }
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
