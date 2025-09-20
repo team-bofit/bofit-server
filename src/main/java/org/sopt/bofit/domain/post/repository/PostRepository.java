@@ -63,4 +63,6 @@ public interface PostRepository extends PostJpaRepository, PostCustomRepository{
 
     )
     void updateWriterNicknameByUserId(@Param("userId") Long userId, @Param("nickname") String nickname);
+
+
 }
