@@ -17,6 +17,7 @@ public class CacheConstant {
 	public final static String INSURANCE_REPORT_CACHE_NAME = "insuranceReport";
 
     public final static String TRENDING_POSTS_CACHE_NAME = "trendingPosts";
-    public final static String TRENDING_POSTS_CACHE_KEY = "all";
+    public final static String SPEL_TRENDING_POSTS_CACHE_KEY = "'trendingPostAll'";
+    public final static String TRENDING_POSTS_CACHE_KEY = "trendingPostAll";
 
 }
