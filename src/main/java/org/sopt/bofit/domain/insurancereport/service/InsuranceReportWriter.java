@@ -24,6 +24,9 @@ import org.sopt.bofit.domain.insurancereport.service.scoringrule.ScoringRuleCalc
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
 import org.sopt.bofit.domain.user.service.UserInfoWriter;
+import org.sopt.bofit.domain.user.service.UserReader;
+import org.sopt.bofit.domain.user.service.UserWriter;
+import org.sopt.bofit.domain.user.service.dto.request.UserInfoUpdateCommand;
 import org.sopt.bofit.global.external.openai.client.OpenAiClient;
 import org.sopt.bofit.global.external.openai.dto.request.ChatRequestMessage;
 import org.sopt.bofit.global.external.openai.template.OpenAiPromptManager;
@@ -40,6 +43,9 @@ public class InsuranceReportWriter {
 	private final InsuranceProductReader insuranceProductReader;
 
 	private final UserInfoWriter userInfoWriter;
+
+    private final UserReader userReader;
+    private final UserWriter userWriter;
 
 	private final InsuranceReportRepository insuranceReportRepository;
 
@@ -138,12 +144,16 @@ public class InsuranceReportWriter {
 	@CachePut(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id", unless = "#result==null")
 	public InsuranceReport saveReport(
 		InsuranceReport report,
-		User user,
-		UserInfo userInfo
+		User requestUser,
+		UserInfo userInfo,
+        UserInfoUpdateCommand userInfoUpdateCommand
 	){
-		user.recommendedInsurance();
+        User user = userReader.getActiveById(requestUser.getId());
 		InsuranceReport savedInsuranceReport = insuranceReportRepository.save(report);
 		userInfoWriter.save(userInfo.updateReport(savedInsuranceReport));
+
+        userWriter.updateUser(user, userInfoUpdateCommand);
+
 		return savedInsuranceReport;
 	}
 

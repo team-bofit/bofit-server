@@ -19,6 +19,8 @@ import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
 import org.sopt.bofit.domain.user.service.UserReader;
+import org.sopt.bofit.domain.user.service.dto.request.UserInfoCommand;
+import org.sopt.bofit.domain.user.service.dto.request.UserInfoUpdateCommand;
 import org.sopt.bofit.domain.user.util.UserUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,8 +37,10 @@ public class InsuranceReportService {
 
 	private final UserReader userReader;
 
-	public IssueInsuranceReportResponse recommend(User user, UserInfo userInfo){
-		int age = UserUtil.convertInternationalAge(user.getBirthDate());
+	public IssueInsuranceReportResponse recommend(Long userId, UserInfoCommand userInfoCommand, UserInfoUpdateCommand userInfoUpdateCommand){
+		User user = userReader.getActiveById(userId);
+        UserInfo userInfo = userInfoCommand.createUserInfo(user);
+        int age = UserUtil.convertInternationalAge(user.getBirthDate());
 
 		List<InsuranceProduct> products
 			= insuranceProductReader.getAgeAndPremiumFilteredProducts(age, userInfo.getMinPrice(), userInfo.getMaxPrice());
@@ -47,7 +51,7 @@ public class InsuranceReportService {
 			products, user, userInfo, age);
 
         InsuranceReport createdReport = insuranceReportWriter.createReport(totalAverage, recommendedProduct, user, userInfo, age);
-        InsuranceReport insuranceReport = insuranceReportWriter.saveReport(createdReport, user, userInfo);
+        InsuranceReport insuranceReport = insuranceReportWriter.saveReport(createdReport, user, userInfo, userInfoUpdateCommand);
 
 		return new IssueInsuranceReportResponse(insuranceReport.getId());
 	}
