@@ -11,7 +11,7 @@ public class TrendPostConstant {
 
     public static final int TREND_POST_SCORED_DATE_RANGE = 7;
 
-    public static final int TREND_POST_CALCULATE_SIZE = 1;
+    public static final int TREND_POST_CALCULATE_SIZE = 20;
 
     public static final int TREND_POST_COMMENT_WEIGHT = 1;
     public static final int TREND_POST_LIKE_WEIGHT = 1;
