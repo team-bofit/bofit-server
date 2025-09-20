@@ -1,23 +1,20 @@
 package org.sopt.bofit.domain.user.service;
 
+import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.user.dto.response.CoveragePreferenceResponses;
+import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;
+import org.sopt.bofit.domain.user.dto.response.JobResponses;
 import org.sopt.bofit.domain.user.dto.response.MyCommentSummaryResponse;
-
 import org.sopt.bofit.domain.user.dto.response.MyPostSummaryResponse;
+import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
+import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
 import org.sopt.bofit.domain.user.entity.constant.Job;
+import org.sopt.bofit.domain.user.service.dto.request.UserInfoUpdateCommand;
 import org.sopt.bofit.global.dto.response.SliceResponse;
-import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;
-import org.sopt.bofit.domain.user.dto.response.JobResponses;
-import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
-
-import org.sopt.bofit.domain.user.entity.User;
-import org.sopt.bofit.domain.user.service.dto.UserUpdate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -43,18 +40,12 @@ public class UserService {
 	}
 
 	@Transactional
-	public User userUpdate(Long userId, UserUpdate userUpdate){
+	public User userUpdate(Long userId, UserInfoUpdateCommand userInfoUpdateCommand){
 		User user = userReader.findById(userId);
 
 		return userWriter.updateUser(
 			user,
-			userUpdate.name(),
-			userUpdate.gender(),
-			userUpdate.birthDate(),
-			userUpdate.job(),
-			userUpdate.isMarried(),
-			userUpdate.isDriver(),
-			userUpdate.hasChild()
+			userInfoUpdateCommand
 		);
 	}
 
