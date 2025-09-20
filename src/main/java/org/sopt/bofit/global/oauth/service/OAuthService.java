@@ -140,7 +140,6 @@ public class OAuthService {
         return OAuthUtil.buildKakaoLogoutRedirectUrl(properties.logoutUri(), properties.clientId(), redirectUri).toString();
     }
 
-    @Transactional
     public void unlink(Long userId){
         User user = userReader.getActiveById(userId);
 
