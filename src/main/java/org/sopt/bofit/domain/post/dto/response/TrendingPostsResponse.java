@@ -3,7 +3,7 @@ package org.sopt.bofit.domain.post.dto.response;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import lombok.Builder;
-import org.sopt.bofit.domain.post.entity.Post;
+import org.sopt.bofit.domain.post.service.dto.response.TrendingPostDto;
 
 @Builder
 public record TrendingPostsResponse (
@@ -38,10 +38,10 @@ public record TrendingPostsResponse (
     PostCategoryResponse category
 ){
 
-    public static TrendingPostsResponse of(Post post, boolean isLiked){
+    public static TrendingPostsResponse of(TrendingPostDto post, boolean isLiked){
         return TrendingPostsResponse.builder()
-            .postId(post.getId())
-            .writerId(post.getUser().getId())
+            .postId(post.getPostId())
+            .writerId(post.getWriterId())
             .writerNickname(post.getWriterNickname())
             .title(post.getTitle())
             .content(post.getContent())

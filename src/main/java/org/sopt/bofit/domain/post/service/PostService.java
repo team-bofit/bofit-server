@@ -18,9 +18,9 @@ import org.sopt.bofit.domain.post.entity.TrendPost;
 import org.sopt.bofit.domain.post.entity.constant.TrendPostSort;
 import org.sopt.bofit.domain.post.service.dto.request.PostCreateCommand;
 import org.sopt.bofit.domain.post.service.dto.request.PostUpdateCommand;
+import org.sopt.bofit.domain.post.service.dto.response.TrendingPostDto;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReader;
-import org.sopt.bofit.global.cache.CacheService;
 import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 import org.sopt.bofit.global.file.util.ImageValidator;
@@ -44,7 +44,7 @@ public class PostService {
     private final TrendPostReader trendPostReader;
     private final TrendPostWriter trendPostWriter;
 
-    private final CacheService cacheService;
+    private final PostCacheService postCacheService;
 
     @Transactional
     public PostCreateResponse createPost(Long userId, PostCreateCommand command) {
@@ -77,12 +77,18 @@ public class PostService {
                         .filter(image -> image.id() != null).map(UpdateImageRequest::id).toList(),
                 command.deleteImageIds());
 
+        trendPostWriter.validUpdatedPost(post);
         return PostCreateResponse.from(post.getId());
     }
 
     @Transactional
     public void deletePost(Long userId, Long postId) {
-        postWriter.deletePost(userId, postId);
+        User user = userReader.getActiveById(userId);
+        Post post = postReader.getActiveById(postId);
+        post.getUser().checkIsWriter(userId, POST_UNAUTHORIZED);
+
+        postWriter.delete(user, post);
+        trendPostWriter.validDeletePost(post);
     }
 
     public SliceResponse<PostSummaryResponse, Long> getAllPosts(Long userId, Long cursorId, int size){
@@ -101,30 +107,29 @@ public class PostService {
     public TrendingPostsResponses getTrendingPosts(Long userId, int size, String sort){
         User user = userReader.getActiveById(userId);
 
-        List<Post> cachedTrendingPosts = cacheService.getTrendingPosts();
-        List<Post> trendingPosts = cachedTrendingPosts.size() < size ?
+        Map<Long, TrendingPostDto> cachedTrendingPosts = postCacheService.getTrendPosts();
+        Map<Long, TrendingPostDto> trendingPosts = cachedTrendingPosts.size() < size ?
             getNewTrendingPosts(size) : cachedTrendingPosts;
 
-        List<Post> targetTrendingPosts = getTargetTrendingPosts(sort, size, trendingPosts);
-        Map<Post, Boolean> isLiked = postLikeReader.isLikedPosts(user, targetTrendingPosts);
+        List<TrendingPostDto> targetTrendingPosts = getTargetTrendingPosts(sort, size, trendingPosts.values().stream().toList());
+        Map<Long, Boolean> isLiked = postLikeReader.isLikedPosts(user, targetTrendingPosts.stream().map(TrendingPostDto::getPostId).toList());
 
         return TrendingPostsResponses.of(targetTrendingPosts, isLiked);
     }
 
-    private List<Post> getNewTrendingPosts(int size){
+    private Map<Long, TrendingPostDto> getNewTrendingPosts(int size){
         List<TrendPost> trendPosts = trendPostReader.getAll();
 
         if(trendPosts.size() < size){
             trendPostWriter.updateTrendPosts();
-            trendPosts = trendPostReader.getAll();
         }
 
-        return trendPostReader.getTrendingPosts(trendPosts);
+        return trendPostReader.getTrendingPosts();
     }
 
-    private List<Post> getTargetTrendingPosts(String sort, int size, List<Post> trendingPosts){
+    private List<TrendingPostDto> getTargetTrendingPosts(String sort, int size, List<TrendingPostDto> trendingPosts){
         if (TrendPostSort.from(sort).equals(TrendPostSort.RANDOM)){
-            ArrayList<Post> shallowTrendingPosts = new ArrayList<>(trendingPosts);
+            ArrayList<TrendingPostDto> shallowTrendingPosts = new ArrayList<>(trendingPosts);
             Collections.shuffle(shallowTrendingPosts);
             return shallowTrendingPosts.subList(0, size);
         }
