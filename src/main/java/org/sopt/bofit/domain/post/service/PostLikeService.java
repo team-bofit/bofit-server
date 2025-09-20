@@ -22,6 +22,8 @@ public class PostLikeService {
     private final PostLikeReader postLikeReader;
     private final PostLikeWriter postLikeWriter;
 
+    private final PostCacheService postCacheService;
+
     @Transactional
     public void createPostLike(Long userId, Long postId){
         Post post = postReader.getActiveById(postId);
@@ -35,6 +37,7 @@ public class PostLikeService {
 
         PostLike postLike = postLikeWriter.create(post, user);
         postWriter.increaseLikeCount(post);
+        postCacheService.increaseLikeCount(postId);
     }
 
     @Transactional
@@ -47,5 +50,6 @@ public class PostLikeService {
         postLikeWriter.delete(postLike);
 
         postWriter.decreaseLikeCount(post);
+        postCacheService.decreaseLikeCount(postId);
     }
 }

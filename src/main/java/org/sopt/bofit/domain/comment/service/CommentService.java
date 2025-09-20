@@ -16,6 +16,7 @@ import org.sopt.bofit.domain.comment.service.dto.request.CommentCreateCommand;
 import org.sopt.bofit.domain.comment.service.dto.request.CommentUpdateCommand;
 import org.sopt.bofit.domain.comment.service.dto.response.CommentResponse;
 import org.sopt.bofit.domain.post.entity.Post;
+import org.sopt.bofit.domain.post.service.PostCacheService;
 import org.sopt.bofit.domain.post.service.PostReader;
 import org.sopt.bofit.domain.post.service.PostWriter;
 import org.sopt.bofit.domain.user.entity.User;
@@ -28,8 +29,6 @@ import org.sopt.bofit.global.file.util.ImageValidator;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -47,6 +46,8 @@ public class CommentService {
 
 	private final PostWriter postWriter;
 
+    private final PostCacheService postCacheService;
+
 
 	@Transactional
 	public Comment createComment(Long userId, Long postId, CommentCreateCommand command){
@@ -60,6 +61,7 @@ public class CommentService {
                     .create(comment, command.imageUrls().get(sequence), sequence + 1));
 
 		postWriter.increaseCommentCount(post);
+        postCacheService.increaseCommentCount(postId);
 
 		return comment;
 	}
@@ -95,6 +97,7 @@ public class CommentService {
 		comment.checkPost(post);
 
 		postWriter.decreaseCommentCount(post);
+        postCacheService.decreaseCommentCount(postId);
 
 		commentWriter.softDelete(comment);
 	}

@@ -5,6 +5,7 @@ import static org.sopt.bofit.global.constant.CacheConstant.TRENDING_POSTS_CACHE_
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.post.entity.Post;
@@ -23,10 +24,12 @@ public class TrendPostWriter {
     private final TrendPostRepository trendPostRepository;
     private final PostRepository postRepository;
 
+    private final PostCacheService postCacheService;
+
     @Scheduled(
         fixedDelayString = "${scheduler.trend-posts-update-delay}"
     )
-    @CacheEvict(cacheNames = TRENDING_POSTS_CACHE_NAME)
+    @CacheEvict(cacheNames = TRENDING_POSTS_CACHE_NAME, allEntries = true)
     @Transactional
     public void updateTrendPosts(){
         List<Post> trendedPosts = postRepository.findTrendPosts(TREND_POST_CALCULATE_SIZE, LocalDateTime.now());
@@ -37,4 +40,16 @@ public class TrendPostWriter {
         trendPostRepository.deleteAllInBatch();
         trendPostRepository.saveAll(trendPosts);
     }
+
+    public void validDeletePost(Post post){
+        if(postCacheService.deletePost(post)){
+            Optional<TrendPost> deletedTrendPost = trendPostRepository.findByPost(post);
+            deletedTrendPost.ifPresent(trendPostRepository::delete);
+        }
+    }
+
+    public void validUpdatedPost(Post post){
+        postCacheService.updatedPost(post);
+    }
+
 }
