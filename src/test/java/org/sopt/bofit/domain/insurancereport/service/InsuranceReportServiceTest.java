@@ -1,16 +1,18 @@
 package org.sopt.bofit.domain.insurancereport.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
-import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.*;
-import static org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErrorCode.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.when;
+import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONALE_REASONS;
+import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONAL_KEYWORD_CHIPS;
+import static org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErrorCode.INVALID_REPORT_SECTION;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,9 +31,9 @@ import org.sopt.bofit.domain.insurancereport.entity.Disease;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
 import org.sopt.bofit.domain.insurancereport.entity.constant.CoverageStatus;
+import org.sopt.bofit.domain.insurancereport.fixture.UserInfoFixture;
 import org.sopt.bofit.domain.insurancereport.repository.InsuranceReportRepository;
 import org.sopt.bofit.domain.user.entity.User;
-import org.sopt.bofit.domain.user.entity.UserInfo;
 import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
 import org.sopt.bofit.domain.user.entity.constant.Gender;
@@ -39,6 +41,7 @@ import org.sopt.bofit.domain.user.entity.constant.Job;
 import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserInfoRepository;
 import org.sopt.bofit.domain.user.repository.UserRepository;
+import org.sopt.bofit.domain.user.service.dto.request.UserInfoCommand;
 import org.sopt.bofit.global.exception.customexception.BadRequestException;
 import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,14 +125,22 @@ class InsuranceReportServiceTest extends IntegrationTestSupport {
 			CoveragePreference.MAJOR_DISEASE, 2
 		);
 
-		UserInfo userInfo = UserInfo.builder()
-			.minPrice(10000)
-			.maxPrice(100000)
-			.familyHistory(List.of(DiagnosedDisease.NONE))
-			.diseaseHistory(List.of(DiagnosedDisease.NONE))
-			.coveragePreferences(selectedCoverages)
-			.user(user)
-			.build();
+//		UserInfo userInfo = UserInfo.builder()
+//			.minPrice(10000)
+//			.maxPrice(100000)
+//			.familyHistory(List.of(DiagnosedDisease.NONE))
+//			.diseaseHistory(List.of(DiagnosedDisease.NONE))
+//			.coveragePreferences(selectedCoverages)
+//			.user(user)
+//			.build();
+
+        UserInfoCommand userInfo = UserInfoFixture.userInfoCommand(
+            10000,
+            100000,
+            List.of(DiagnosedDisease.NONE),
+            List.of(DiagnosedDisease.NONE),
+            selectedCoverages
+        );
 
 		List<InsuranceProduct> insuranceProducts = insuranceProductRepository.saveAll(List.of(product1, product2, product3));
 		insuranceStatisticRepository.save(statistic);
@@ -139,7 +150,8 @@ class InsuranceReportServiceTest extends IntegrationTestSupport {
 			.thenReturn(new ReportRationale(DEFAULT_RATIONALE_REASONS, DEFAULT_RATIONAL_KEYWORD_CHIPS));
 
 		// when
-		IssueInsuranceReportResponse result = insuranceReportService.recommend(user, userInfo);
+		IssueInsuranceReportResponse result = insuranceReportService.recommend(savedUser.getId(), userInfo,
+            UserInfoFixture.userInfoUpdateCommand());
 
 		// then
 		Optional<InsuranceReport> resultReportId = insuranceReportRepository.findById(result.insuranceReportId());
@@ -155,6 +167,9 @@ class InsuranceReportServiceTest extends IntegrationTestSupport {
 
 		assertThat(userInfoRepository.findAll().size())
 			.isEqualTo(1);
+
+        User u2 = userRepository.findById(savedUser.getId()).get();
+        assertTrue(u2.isRecommendInsurance());
 	}
 
 	@DisplayName("주요 질병 섹션 조회 시 쿼리파라미터에 section=cancer 인 경우 정상적으로 조회함")

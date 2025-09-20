@@ -23,6 +23,7 @@ import org.sopt.bofit.domain.insurance.repository.InsuranceStatisticRepository;
 import org.sopt.bofit.domain.insurancereport.builder.InsuranceReportTestBuilder;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
+import org.sopt.bofit.domain.insurancereport.fixture.UserInfoFixture;
 import org.sopt.bofit.domain.insurancereport.repository.InsuranceReportRepository;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
@@ -33,6 +34,7 @@ import org.sopt.bofit.domain.user.entity.constant.Job;
 import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserInfoRepository;
 import org.sopt.bofit.domain.user.repository.UserRepository;
+import org.sopt.bofit.domain.user.service.dto.request.UserInfoUpdateCommand;
 import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -221,13 +223,17 @@ class InsuranceReportWriterTest extends IntegrationTestSupport {
             .withStatistic(savedStatistic)
             .build();
 
+        UserInfoUpdateCommand userInfoUpdateCommand = UserInfoFixture.userInfoUpdateCommand();
+
 	    // when
-		InsuranceReport result = insuranceReportWriter.saveReport(insuranceReport, savedUser, userInfo);
+		InsuranceReport result = insuranceReportWriter.saveReport(insuranceReport, savedUser, userInfo, userInfoUpdateCommand);
 
 		// then
 		assertThat(userInfoRepository.findAll().size()).isEqualTo(1);
         assertThat(insuranceReportRepository.findAll().size()).isEqualTo(1);
-        assertTrue(savedUser.isRecommendInsurance());
-	}
+
+        User resultUser = userRepository.findById(savedUser.getId()).get();
+        assertTrue(resultUser.isRecommendInsurance());
+    }
 
 }

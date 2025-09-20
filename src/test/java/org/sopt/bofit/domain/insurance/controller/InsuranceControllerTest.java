@@ -1,5 +1,26 @@
 package org.sopt.bofit.domain.insurance.controller;
 
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.notNull;
+import static org.mockito.Mockito.when;
+import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.PREMIUM_RANGE;
+import static org.sopt.bofit.domain.user.entity.constant.CoveragePreference.DEATH_BENEFIT;
+import static org.sopt.bofit.domain.user.entity.constant.CoveragePreference.ESSENTIAL_ONLY;
+import static org.sopt.bofit.domain.user.entity.constant.CoveragePreference.RECOMMENDED_OPTION;
+import static org.sopt.bofit.domain.user.entity.constant.CoveragePreference.SURGERY_COVERAGE;
+import static org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease.CANCER;
+import static org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease.RIVER;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sopt.bofit.domain.insurancereport.dto.request.InsuranceReportRequest;
@@ -10,22 +31,6 @@ import org.sopt.bofit.domain.user.entity.constant.Job;
 import org.sopt.bofit.support.ControllerTestSupport;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import static org.mockito.Mockito.*;
-import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.PREMIUM_RANGE;
-import static org.sopt.bofit.domain.user.entity.constant.CoveragePreference.*;
-import static org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease.CANCER;
-import static org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease.RIVER;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class InsuranceControllerTest extends ControllerTestSupport {
 
@@ -52,7 +57,7 @@ class InsuranceControllerTest extends ControllerTestSupport {
 		User mockUser = User.builder().id(1L).build();
 
 		when(userService.userUpdate(anyLong(), any())).thenReturn(mockUser);
-		when(insuranceReportService.recommend(notNull(),notNull()))
+		when(insuranceReportService.recommend(notNull(), notNull(), notNull()))
 			.thenReturn(new IssueInsuranceReportResponse(UUID.randomUUID()));
 
 		// when // then
@@ -92,7 +97,7 @@ class InsuranceControllerTest extends ControllerTestSupport {
 		User mockUser = User.builder().id(1L).build();
 
 		when(userService.userUpdate(anyLong(), any())).thenReturn(mockUser);
-		when(insuranceReportService.recommend(notNull(),notNull()))
+		when(insuranceReportService.recommend(notNull(), notNull(), notNull()))
 			.thenReturn(new IssueInsuranceReportResponse(UUID.randomUUID()));
 
 		// when // then
@@ -132,7 +137,7 @@ class InsuranceControllerTest extends ControllerTestSupport {
 		User mockUser = User.builder().id(1L).build();
 
 		when(userService.userUpdate(anyLong(), any())).thenReturn(mockUser);
-		when(insuranceReportService.recommend(notNull(),notNull()))
+		when(insuranceReportService.recommend(notNull(), notNull(), notNull()))
 			.thenReturn(new IssueInsuranceReportResponse(UUID.randomUUID()));
 
 		// when // then
@@ -171,7 +176,7 @@ class InsuranceControllerTest extends ControllerTestSupport {
 		User mockUser = User.builder().id(1L).build();
 
 		when(userService.userUpdate(anyLong(), any())).thenReturn(mockUser);
-		when(insuranceReportService.recommend(notNull(),notNull()))
+		when(insuranceReportService.recommend(notNull(), notNull(), notNull()))
 			.thenReturn(new IssueInsuranceReportResponse(UUID.randomUUID()));
 
 		// when // then
@@ -214,7 +219,7 @@ class InsuranceControllerTest extends ControllerTestSupport {
 		User mockUser = User.builder().id(1L).build();
 
 		when(userService.userUpdate(anyLong(), any())).thenReturn(mockUser);
-		when(insuranceReportService.recommend(notNull(),notNull()))
+		when(insuranceReportService.recommend(notNull(), notNull(), notNull()))
 			.thenReturn(new IssueInsuranceReportResponse(UUID.randomUUID()));
 
 		// when // then
