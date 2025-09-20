@@ -40,6 +40,7 @@ import org.sopt.bofit.domain.post.dto.request.PostUpdateRequest;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
+import org.sopt.bofit.domain.post.entity.constant.PostCategoryFilter;
 import org.sopt.bofit.domain.post.dto.response.TrendingPostsResponses;
 import org.sopt.bofit.domain.post.service.PostLikeService;
 import org.sopt.bofit.domain.post.service.PostService;
@@ -47,16 +48,16 @@ import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.annotation.LoginUserId;
 import org.sopt.bofit.global.dto.response.BaseResponse;
 import org.sopt.bofit.global.dto.response.SliceResponse;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+import static org.sopt.bofit.domain.comment.constant.CommentConstant.COMMENTS_DEFAULT_SIZE;
+import static org.sopt.bofit.domain.commentreply.constant.CommentReplyConstant.COMMENT_REPLY_DEFAULT_SIZE;
+import static org.sopt.bofit.domain.post.constant.PostConstant.POSTS_DEFAULT_SIZE;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
+import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_DESCRIPTION_COMMUNITY;
+import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_NAME_COMMUNITY;
 
 @RestController
 @RequiredArgsConstructor
@@ -108,6 +109,8 @@ public class PostController {
     @GetMapping()
     public BaseResponse<SliceResponse<PostSummaryResponse, Long>> getAllPosts(
             @Parameter(hidden = true) @LoginUserId Long userId,
+            @RequestParam(required = false, defaultValue = "LATEST") String sort,
+            @RequestParam (required = false, defaultValue = "ALL") PostCategoryFilter category,
             @RequestParam(required = false, name = "cursor") Long cursorId,
             @RequestParam(required = false, defaultValue = POSTS_DEFAULT_SIZE) int size){
         return BaseResponse.ok(postService.getAllPosts(userId, cursorId, size), "게시물 전체 조회 성공");
