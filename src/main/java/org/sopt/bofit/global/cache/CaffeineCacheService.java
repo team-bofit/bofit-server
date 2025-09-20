@@ -5,9 +5,10 @@ import static org.sopt.bofit.global.constant.CacheConstant.TRENDING_POSTS_CACHE_
 import static org.sopt.bofit.global.constant.CacheConstant.TRENDING_POSTS_CACHE_NAME;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.sopt.bofit.domain.post.entity.Post;
+import org.sopt.bofit.domain.post.service.dto.response.TrendingPostDto;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
 
@@ -24,13 +25,20 @@ public class CaffeineCacheService implements CacheService {
 
     @Override
     @SuppressWarnings("unchecked")  // TRENDING_POSTS_CACHE_NAME 캐시는 항상 Post 객체를 담고 있으로 안전함.
-    public List<Post> getTrendingPosts(){
-        Object value = cacheManager.getCache(TRENDING_POSTS_CACHE_NAME).get(TRENDING_POSTS_CACHE_KEY, List.class);
+    public Map<Long, TrendingPostDto> getTrendingPosts(){
+
+        Object value = cacheManager.getCache(TRENDING_POSTS_CACHE_NAME).get(TRENDING_POSTS_CACHE_KEY,  LinkedHashMap.class);
+
         if (value != null &&
-            value instanceof List list
+            value instanceof LinkedHashMap map
         ){
-            return (List<Post>) list;
+            return (LinkedHashMap<Long, TrendingPostDto>) map;
         }
-        return Collections.emptyList();
+        return Collections.emptyMap();
+    }
+
+    @Override
+    public void deleteCache(String cacheName) {
+        cacheManager.getCache(cacheName).clear();
     }
 }
