@@ -1,14 +1,21 @@
 package org.sopt.bofit.global.config;
 
-import static org.sopt.bofit.global.constant.CacheConstant.*;
+import static org.sopt.bofit.domain.post.constant.TrendPostConstant.TREND_POST_CALCULATE_SIZE;
+import static org.sopt.bofit.global.constant.CacheConstant.DEFAULT_CACHE_NAME;
+import static org.sopt.bofit.global.constant.CacheConstant.DISEASE_HISTORY_SCORING_RULE_CACHE_NAME;
+import static org.sopt.bofit.global.constant.CacheConstant.FAMILY_HISTORY_SCORING_RULE_CACHE_NAME;
+import static org.sopt.bofit.global.constant.CacheConstant.INSURANCE_REPORT_CACHE_NAME;
+import static org.sopt.bofit.global.constant.CacheConstant.INSURANCE_STATISTIC_CACHE_NAME;
+import static org.sopt.bofit.global.constant.CacheConstant.SELECTED_SCORING_RULE_CACHE_NAME;
+import static org.sopt.bofit.global.constant.CacheConstant.TRENDING_POSTS_CACHE_NAME;
+import static org.sopt.bofit.global.constant.CacheConstant.USER_INFO_SCORING_RULE_CACHE_NAME;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
+import java.util.concurrent.TimeUnit;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class CacheConfig {
@@ -28,6 +35,8 @@ public class CacheConfig {
 
 		cacheManager.registerCustomCache(INSURANCE_REPORT_CACHE_NAME, insuranceReportCacheBuilder().build());
 		cacheManager.registerCustomCache(INSURANCE_STATISTIC_CACHE_NAME, insuranceStatisticCacheBuilder().build());
+
+        cacheManager.registerCustomCache(TRENDING_POSTS_CACHE_NAME, trendPostsCacheBuilder().build());
 		return cacheManager;
 	}
 
@@ -55,4 +64,12 @@ public class CacheConfig {
 			.softValues()
 			;
 	}
+
+    private Caffeine<Object, Object> trendPostsCacheBuilder(){
+        return Caffeine.newBuilder()
+            .expireAfterWrite(30, TimeUnit.MINUTES)
+            .maximumSize(TREND_POST_CALCULATE_SIZE)
+            .softValues();
+    }
+
 }
