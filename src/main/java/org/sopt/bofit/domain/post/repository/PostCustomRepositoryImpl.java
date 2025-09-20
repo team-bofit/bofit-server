@@ -88,17 +88,9 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         QPost post = QPost.post;
         QPostLike postLike = QPostLike.postLike;
 
-        BooleanBuilder where = new BooleanBuilder()
-                .and(post.status.eq(PostStatus.ACTIVE));
-        if (cursorId != null) where.and(post.id.lt(cursorId));
-        if (category != null && category != PostCategoryFilter.ALL) {
-            where.and(post.postCategory.stringValue().eq(category.name()));
-        }
+        BooleanBuilder where = getCategoryFilter(category, cursorId, post);
 
-        OrderSpecifier<?> orderBy = switch (order) {
-            case LATEST -> post.createdAt.desc();
-            case POPULAR -> post.likeCount.desc();
-        };
+        OrderSpecifier<?> orderBy = getSortOrder(order, post);
 
         BooleanExpression likedByCurrentUser = getLikedByCurrentUser(userId, postLike, post);
 
@@ -125,6 +117,23 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         if (hasNext) content.remove(size);
 
         return new SliceImpl<>(content, PageRequest.of(0, size), hasNext);
+    }
+
+    private OrderSpecifier<?> getSortOrder(PostSortOrder order, QPost post) {
+        return switch (order) {
+            case LATEST -> post.createdAt.desc();
+            case POPULAR -> post.likeCount.desc();
+        };
+    }
+
+    private BooleanBuilder getCategoryFilter(PostCategoryFilter category, Long cursorId, QPost post) {
+        BooleanBuilder where = new BooleanBuilder()
+                .and(post.status.eq(PostStatus.ACTIVE));
+        if (cursorId != null) where.and(post.id.lt(cursorId));
+        if (category != null && category != PostCategoryFilter.ALL) {
+            where.and(post.postCategory.stringValue().eq(category.name()));
+        }
+        return where;
     }
 
     private BooleanExpression getLikedByCurrentUser(Long userId, QPostLike postLike, QPost post) {
