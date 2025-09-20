@@ -9,5 +9,7 @@ public record KakaoProperties(
         String tokenUri,
         String redirectUri,
         String userInfoUri,
-        String logoutUri
+        String logoutUri,
+        String adminKey,
+        String unlinkUri
 ) { }

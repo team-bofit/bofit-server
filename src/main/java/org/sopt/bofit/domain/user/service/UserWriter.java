@@ -59,4 +59,13 @@ public class UserWriter {
 		user.updateProfileImageUrl(newProfileImageUrl);
 	}
 
+	@Transactional
+	public void unlinkUser(Long userId) {
+		User user = userReader.findById(userId);
+		user.deactivate();
+		user.updateOauthId(user.getOauthId() + ":INACTIVE");
+
+		postRepository.updateWriterNicknameByUserId(user.getId(), user.getNickname());
+	}
+
 }

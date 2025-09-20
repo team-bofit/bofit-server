@@ -58,4 +58,13 @@ public interface PostJpaRepository extends JpaRepository<Post, Long> {
     )
     void decreaseCommentCount(@Param("requestPost") Post post);
 
+    @Modifying
+    @Query("""
+        UPDATE Post p
+        SET p.writerNickname = :nickname
+        WHERE p.user.id = :userId"""
+
+    )
+    void updateWriterNicknameByUserId(@Param("userId") Long userId, @Param("nickname") String nickname);
+
 }

@@ -48,8 +48,10 @@ openai:
 
 kakao:
   client-id: test-client-id
+  admin-key: test-admin-key
   redirect-uri: http://localhost:8080/test
   logout-uri: https://kauth.kakao.com/oauth/logout
+  unlink-uri: https://kapi.kakao.com/v1/user/unlink
 
 cloud:
   aws:
