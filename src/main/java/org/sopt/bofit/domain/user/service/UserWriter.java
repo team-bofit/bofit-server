@@ -59,4 +59,11 @@ public class UserWriter {
 		user.updateProfileImageUrl(newProfileImageUrl);
 	}
 
+	@Transactional
+	public void unlinkUser(User user) {
+		user.deactivate();
+
+		postRepository.updateWriterNicknameByUserId(user.getId(), user.getNickname());
+	}
+
 }

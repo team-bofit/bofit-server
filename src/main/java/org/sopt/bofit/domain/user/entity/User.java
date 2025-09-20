@@ -2,10 +2,7 @@ package org.sopt.bofit.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.sopt.bofit.domain.user.entity.constant.Gender;
-import org.sopt.bofit.domain.user.entity.constant.Job;
-import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
-import org.sopt.bofit.domain.user.entity.constant.UserStatus;
+import org.sopt.bofit.domain.user.entity.constant.*;
 import org.sopt.bofit.global.entity.BaseEntity;
 import org.sopt.bofit.global.exception.constant.ErrorCode;
 import org.sopt.bofit.global.exception.customexception.ForbiddenException;
@@ -104,6 +101,10 @@ public class User extends BaseEntity {
         this.isRecommendInsurance = true;
     }
 
+    public void updateOauthId(String oauthId) {
+        this.oauthId = oauthId;
+    }
+
     public void checkIsWriter(User writer, ErrorCode errorCode) {
         if (!this.equals(writer)) {
             throw new ForbiddenException(errorCode);
@@ -114,6 +115,12 @@ public class User extends BaseEntity {
         if (!this.getId().equals(writerId)) {
             throw new ForbiddenException(errorCode);
         }
+    }
+
+    public void deactivate() {
+        this.status = UserStatus.INACTIVE;
+        this.nickname = UserNicknameConstant.ANONYMOUS_NICKNAME;
+        this.profileImage = null;
     }
 
     @Override

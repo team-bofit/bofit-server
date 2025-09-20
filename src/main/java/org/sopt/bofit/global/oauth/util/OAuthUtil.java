@@ -22,4 +22,11 @@ public class OAuthUtil {
                 .build(true)
                 .toUri();
     }
+
+    public static URI buildKakaoUnlinkUri(String unlinkBaseUri) {
+        return UriComponentsBuilder
+                .fromHttpUrl(unlinkBaseUri)
+                .build(true)
+                .toUri();
+    }
 }

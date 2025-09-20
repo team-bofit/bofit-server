@@ -54,4 +54,13 @@ public interface PostRepository extends PostJpaRepository, PostCustomRepository{
     void decreaseCommentCount(@Param("requestPost") Post post);
 
     boolean existsByIdAndUser(Long postId, User user);
+
+    @Modifying
+    @Query("""
+        UPDATE Post p
+        SET p.writerNickname = :nickname
+        WHERE p.user.id = :userId"""
+
+    )
+    void updateWriterNicknameByUserId(@Param("userId") Long userId, @Param("nickname") String nickname);
 }
