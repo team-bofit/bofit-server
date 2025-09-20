@@ -22,7 +22,7 @@ public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
         select p.id
         from PostLike pl
         join pl.post p
-        where pl.user = :user and p in :posts
+        where pl.user = :user and p.id in :postIds
     """)
-    Set<Long> findLikedPostIdsByUserAndPosts(@Param("user") User user, @Param("posts") List<Post> posts);
+    Set<Long> findLikedPostIdsByUserAndPosts(@Param("user") User user, @Param("postIds") List<Long> postIds);
 }

@@ -29,9 +29,9 @@ public class PostLikeReader {
             .orElseThrow(() -> new NotFoundException(PostErrorCode.POST_LIKE_NOT_FOUND));
     }
 
-    public Map<Post, Boolean> isLikedPosts(User user, List<Post> posts){
-        Set<Long> likedPostIds = postLikeRepository.findLikedPostIdsByUserAndPosts(user, posts);
-        return posts.stream()
+    public Map<Long, Boolean> isLikedPosts(User user, List<Long> postIds){
+        Set<Long> likedPostIds = postLikeRepository.findLikedPostIdsByUserAndPosts(user, postIds);
+        return postIds.stream()
             .collect(Collectors.toMap(Function.identity(), likedPostIds::contains));
     }
 
