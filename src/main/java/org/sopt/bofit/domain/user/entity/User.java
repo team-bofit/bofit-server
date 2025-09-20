@@ -2,10 +2,7 @@ package org.sopt.bofit.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.sopt.bofit.domain.user.entity.constant.Gender;
-import org.sopt.bofit.domain.user.entity.constant.Job;
-import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
-import org.sopt.bofit.domain.user.entity.constant.UserStatus;
+import org.sopt.bofit.domain.user.entity.constant.*;
 import org.sopt.bofit.global.entity.BaseEntity;
 import org.sopt.bofit.global.exception.constant.ErrorCode;
 import org.sopt.bofit.global.exception.customexception.ForbiddenException;
@@ -121,9 +118,8 @@ public class User extends BaseEntity {
     }
 
     public void deactivate() {
-        final String UNKNOWN_NICKNAME = "알 수 없음";
         this.status = UserStatus.INACTIVE;
-        this.nickname = UNKNOWN_NICKNAME;
+        this.nickname = UserNicknameConstant.ANONYMOUS_NICKNAME;
         this.profileImage = null;
     }
 
