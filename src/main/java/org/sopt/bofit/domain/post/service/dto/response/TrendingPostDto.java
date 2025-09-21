@@ -21,7 +21,7 @@ public class TrendingPostDto {
     private PostStatus status;
     private PostCategory postCategory;
 
-    private Long likeCount;
+    private int likeCount;
     private int commentCount;
 
     private LocalDateTime createdAt;
@@ -31,7 +31,7 @@ public class TrendingPostDto {
     private TrendingPostDto(Long postId,
         Long writerId, String writerNickname,
         String title, String content, PostStatus status, PostCategory postCategory,
-        Long likeCount, int commentCount,
+        int likeCount, int commentCount,
         LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.postId = postId;
         this.writerId = writerId;
