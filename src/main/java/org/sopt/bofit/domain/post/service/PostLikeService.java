@@ -37,7 +37,9 @@ public class PostLikeService {
 
         PostLike postLike = postLikeWriter.create(post, user);
         postWriter.increaseLikeCount(post);
+        postWriter.increaseTrendScore(post);
         postCacheService.increaseLikeCount(postId);
+
     }
 
     @Transactional
@@ -50,6 +52,7 @@ public class PostLikeService {
         postLikeWriter.delete(postLike);
 
         postWriter.decreaseLikeCount(post);
+        postWriter.decreaseTrendScore(post);
         postCacheService.decreaseLikeCount(postId);
     }
 }

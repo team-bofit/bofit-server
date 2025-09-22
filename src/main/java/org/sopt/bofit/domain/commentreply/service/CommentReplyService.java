@@ -1,11 +1,6 @@
 package org.sopt.bofit.domain.commentreply.service;
 
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.comment.service.CommentReader;
@@ -18,6 +13,7 @@ import org.sopt.bofit.domain.commentreply.service.dto.request.CommentReplyUpdate
 import org.sopt.bofit.domain.commentreply.service.dto.response.CommentReplyResponse;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.service.PostReader;
+import org.sopt.bofit.domain.post.service.PostWriter;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.global.dto.response.SliceResponse;
@@ -27,6 +23,12 @@ import org.sopt.bofit.global.file.util.ImageValidator;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +44,8 @@ public class CommentReplyService {
     private final CommentWriter commentWriter;
     private final UserReader userReader;
     private final PostReader postReader;
+
+    private final PostWriter postWriter;
 
     /**
      *  추후 이미지 개수가 많아지면 AllInBatch 등으로 수정하기
@@ -59,6 +63,7 @@ public class CommentReplyService {
                 .forEach(sequence ->
                     commentReplyImageWriter.create(commentReply, command.imageUrls().get(sequence), sequence+ 1));
         commentWriter.increaseReplyCount(comment);
+        postWriter.increaseTrendScore(post);
         return commentReply;
     }
 
