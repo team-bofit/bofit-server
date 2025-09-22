@@ -1,8 +1,9 @@
 package org.sopt.bofit.domain.post.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.time.LocalDateTime;
 import org.sopt.bofit.global.dto.response.CursorProvider;
+
+import java.time.LocalDateTime;
 
 public record PostSummaryResponse (
         @Schema(description = "게시글 ID")
@@ -30,7 +31,7 @@ public record PostSummaryResponse (
         LocalDateTime createdAt,
 
         @Schema(description = "좋아요 수")
-        Long likeCount,
+        int likeCount,
 
         @Schema(description = "사용자의 좋아요 여부")
         boolean likedByCurrentUser
