@@ -30,7 +30,7 @@ public record PostSummaryResponse (
         LocalDateTime createdAt,
 
         @Schema(description = "좋아요 수")
-        Long likeCount,
+        int likeCount,
 
         @Schema(description = "사용자의 좋아요 여부")
         boolean likedByCurrentUser
