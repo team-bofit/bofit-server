@@ -130,7 +130,16 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
 
         BooleanExpression likedByCurrentUser = getLikedByCurrentUser(userId, postLike, post);
 
-        NumberExpression<Double> relevanceScore = getRelevanceScore(keyword, post);
+        BooleanExpression searchCondition;
+        if (keyword != null && keyword.length() < 2) {
+            String likePattern = "%" + keyword + "%";
+            searchCondition = post.title.like(likePattern)
+                    .or(post.content.like(likePattern))
+                    .or(post.writerNickname.like(likePattern));
+        } else {
+            NumberExpression<Double> relevanceScore = getRelevanceScore(keyword, post);
+            searchCondition = relevanceScore.gt(0);
+        }
 
         List<PostSummaryResponse> content = queryFactory
                 .select(Projections.constructor(PostSummaryResponse.class,
@@ -146,11 +155,13 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                         likedByCurrentUser
                 ))
                 .from(post)
-                .where(relevanceScore.gt(0),
+                .where(searchCondition,
                         post.status.eq(PostStatus.ACTIVE),
                         cursorId != null ? post.id.lt(cursorId) : null
                         )
-                .orderBy(relevanceScore.desc())
+                .orderBy(keyword != null && keyword.length() > 1
+                        ? getRelevanceScore(keyword, post).desc()
+                        : post.id.desc())
                 .limit(size + 1)
                 .fetch();
 
