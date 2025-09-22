@@ -22,7 +22,7 @@ public record MyPostSummaryResponse(
         LocalDateTime createdAt,
 
         @Schema(description = "좋아요 수")
-        Long likeCount,
+        int likeCount,
 
         @Schema(description = "사용자 좋아요 여부")
         boolean isLike
