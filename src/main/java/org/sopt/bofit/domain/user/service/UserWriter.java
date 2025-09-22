@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -63,7 +64,7 @@ public class UserWriter {
 	public void unlinkUser(Long userId) {
 		User user = userReader.findById(userId);
 		user.deactivate();
-		user.updateOauthId(user.getOauthId() + ":INACTIVE");
+		user.updateOauthId(user.getOauthId() + ":INACTIVE:" + UUID.randomUUID());
 
 		postRepository.updateWriterNicknameByUserId(user.getId(), user.getNickname());
 	}
