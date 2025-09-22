@@ -86,6 +86,9 @@ management:
 #      show-details: when-authorized
 
 
+scheduler:
+  trend-posts-update-delay: ${TREND_POST_UPDATE_DELAY}
+
 ---
 spring:
   config:
