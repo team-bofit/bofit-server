@@ -126,7 +126,6 @@ public class PostController {
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
     @Operation(summary = "인기 게시물 목록 조회", description = "커뮤니티에서 인기글 목록을 조회합니다.")
-    @CustomExceptionDescription(POST_DETAIL)
     @GetMapping("/trend")
     public BaseResponse<TrendingPostsResponses> getTrendPosts(
         @Parameter(hidden = true) @LoginUserId Long userId,
