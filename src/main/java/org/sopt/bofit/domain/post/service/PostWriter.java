@@ -41,22 +41,22 @@ public class PostWriter {
 
     @Transactional
     public void increaseLikeCount(Post post){
-        postRepository.increaseLikeCount(post);
+        postRepository.increaseLikeCountAndTrendScore(post);
     }
 
     @Transactional
     public void decreaseLikeCount(Post post){
-        postRepository.decreaseLikeCount(post);
+        postRepository.decreaseLikeCountAndTrendScore(post);
     }
 
     @Transactional
     public void increaseCommentCount(Post post){
-        postRepository.increaseCommentCount(post);
+        postRepository.increaseCommentCountAndTrendScore(post);
     }
 
     @Transactional
     public void decreaseCommentCount(Post post){
-        postRepository.decreaseCommentCount(post);
+        postRepository.decreaseCommentCountAndTrendScore(post);
     }
 
     @Transactional

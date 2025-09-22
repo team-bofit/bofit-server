@@ -19,18 +19,20 @@ public interface PostJpaRepository extends JpaRepository<Post, Long> {
     @Modifying
     @Query("""
 		update Post p
-		set p.likeCount = p.likeCount + 1
+		set p.likeCount = p.likeCount + 1,
+			p.trendScore = p.trendScore + 1
 		where p = :requestPost
 		""")
-    void increaseLikeCount(@Param("requestPost") Post post);
+    void increaseLikeCountAndTrendScore(@Param("requestPost") Post post);
 
     @Modifying
     @Query("""
         UPDATE Post p
-        SET p.likeCount = p.likeCount - 1
+        SET p.likeCount = p.likeCount - 1,
+            p.trendScore = p.trendScore - 1   
         WHERE p = :requestPost
         """)
-    void decreaseLikeCount(@Param("requestPost") Post post);
+    void decreaseLikeCountAndTrendScore(@Param("requestPost") Post post);
 
     @Modifying
     @Query("""
@@ -44,20 +46,22 @@ public interface PostJpaRepository extends JpaRepository<Post, Long> {
     @Modifying
     @Query("""
         UPDATE Post p
-        SET p.commentCount = p.commentCount + 1
+        SET p.commentCount = p.commentCount + 1,
+            p.trendScore = p.trendScore + 1    
         WHERE p = :requestPost
         """
     )
-    void increaseCommentCount(@Param("requestPost") Post post);
+    void increaseCommentCountAndTrendScore(@Param("requestPost") Post post);
 
     @Modifying
     @Query("""
         UPDATE Post p
-        SET p.commentCount = p.commentCount - 1
+        SET p.commentCount = p.commentCount - 1,
+            p.trendScore = p.trendScore - 1    
         WHERE p = :requestPost
         """
     )
-    void decreaseCommentCount(@Param("requestPost") Post post);
+    void decreaseCommentCountAndTrendScore(@Param("requestPost") Post post);
 
     @Modifying
     @Query("""
@@ -84,6 +88,8 @@ public interface PostJpaRepository extends JpaRepository<Post, Long> {
         WHERE p = :requestPost
         """
     )
+
+
     void decreaseTrendScore(@Param("requestPost") Post post);
 
 }

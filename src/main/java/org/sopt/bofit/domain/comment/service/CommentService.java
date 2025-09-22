@@ -62,7 +62,6 @@ public class CommentService {
                     .create(comment, command.imageUrls().get(sequence), sequence + 1));
 
 		postWriter.increaseCommentCount(post);
-        postWriter.increaseTrendScore(post);
         postCacheService.increaseCommentCount(postId);
 
 		return comment;
@@ -99,7 +98,6 @@ public class CommentService {
 		comment.checkPost(post);
 
 		postWriter.decreaseCommentCount(post);
-        postWriter.decreaseTrendScore(post);
         postCacheService.decreaseCommentCount(postId);
 
 		commentWriter.softDelete(comment);
