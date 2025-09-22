@@ -1,12 +1,11 @@
-package org.sopt.bofit.domain.user.service.dto;
+package org.sopt.bofit.domain.user.service.dto.request;
 
 import java.time.LocalDate;
-
 import org.sopt.bofit.domain.user.entity.constant.Gender;
 import org.sopt.bofit.domain.user.entity.constant.Job;
 
 
-public record UserUpdate(
+public record UserInfoUpdateCommand(
 	String name,
 	Gender gender,
 	LocalDate birthDate,

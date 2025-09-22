@@ -1,21 +1,7 @@
 package org.sopt.bofit.domain.insurancereport.dto.request;
 
-import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.*;
-import static org.sopt.bofit.domain.user.constant.UserInfoConstant.*;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-
-import org.sopt.bofit.domain.insurancereport.annotation.PremiumRange;
-import org.sopt.bofit.domain.user.entity.User;
-import org.sopt.bofit.domain.user.entity.UserInfo;
-import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
-import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
-import org.sopt.bofit.domain.user.entity.constant.Gender;
-import org.sopt.bofit.domain.user.entity.constant.Job;
-import org.sopt.bofit.domain.user.service.dto.UserUpdate;
-import org.springframework.format.annotation.DateTimeFormat;
+import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.NAME_REGEX;
+import static org.sopt.bofit.domain.user.constant.UserInfoConstant.MAX_COVERAGE_PREFERENCES;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -24,7 +10,18 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import lombok.Builder;
+import org.sopt.bofit.domain.insurancereport.annotation.PremiumRange;
+import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
+import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
+import org.sopt.bofit.domain.user.entity.constant.Gender;
+import org.sopt.bofit.domain.user.entity.constant.Job;
+import org.sopt.bofit.domain.user.service.dto.request.UserInfoCommand;
+import org.sopt.bofit.domain.user.service.dto.request.UserInfoUpdateCommand;
+import org.springframework.format.annotation.DateTimeFormat;
 
 @PremiumRange
 @Builder
@@ -87,19 +84,19 @@ public record InsuranceReportRequest(
 	int maxPremium
 ) {
 
-	public UserUpdate toUserUpdate(){
-			return new UserUpdate(name, gender, birthDate, job,
+	public UserInfoUpdateCommand toUserUpdate(){
+			return new UserInfoUpdateCommand(name, gender, birthDate, job,
 				isMarried, isDriver, hasChild);
 	}
 
-	public UserInfo toUserInfo(User user){
-		return UserInfo.builder()
-			.user(user)
-			.minPrice(minPremium)
-			.maxPrice(maxPremium)
-			.diseaseHistory(diseaseHistory)
-			.familyHistory(familyHistory)
-			.coveragePreferences(coveragePreferences)
-			.build();
-	}
+    public UserInfoCommand toUserInfoCommand(){
+        return new UserInfoCommand(
+            minPremium,
+            maxPremium,
+            diseaseHistory,
+            familyHistory,
+            coveragePreferences
+        );
+    }
+
 }
