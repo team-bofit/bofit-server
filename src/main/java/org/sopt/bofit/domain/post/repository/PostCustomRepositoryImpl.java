@@ -1,19 +1,13 @@
 package org.sopt.bofit.domain.post.repository;
 
-import static org.sopt.bofit.domain.post.constant.TrendPostConstant.TREND_POST_COMMENT_REPLY_WEIGHT;
-import static org.sopt.bofit.domain.post.constant.TrendPostConstant.TREND_POST_COMMENT_WEIGHT;
-import static org.sopt.bofit.domain.post.constant.TrendPostConstant.TREND_POST_LIKE_WEIGHT;
-import static org.sopt.bofit.domain.post.constant.TrendPostConstant.TREND_POST_SCORED_DATE_RANGE;
-import static org.sopt.bofit.domain.post.entity.constant.PostStatus.ACTIVE;
-
+import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import java.time.LocalDateTime;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.QComment;
 import org.sopt.bofit.domain.commentreply.entity.QCommentReply;
@@ -21,12 +15,20 @@ import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.entity.QPost;
 import org.sopt.bofit.domain.post.entity.QPostLike;
+import org.sopt.bofit.domain.post.entity.constant.PostCategoryFilter;
+import org.sopt.bofit.domain.post.entity.constant.PostSortOrder;
 import org.sopt.bofit.domain.post.entity.constant.PostStatus;
 import org.sopt.bofit.domain.user.dto.response.MyPostSummaryResponse;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static org.sopt.bofit.domain.post.constant.TrendPostConstant.*;
+import static org.sopt.bofit.domain.post.entity.constant.PostStatus.ACTIVE;
 
 
 @Repository
@@ -80,9 +82,13 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
     }
 
     @Override
-    public Slice<PostSummaryResponse> findAllByCursorId(Long userId, Long cursorId, int size) {
+    public Slice<PostSummaryResponse> findAllByCursorId(PostSortOrder order, PostCategoryFilter category, Long userId, Long cursorId, int size) {
         QPost post = QPost.post;
         QPostLike postLike = QPostLike.postLike;
+
+        BooleanBuilder where = getCategoryFilter(category, cursorId, post);
+
+        OrderSpecifier<?> orderBy = getSortOrder(order, post);
 
         BooleanExpression likedByCurrentUser = getLikedByCurrentUser(userId, postLike, post);
 
@@ -100,11 +106,8 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                         likedByCurrentUser
                 ))
                 .from(post)
-                .where(
-                        post.status.eq(PostStatus.ACTIVE),
-                        cursorId != null ? post.id.lt(cursorId) : null
-                )
-                .orderBy(post.id.desc())
+                .where(where)
+                .orderBy(orderBy)
                 .limit(size + 1)
                 .fetch();
 
@@ -112,6 +115,23 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         if (hasNext) content.remove(size);
 
         return new SliceImpl<>(content, PageRequest.of(0, size), hasNext);
+    }
+
+    private OrderSpecifier<?> getSortOrder(PostSortOrder order, QPost post) {
+        return switch (order) {
+            case LATEST -> post.createdAt.desc();
+            case POPULAR -> post.trendScore.desc();
+        };
+    }
+
+    private BooleanBuilder getCategoryFilter(PostCategoryFilter category, Long cursorId, QPost post) {
+        BooleanBuilder where = new BooleanBuilder()
+                .and(post.status.eq(PostStatus.ACTIVE));
+        if (cursorId != null) where.and(post.id.lt(cursorId));
+        if (category != null && category != PostCategoryFilter.ALL) {
+            where.and(post.postCategory.stringValue().eq(category.name()));
+        }
+        return where;
     }
 
     private BooleanExpression getLikedByCurrentUser(Long userId, QPostLike postLike, QPost post) {

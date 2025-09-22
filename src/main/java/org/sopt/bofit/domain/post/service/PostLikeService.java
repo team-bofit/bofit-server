@@ -38,6 +38,7 @@ public class PostLikeService {
         PostLike postLike = postLikeWriter.create(post, user);
         postWriter.increaseLikeCount(post);
         postCacheService.increaseLikeCount(postId);
+
     }
 
     @Transactional
