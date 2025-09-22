@@ -58,4 +58,14 @@ public class PostWriter {
     public void decreaseCommentCount(Post post){
         postRepository.decreaseCommentCount(post);
     }
+
+    @Transactional
+    public void increaseTrendScore(Post post){
+        postRepository.increaseTrendScore(post);
+    }
+
+    @Transactional
+    public void decreaseTrendScore(Post post){
+        postRepository.decreaseTrendScore(post);
+    }
 }
