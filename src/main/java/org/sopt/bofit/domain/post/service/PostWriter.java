@@ -11,8 +11,6 @@ import org.sopt.bofit.domain.user.service.UserReader;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
-
 @Service
 @RequiredArgsConstructor
 public class PostWriter {
@@ -35,16 +33,12 @@ public class PostWriter {
 
 
     @Transactional
-    public void deletePost(Long userId, Long postId) {
-        User user = userReader.getActiveById(userId);
-        Post post = postReader.getActiveById(postId);
-        post.getUser().checkIsWriter(userId, POST_UNAUTHORIZED);
+    public void delete(User user, Post post) {
+        postRepository.delete(post);
 
-        postRepository.deletePostByPostId(postId);
-
-        commentRepository.findAllByPostIdAndStatus(postId, CommentStatus.ACTIVE).forEach(Comment::softDelete);
-
+        commentRepository.findAllByPostIdAndStatus(post.getId(), CommentStatus.ACTIVE).forEach(Comment::softDelete);
     }
+
     @Transactional
     public void increaseLikeCount(Post post){
         postRepository.increaseLikeCount(post);

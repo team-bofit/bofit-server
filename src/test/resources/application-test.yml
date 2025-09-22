@@ -37,6 +37,9 @@ jwt:
   accessTokenExpiration: 3600000
   refreshTokenExpiration: 604800000
 
+scheduler:
+  trend-posts-update-delay: 60000
+
 openai:
   secret-key: test-key
   model: test-gpt-model

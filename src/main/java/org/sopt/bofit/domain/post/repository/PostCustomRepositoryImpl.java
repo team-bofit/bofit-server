@@ -1,13 +1,24 @@
 package org.sopt.bofit.domain.post.repository;
 
+import static org.sopt.bofit.domain.post.constant.TrendPostConstant.TREND_POST_COMMENT_REPLY_WEIGHT;
+import static org.sopt.bofit.domain.post.constant.TrendPostConstant.TREND_POST_COMMENT_WEIGHT;
+import static org.sopt.bofit.domain.post.constant.TrendPostConstant.TREND_POST_LIKE_WEIGHT;
+import static org.sopt.bofit.domain.post.constant.TrendPostConstant.TREND_POST_SCORED_DATE_RANGE;
+import static org.sopt.bofit.domain.post.entity.constant.PostStatus.ACTIVE;
+
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.sopt.bofit.domain.comment.entity.QComment;
+import org.sopt.bofit.domain.commentreply.entity.QCommentReply;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
+import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.entity.QPost;
 import org.sopt.bofit.domain.post.entity.QPostLike;
 import org.sopt.bofit.domain.post.entity.constant.PostStatus;
@@ -16,8 +27,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 
 @Repository
@@ -46,7 +55,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                 .from(post)
                 .where(
                         post.user.id.eq(userId),
-                        post.status.eq(PostStatus.ACTIVE),
+                        post.status.eq(ACTIVE),
                         cursorId != null ? post.id.lt(cursorId) : null
                 )
                 .orderBy(post.id.desc())
@@ -160,6 +169,39 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
         if (hasNext) content.remove(size);
 
         return new SliceImpl<>(content, PageRequest.of(0, size), hasNext);
+    }
+
+    @Override
+    public List<Post> findTrendPosts(int size, LocalDateTime now) {
+
+        QPost post = QPost.post;
+        QPostLike postLike = QPostLike.postLike;
+        QComment comment = QComment.comment;
+        QCommentReply commentReply = QCommentReply.commentReply;
+
+        NumberExpression<Integer> score =
+            postLike.count().intValue().multiply(TREND_POST_LIKE_WEIGHT)
+            .add(comment.count().intValue().multiply(TREND_POST_COMMENT_WEIGHT)
+                .add(commentReply.count().intValue().multiply(TREND_POST_COMMENT_REPLY_WEIGHT))
+                .add(post.likeCount)
+                .add(post.commentCount)
+            );
+
+        LocalDateTime scoredDateRange = now.minusDays(TREND_POST_SCORED_DATE_RANGE);
+
+        List<Post> trendPosts = queryFactory
+            .select(post)
+            .from(post)
+            .leftJoin(postLike).on(postLike.post.eq(post), postLike.createdAt.after(scoredDateRange))
+            .leftJoin(comment).on(comment.post.eq(post), comment.createdAt.after(scoredDateRange))
+            .leftJoin(commentReply).on(commentReply.comment.eq(comment), commentReply.createdAt.after(scoredDateRange))
+            .where(post.status.eq(PostStatus.ACTIVE))
+            .orderBy(score.desc(), post.id.desc())
+            .groupBy(post.id)
+            .limit(size)
+            .fetch();
+
+        return trendPosts;
     }
 
     private NumberExpression<Double> getRelevanceScore(String keyword, QPost post) {

@@ -1,5 +1,10 @@
 package org.sopt.bofit.domain.post.service;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.entity.PostLike;
@@ -23,4 +28,11 @@ public class PostLikeReader {
         return postLikeRepository.findByPostAndUser(post, user)
             .orElseThrow(() -> new NotFoundException(PostErrorCode.POST_LIKE_NOT_FOUND));
     }
+
+    public Map<Long, Boolean> isLikedPosts(User user, List<Long> postIds){
+        Set<Long> likedPostIds = postLikeRepository.findLikedPostIdsByUserAndPosts(user, postIds);
+        return postIds.stream()
+            .collect(Collectors.toMap(Function.identity(), likedPostIds::contains));
+    }
+
 }

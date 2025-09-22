@@ -3,6 +3,8 @@ package org.sopt.bofit.domain.post.controller;
 import static org.sopt.bofit.domain.comment.constant.CommentConstant.COMMENTS_DEFAULT_SIZE;
 import static org.sopt.bofit.domain.commentreply.constant.CommentReplyConstant.COMMENT_REPLY_DEFAULT_SIZE;
 import static org.sopt.bofit.domain.post.constant.PostConstant.POSTS_DEFAULT_SIZE;
+import static org.sopt.bofit.domain.post.constant.TrendPostConstant.TREND_POST_DEFAULT_SIZE;
+import static org.sopt.bofit.domain.post.constant.TrendPostConstant.TREND_POST_DEFAULT_SORT;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CREATE_COMMENT;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CREATE_COMMENT_REPLY;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CREATE_POST;
@@ -22,6 +24,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.dto.request.CommentCreateRequest;
@@ -37,6 +40,7 @@ import org.sopt.bofit.domain.post.dto.request.PostUpdateRequest;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
+import org.sopt.bofit.domain.post.dto.response.TrendingPostsResponses;
 import org.sopt.bofit.domain.post.service.PostLikeService;
 import org.sopt.bofit.domain.post.service.PostService;
 import org.sopt.bofit.global.annotation.CustomExceptionDescription;
@@ -114,10 +118,21 @@ public class PostController {
     @CustomExceptionDescription(POST_DETAIL)
     @GetMapping("{post-id}")
     public BaseResponse<PostDetailResponse> getPostDetail(
-            @PathVariable(name = "post-id") Long postId,
-             @Parameter(hidden = true) @LoginUserId Long userId
+        @PathVariable(name = "post-id") Long postId,
+        @Parameter(hidden = true) @LoginUserId Long userId
     ){
         return BaseResponse.ok(postService.getPostDetail(userId, postId),"글 상세 조회 성공");
+    }
+
+    @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
+    @Operation(summary = "인기 게시물 목록 조회", description = "커뮤니티에서 인기글 목록을 조회합니다.")
+    @GetMapping("/trend")
+    public BaseResponse<TrendingPostsResponses> getTrendPosts(
+        @Parameter(hidden = true) @LoginUserId Long userId,
+        @RequestParam(defaultValue = TREND_POST_DEFAULT_SIZE, required = false) @Max(10) int size,
+        @RequestParam(defaultValue = TREND_POST_DEFAULT_SORT, required = false) String sort
+    ){
+        return BaseResponse.ok(postService.getTrendingPosts(userId, size, sort),"인기글 목록 조회 성공");
     }
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)

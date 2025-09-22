@@ -1,6 +1,10 @@
 
 package org.sopt.bofit.domain.post.service;
 
+import static org.sopt.bofit.domain.post.dto.response.PostDetailResponse.PostDetailImageResponse;
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_NOT_FOUND;
+
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.comment.entity.CommentStatus;
@@ -17,11 +21,6 @@ import org.sopt.bofit.global.exception.customexception.NotFoundException;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-
-import static org.sopt.bofit.domain.post.dto.response.PostDetailResponse.PostDetailImageResponse;
-import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_NOT_FOUND;
 
 @Service
 @RequiredArgsConstructor
@@ -52,7 +51,7 @@ public class PostReader {
 
         boolean isLike = postRepository.existsByIdAndUser(postId, writer);
 
-        long postCommentCount = activeComments.size();
+        int postCommentCount = activeComments.size();
 
         return PostDetailResponse.builder()
                 .writerId(writer.getId())
