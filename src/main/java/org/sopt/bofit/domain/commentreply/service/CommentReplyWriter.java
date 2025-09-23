@@ -18,4 +18,8 @@ public class CommentReplyWriter {
         return commentReplyRepository.save(commentReply);
     }
 
+    public void delete (CommentReply commentReply){
+        commentReply.softDelete();
+    }
+
 }
