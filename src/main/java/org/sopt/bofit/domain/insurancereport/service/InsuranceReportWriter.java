@@ -21,12 +21,12 @@ import org.sopt.bofit.domain.insurancereport.repository.InsuranceReportRepositor
 import org.sopt.bofit.domain.insurancereport.service.filter.CoveragePreferenceFilter;
 import org.sopt.bofit.domain.insurancereport.service.filter.DiseaseHistoryFilter;
 import org.sopt.bofit.domain.insurancereport.service.scoringrule.ScoringRuleCalculator;
+import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
 import org.sopt.bofit.domain.user.service.UserInfoWriter;
 import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.domain.user.service.UserWriter;
-import org.sopt.bofit.domain.user.service.dto.request.PersonalInfoCommand;
 import org.sopt.bofit.global.external.openai.client.OpenAiClient;
 import org.sopt.bofit.global.external.openai.dto.request.ChatRequestMessage;
 import org.sopt.bofit.global.external.openai.template.OpenAiPromptManager;
@@ -76,6 +76,7 @@ public class InsuranceReportWriter {
         InsuranceProduct product,
         User user,
         UserInfo userInfo,
+        PersonalInfo personalInfo,
         int age
     ){
         CoverageStatus cancerStatus = cancerCoverageStatus(product, average);
@@ -136,7 +137,7 @@ public class InsuranceReportWriter {
 
             .build();
 
-        report.updateRationale(generateRationale(user, userInfo, report, age));
+        report.updateRationale(generateRationale(personalInfo, userInfo, report, age));
         return report;
     }
 
@@ -146,19 +147,19 @@ public class InsuranceReportWriter {
 		InsuranceReport report,
 		User requestUser,
 		UserInfo userInfo,
-        PersonalInfoCommand personalInfoCommand
+        PersonalInfo personalInfo
 	){
         User user = userReader.getActiveById(requestUser.getId());
 		InsuranceReport savedInsuranceReport = insuranceReportRepository.save(report);
 		userInfoWriter.save(userInfo.updateReport(savedInsuranceReport));
 
-        userWriter.updateUser(user, personalInfoCommand);
+        userWriter.updateUser(user, personalInfo);
 
 		return savedInsuranceReport;
 	}
 
 	public ReportRationale generateRationale(
-		User user,
+        PersonalInfo personalInfo,
 		UserInfo userInfo,
 		InsuranceReport report,
 		int age
@@ -167,7 +168,7 @@ public class InsuranceReportWriter {
 		ReportRationale response = openAiClient.sendReportRelationalRequest(
 			List.of(
 				new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportSystemMessage()),
-				new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportRationale(user, userInfo, report, age))
+				new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportRationale(personalInfo, userInfo, report, age))
 			));
 		return response;
 	}

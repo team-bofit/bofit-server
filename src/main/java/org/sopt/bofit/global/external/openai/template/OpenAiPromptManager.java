@@ -2,7 +2,7 @@ package org.sopt.bofit.global.external.openai.template;
 
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.template.ReportPromptTemplate;
-import org.sopt.bofit.domain.user.entity.User;
+import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.UserInfo;
 import org.springframework.stereotype.Component;
 
@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 public class OpenAiPromptManager {
 
 	public String generateReportRationale(
-		User user,
+        PersonalInfo personalInfo,
 		UserInfo userInfo,
 		InsuranceReport report,
 		int age
 	){
-		return ReportPromptTemplate.recommendReasonAndKeywordChip(user, userInfo, report, age);
+		return ReportPromptTemplate.recommendReasonAndKeywordChip(personalInfo, userInfo, report, age);
 	}
 
 	public String generateReportSystemMessage(){
