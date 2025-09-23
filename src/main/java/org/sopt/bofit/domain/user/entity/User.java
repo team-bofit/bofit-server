@@ -58,6 +58,10 @@ public class User extends BaseEntity {
     @Builder.Default
     private UserStatus status = UserStatus.ACTIVE;
 
+    public void updatePersonalInfo(PersonalInfo personalInfo) {
+        this.personalInfo = personalInfo;
+    }
+
     public void updateName(String name) {
         this.personalInfo.updateName(name);
     }
