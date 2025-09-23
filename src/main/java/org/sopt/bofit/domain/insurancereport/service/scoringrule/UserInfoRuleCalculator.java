@@ -1,12 +1,12 @@
 package org.sopt.bofit.domain.insurancereport.service.scoringrule;
 
-import static org.sopt.bofit.domain.insurancereport.constant.ScoringRuleConstant.*;
-import static org.sopt.bofit.domain.user.entity.constant.Job.*;
+import static org.sopt.bofit.domain.insurancereport.constant.ScoringRuleConstant.MAJOR_DISEASE_RISKED_AGE;
+import static org.sopt.bofit.domain.user.entity.constant.Job.DRIVER_DELIVERY;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-
+import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.userinfo.UserInfoRuleType;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.userinfo.UserInfoScoringRule;
@@ -15,8 +15,6 @@ import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.Gender;
 import org.sopt.bofit.domain.user.entity.constant.Job;
 import org.springframework.stereotype.Service;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -41,12 +39,12 @@ public class UserInfoRuleCalculator {
 	private Map<UserInfoRuleType, Predicate<User>> getUserInfoRuleMap(int age){
 		return Map.of(
 			UserInfoRuleType.AT_RISK_OF_MAJOR_DISEASE, user -> age > MAJOR_DISEASE_RISKED_AGE,
-			UserInfoRuleType.FEMALE, user -> user.getGender().equals(Gender.FEMALE),
-			UserInfoRuleType.PRODUCTION_SITE, user -> user.getJob().equals(Job.PRODUCTION_SITE),
-			UserInfoRuleType.DRIVER_DELIVERY, user -> user.getJob().equals(DRIVER_DELIVERY),
-			UserInfoRuleType.MARRIED, User::isMarried,
-			UserInfoRuleType.HAS_CHILD, User::isHasChild,
-			UserInfoRuleType.DRIVER, User::isDriver
+			UserInfoRuleType.FEMALE, user -> user.getPersonalInfo().getGender().equals(Gender.FEMALE),
+			UserInfoRuleType.PRODUCTION_SITE, user -> user.getPersonalInfo().getJob().equals(Job.PRODUCTION_SITE),
+			UserInfoRuleType.DRIVER_DELIVERY, user -> user.getPersonalInfo().getJob().equals(DRIVER_DELIVERY),
+			UserInfoRuleType.MARRIED, user -> user.getPersonalInfo().isMarried(),
+			UserInfoRuleType.HAS_CHILD, user -> user.getPersonalInfo().isHasChild(),
+			UserInfoRuleType.DRIVER, user -> user.getPersonalInfo().isDriver()
 		);
 	}
 
