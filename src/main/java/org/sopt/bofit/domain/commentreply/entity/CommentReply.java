@@ -22,6 +22,7 @@ import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.global.entity.BaseEntity;
 import org.sopt.bofit.global.exception.constant.CommentReplyErrorCode;
 import org.sopt.bofit.global.exception.customexception.BadRequestException;
+import org.sopt.bofit.global.exception.customexception.ForbiddenException;
 
 @Getter
 @Entity
@@ -70,6 +71,12 @@ public class CommentReply extends BaseEntity {
     public void checkComment(Comment comment){
         if (! this.comment.equals(comment)){
             throw new BadRequestException(CommentReplyErrorCode.UNMATCHED_COMMENT_REPLY_COMMENT);
+        }
+    }
+
+    public void checkWriter(User user){
+        if (! this.user.equals(user)){
+            throw new ForbiddenException(CommentReplyErrorCode.COMMENT_REPLY_UNAUTHORIZED);
         }
     }
 
