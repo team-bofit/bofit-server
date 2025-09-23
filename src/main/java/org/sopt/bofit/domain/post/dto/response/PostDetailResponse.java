@@ -1,9 +1,10 @@
 package org.sopt.bofit.domain.post.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
+
 import java.time.LocalDateTime;
 import java.util.List;
-import lombok.Builder;
 
 @Builder
 public record PostDetailResponse(
@@ -33,6 +34,9 @@ public record PostDetailResponse(
 
         @Schema(description = "사용자 좋아요 여부")
         boolean likedByCurrentUser,
+
+        @Schema(description = "게시물 카테고리")
+        PostCategoryResponse category,
 
         @Schema(description = "이미지 url")
         List<PostDetailImageResponse> imageUrl
