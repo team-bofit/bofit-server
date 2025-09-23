@@ -7,13 +7,13 @@ import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
 import org.sopt.bofit.domain.user.entity.constant.Gender;
 import org.sopt.bofit.domain.user.entity.constant.Job;
+import org.sopt.bofit.domain.user.service.dto.request.PersonalInfoCommand;
 import org.sopt.bofit.domain.user.service.dto.request.UserInfoCommand;
-import org.sopt.bofit.domain.user.service.dto.request.UserInfoUpdateCommand;
 
 public class UserInfoFixture {
 
-    public static UserInfoUpdateCommand userInfoUpdateCommand(){
-        return new UserInfoUpdateCommand(
+    public static PersonalInfoCommand userInfoUpdateCommand(){
+        return new PersonalInfoCommand(
             "테스트",
             Gender.FEMALE,
             LocalDate.of(2000, 01, 01),

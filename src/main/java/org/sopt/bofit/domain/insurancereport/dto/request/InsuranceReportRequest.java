@@ -19,8 +19,8 @@ import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
 import org.sopt.bofit.domain.user.entity.constant.Gender;
 import org.sopt.bofit.domain.user.entity.constant.Job;
+import org.sopt.bofit.domain.user.service.dto.request.PersonalInfoCommand;
 import org.sopt.bofit.domain.user.service.dto.request.UserInfoCommand;
-import org.sopt.bofit.domain.user.service.dto.request.UserInfoUpdateCommand;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @PremiumRange
@@ -84,9 +84,8 @@ public record InsuranceReportRequest(
 	int maxPremium
 ) {
 
-	public UserInfoUpdateCommand toUserUpdate(){
-			return new UserInfoUpdateCommand(name, gender, birthDate, job,
-				isMarried, isDriver, hasChild);
+	public PersonalInfoCommand toPersonalInfoCommand(){
+			return new PersonalInfoCommand(name, gender, birthDate, job, isMarried, isDriver, hasChild);
 	}
 
     public UserInfoCommand toUserInfoCommand(){

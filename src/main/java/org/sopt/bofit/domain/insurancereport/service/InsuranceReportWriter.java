@@ -26,7 +26,7 @@ import org.sopt.bofit.domain.user.entity.UserInfo;
 import org.sopt.bofit.domain.user.service.UserInfoWriter;
 import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.domain.user.service.UserWriter;
-import org.sopt.bofit.domain.user.service.dto.request.UserInfoUpdateCommand;
+import org.sopt.bofit.domain.user.service.dto.request.PersonalInfoCommand;
 import org.sopt.bofit.global.external.openai.client.OpenAiClient;
 import org.sopt.bofit.global.external.openai.dto.request.ChatRequestMessage;
 import org.sopt.bofit.global.external.openai.template.OpenAiPromptManager;
@@ -146,13 +146,13 @@ public class InsuranceReportWriter {
 		InsuranceReport report,
 		User requestUser,
 		UserInfo userInfo,
-        UserInfoUpdateCommand userInfoUpdateCommand
+        PersonalInfoCommand personalInfoCommand
 	){
         User user = userReader.getActiveById(requestUser.getId());
 		InsuranceReport savedInsuranceReport = insuranceReportRepository.save(report);
 		userInfoWriter.save(userInfo.updateReport(savedInsuranceReport));
 
-        userWriter.updateUser(user, userInfoUpdateCommand);
+        userWriter.updateUser(user, personalInfoCommand);
 
 		return savedInsuranceReport;
 	}
