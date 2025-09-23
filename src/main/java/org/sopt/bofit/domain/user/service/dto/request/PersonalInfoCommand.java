@@ -5,7 +5,7 @@ import org.sopt.bofit.domain.user.entity.constant.Gender;
 import org.sopt.bofit.domain.user.entity.constant.Job;
 
 
-public record UserInfoUpdateCommand(
+public record PersonalInfoCommand(
 	String name,
 	Gender gender,
 	LocalDate birthDate,

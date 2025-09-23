@@ -47,7 +47,7 @@ public class InsuranceController {
 	public BaseResponse<IssueInsuranceReportResponse> issueReport(
 		@Parameter(hidden = true) @LoginUserId Long userId,
 		@Valid @RequestBody InsuranceReportRequest request){
-		IssueInsuranceReportResponse response = insuranceReportService.recommend(userId, request.toUserInfoCommand(), request.toUserUpdate());
+		IssueInsuranceReportResponse response = insuranceReportService.recommend(userId, request.toUserInfoCommand(), request.toPersonalInfoCommand());
 		return BaseResponse.create(response, "보험 추천 리포트 발급 성공");
 	}
 

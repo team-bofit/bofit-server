@@ -34,7 +34,7 @@ import org.sopt.bofit.domain.user.entity.constant.Job;
 import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserInfoRepository;
 import org.sopt.bofit.domain.user.repository.UserRepository;
-import org.sopt.bofit.domain.user.service.dto.request.UserInfoUpdateCommand;
+import org.sopt.bofit.domain.user.service.dto.request.PersonalInfoCommand;
 import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -223,10 +223,11 @@ class InsuranceReportWriterTest extends IntegrationTestSupport {
             .withStatistic(savedStatistic)
             .build();
 
-        UserInfoUpdateCommand userInfoUpdateCommand = UserInfoFixture.userInfoUpdateCommand();
+        PersonalInfoCommand personalInfoCommand = UserInfoFixture.userInfoUpdateCommand();
 
 	    // when
-		InsuranceReport result = insuranceReportWriter.saveReport(insuranceReport, savedUser, userInfo, userInfoUpdateCommand);
+		InsuranceReport result = insuranceReportWriter.saveReport(insuranceReport, savedUser, userInfo,
+            personalInfoCommand);
 
 		// then
 		assertThat(userInfoRepository.findAll().size()).isEqualTo(1);
