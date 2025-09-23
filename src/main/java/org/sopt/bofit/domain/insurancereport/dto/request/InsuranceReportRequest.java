@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import lombok.Builder;
 import org.sopt.bofit.domain.insurancereport.annotation.PremiumRange;
+import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
 import org.sopt.bofit.domain.user.entity.constant.Gender;
@@ -87,6 +88,18 @@ public record InsuranceReportRequest(
 	public PersonalInfoCommand toPersonalInfoCommand(){
 			return new PersonalInfoCommand(name, gender, birthDate, job, isMarried, isDriver, hasChild);
 	}
+
+    public PersonalInfo toPersonalInfo(){
+        return PersonalInfo.builder()
+            .name(name)
+            .gender(gender)
+            .birthDate(birthDate)
+            .job(job)
+            .isMarried(isMarried)
+            .isDriver(isDriver)
+            .hasChild(hasChild)
+            .build();
+    }
 
     public UserInfoCommand toUserInfoCommand(){
         return new UserInfoCommand(

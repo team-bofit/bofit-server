@@ -16,10 +16,10 @@ import org.sopt.bofit.domain.insurancereport.dto.response.disability.DisabilityS
 import org.sopt.bofit.domain.insurancereport.dto.response.majordisease.MajorDiseaseSection;
 import org.sopt.bofit.domain.insurancereport.dto.response.surgery.SurgerySection;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
+import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
 import org.sopt.bofit.domain.user.service.UserReader;
-import org.sopt.bofit.domain.user.service.dto.request.PersonalInfoCommand;
 import org.sopt.bofit.domain.user.service.dto.request.UserInfoCommand;
 import org.sopt.bofit.domain.user.util.UserUtil;
 import org.springframework.stereotype.Service;
@@ -37,10 +37,10 @@ public class InsuranceReportService {
 
 	private final UserReader userReader;
 
-	public IssueInsuranceReportResponse recommend(Long userId, UserInfoCommand userInfoCommand, PersonalInfoCommand personalInfoCommand){
+	public IssueInsuranceReportResponse recommend(Long userId, UserInfoCommand userInfoCommand, PersonalInfo personalInfo){
 		User user = userReader.getActiveById(userId);
         UserInfo userInfo = userInfoCommand.createUserInfo(user);
-        int age = UserUtil.convertInternationalAge(personalInfoCommand.birthDate());
+        int age = UserUtil.convertInternationalAge(personalInfo.getBirthDate());
 
 		List<InsuranceProduct> products
 			= insuranceProductReader.getAgeAndPremiumFilteredProducts(age, userInfo.getMinPrice(), userInfo.getMaxPrice());
@@ -50,9 +50,10 @@ public class InsuranceReportService {
 		InsuranceProduct recommendedProduct = insuranceReportWriter.recommendBestInsurance(
 			products, user, userInfo, age);
 
-        InsuranceReport createdReport = insuranceReportWriter.createReport(totalAverage, recommendedProduct, user, userInfo, age);
+        InsuranceReport createdReport
+            = insuranceReportWriter.createReport(totalAverage, recommendedProduct, user, userInfo, personalInfo, age);
         InsuranceReport insuranceReport = insuranceReportWriter.saveReport(createdReport, user, userInfo,
-            personalInfoCommand);
+            personalInfo);
 
 		return new IssueInsuranceReportResponse(insuranceReport.getId());
 	}
