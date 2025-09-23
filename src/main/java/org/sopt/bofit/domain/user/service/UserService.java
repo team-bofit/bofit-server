@@ -7,11 +7,11 @@ import org.sopt.bofit.domain.user.dto.response.JobResponses;
 import org.sopt.bofit.domain.user.dto.response.MyCommentSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.MyPostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
+import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
 import org.sopt.bofit.domain.user.entity.constant.Job;
-import org.sopt.bofit.domain.user.service.dto.request.PersonalInfoCommand;
 import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,12 +40,12 @@ public class UserService {
 	}
 
 	@Transactional
-	public User userUpdate(Long userId, PersonalInfoCommand personalInfoCommand){
+	public User userUpdate(Long userId, PersonalInfo personalInfo){
 		User user = userReader.findById(userId);
 
 		return userWriter.updateUser(
 			user,
-            personalInfoCommand
+            personalInfo
 		);
 	}
 
