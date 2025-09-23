@@ -1,18 +1,5 @@
 package org.sopt.bofit.domain.user.entity;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.hibernate.annotations.Type;
-import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
-import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
-import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
-import org.sopt.bofit.global.converter.CoveragePreferenceMapConverter;
-import org.sopt.bofit.global.converter.DiseaseEnumListJsonConverter;
-import org.sopt.bofit.global.entity.BaseEntity;
-
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -25,11 +12,22 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
+import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
+import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
+import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
+import org.sopt.bofit.global.converter.CoveragePreferenceMapConverter;
+import org.sopt.bofit.global.converter.DiseaseEnumListJsonConverter;
+import org.sopt.bofit.global.entity.BaseEntity;
 
 @Entity
 @Getter
@@ -38,6 +36,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Table(name = "user_info")
 public class UserInfo extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
