@@ -18,7 +18,7 @@ public class CommentWriter {
 		return commentRepository.save(comment);
 	}
 
-	public Comment softDelete(Comment comment){
+	public Comment delete(Comment comment){
 		return comment.softDelete();
 	}
 

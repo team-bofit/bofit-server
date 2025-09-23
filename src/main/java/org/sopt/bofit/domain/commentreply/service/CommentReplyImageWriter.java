@@ -22,7 +22,7 @@ public class CommentReplyImageWriter {
     }
 
     @Transactional
-    public void softDelete(Map<Long, CommentReplyImage> commentReplyImages, List<Long> deleteImageIds){
+    public void delete(Map<Long, CommentReplyImage> commentReplyImages, List<Long> deleteImageIds){
         deleteImageIds.forEach(id -> {
             commentReplyImages.get(id).softDelete();
         });

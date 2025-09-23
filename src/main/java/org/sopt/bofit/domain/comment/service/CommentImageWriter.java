@@ -1,15 +1,14 @@
 package org.sopt.bofit.domain.comment.service;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.comment.entity.CommentImage;
 import org.sopt.bofit.domain.comment.repository.CommentImageRepository;
 import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -37,7 +36,7 @@ public class CommentImageWriter {
     }
 
     @Transactional
-    public void softDelete(Map<Long, CommentImage> commentImages, List<Long> deleteImageIds){
+    public void delete(Map<Long, CommentImage> commentImages, List<Long> deleteImageIds){
         deleteImageIds.forEach(id -> {
             commentImages.get(id).softDelete();
         });
