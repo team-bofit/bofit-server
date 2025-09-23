@@ -1,9 +1,8 @@
 package org.sopt.bofit.domain.user.dto.response;
 
-import org.sopt.bofit.domain.user.entity.User;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
+import org.sopt.bofit.domain.user.entity.User;
 
 public record UserProfileResponse(
         @Schema(description = "유저 PK", example = "1")
@@ -39,7 +38,7 @@ public record UserProfileResponse(
     public static UserProfileResponse from(User user) {
         return UserProfileResponse.builder()
             .userId(user.getId())
-            .username(user.getName())
+            .username(user.getPersonalInfo().getName())
             .nickname(user.getNickname())
             .profileImageUrl(user.getProfileImage())
             .isRecommendInsurance(user.isRecommendInsurance())
