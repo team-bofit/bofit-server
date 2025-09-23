@@ -84,4 +84,8 @@ public class CommentReply extends BaseEntity {
         this.content = content;
     }
 
+    public void softDelete(){
+        this.status = CommentReplyStatus.INACTIVE;
+    }
+
 }
