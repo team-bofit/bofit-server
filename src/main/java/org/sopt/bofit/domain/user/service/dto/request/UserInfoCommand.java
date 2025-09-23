@@ -18,6 +18,7 @@ public record UserInfoCommand (
 
     public UserInfo createUserInfo(User user){
         return UserInfo.builder()
+            .user(user)
             .maxPrice(maxPrice)
             .minPrice(minPrice)
             .diseaseHistory(diseaseHistory)
