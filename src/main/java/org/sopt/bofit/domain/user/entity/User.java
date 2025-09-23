@@ -1,14 +1,28 @@
 package org.sopt.bofit.domain.user.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.sopt.bofit.domain.user.entity.constant.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import java.time.LocalDate;
+import java.util.Objects;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.sopt.bofit.domain.user.entity.constant.Gender;
+import org.sopt.bofit.domain.user.entity.constant.Job;
+import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
+import org.sopt.bofit.domain.user.entity.constant.UserNicknameConstant;
+import org.sopt.bofit.domain.user.entity.constant.UserStatus;
 import org.sopt.bofit.global.entity.BaseEntity;
 import org.sopt.bofit.global.exception.constant.ErrorCode;
 import org.sopt.bofit.global.exception.customexception.ForbiddenException;
-
-import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -28,30 +42,13 @@ public class User extends BaseEntity {
     @Column(unique = true, nullable = false, name = "oauth_id")
     private String oauthId;
 
-    private String name;
-
     private String nickname;
 
     @Column(name = "profile_image")
     private String profileImage;
 
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
-    @Column(name = "birth_date")
-    private LocalDate birthDate;
-
-    @Enumerated(EnumType.STRING)
-    private Job job;
-
-    @Column(name = "is_married")
-    private boolean isMarried;
-
-    @Column(name = "is_driver")
-    private boolean isDriver;
-
-    @Column(name = "has_child")
-    private boolean hasChild;
+    @Embedded
+    private PersonalInfo personalInfo;
 
     @Column(name = "is_recommend_insurance")
     private boolean isRecommendInsurance;
@@ -62,7 +59,7 @@ public class User extends BaseEntity {
     private UserStatus status = UserStatus.ACTIVE;
 
     public void updateName(String name) {
-        this.name = name;
+        this.personalInfo.updateName(name);
     }
 
     public void updateNickname(String nickname) {
@@ -74,27 +71,27 @@ public class User extends BaseEntity {
     }
 
     public void updateGender(Gender gender) {
-        this.gender = gender;
+        this.personalInfo.updateGender(gender);
     }
 
     public void updateBirthDate(LocalDate birthDate) {
-        this.birthDate = birthDate;
+        this.personalInfo.updateBirthDate(birthDate);
     }
 
     public void updateJob(Job job) {
-        this.job = job;
+        this.personalInfo.updateJob(job);
     }
 
     public void updateMarried(boolean married) {
-        isMarried = married;
+        this.personalInfo.updateMarried(married);
     }
 
     public void updateDriver(boolean driver) {
-        isDriver = driver;
+        this.personalInfo.updateDriver(driver);
     }
 
     public void updateHasChild(boolean hasChild) {
-        this.hasChild = hasChild;
+        this.personalInfo.updateHasChild(hasChild);
     }
 
     public void recommendedInsurance(){
