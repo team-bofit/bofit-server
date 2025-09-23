@@ -100,7 +100,7 @@ public class CommentService {
         postCacheService.decreaseCommentCount(postId);
 
 		commentWriter.delete(comment);
-        commentImageWriter.delete();
+        commentImageWriter.deleteFromComment(comment);
 	}
 
     @Transactional(readOnly = true)
