@@ -1,6 +1,11 @@
 package org.sopt.bofit.domain.commentreply.service;
 
 
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.comment.service.CommentReader;
@@ -23,12 +28,6 @@ import org.sopt.bofit.global.file.util.ImageValidator;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor
@@ -93,6 +92,22 @@ public class CommentReplyService {
         command.content().ifPresent(commentReply::updateContent);
 
         return commentReply;
+    }
+
+    @Transactional
+    public void delete(Long userId, Long postId, Long commentId, Long commentReplyId){
+        User user = userReader.getActiveById(userId);
+        Post post = postReader.getActiveById(postId);
+        Comment comment = commentReader.getActiveById(commentId);
+        CommentReply commentReply = commentReplyReader.getActiveById(commentReplyId);
+
+        commentReply.checkComment(comment);
+        commentReply.checkWriter(user);
+
+        commentReplyWriter.delete(commentReply);
+        postWriter.decreaseTrendScore(post);
+        commentWriter.decreaseReplyCount(comment);
+        commentReplyImageWriter.deleteFromCommentReply(commentReply);
     }
 
     @Transactional(readOnly = true)
