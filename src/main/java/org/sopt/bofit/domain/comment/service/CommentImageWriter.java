@@ -6,6 +6,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.comment.entity.CommentImage;
+import org.sopt.bofit.domain.comment.entity.CommentImageStatus;
 import org.sopt.bofit.domain.comment.repository.CommentImageRepository;
 import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 import org.springframework.stereotype.Service;
@@ -42,5 +43,11 @@ public class CommentImageWriter {
         });
     }
 
+    @Transactional
+    public void deleteFromComment(Comment comment){
+        List<CommentImage> activeImages = commentImageRepository.findAllByCommentAndStatus(
+            comment, CommentImageStatus.ACTIVE);
+        activeImages.forEach(CommentImage::softDelete);
+    }
 
 }
