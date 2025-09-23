@@ -11,6 +11,7 @@ import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CR
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.CREATE_POST_LIKE;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DEFAULT;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DELETE_COMMENT;
+import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DELETE_COMMENT_REPLY;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DELETE_POST;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.DELETE_POST_LIKE;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.POST_DETAIL;
@@ -40,8 +41,8 @@ import org.sopt.bofit.domain.post.dto.request.PostUpdateRequest;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
-import org.sopt.bofit.domain.post.entity.constant.PostCategoryFilter;
 import org.sopt.bofit.domain.post.dto.response.TrendingPostsResponses;
+import org.sopt.bofit.domain.post.entity.constant.PostCategoryFilter;
 import org.sopt.bofit.domain.post.entity.constant.PostSortOrder;
 import org.sopt.bofit.domain.post.service.PostLikeService;
 import org.sopt.bofit.domain.post.service.PostService;
@@ -49,16 +50,16 @@ import org.sopt.bofit.global.annotation.CustomExceptionDescription;
 import org.sopt.bofit.global.annotation.LoginUserId;
 import org.sopt.bofit.global.dto.response.BaseResponse;
 import org.sopt.bofit.global.dto.response.SliceResponse;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
-
-import static org.sopt.bofit.domain.comment.constant.CommentConstant.COMMENTS_DEFAULT_SIZE;
-import static org.sopt.bofit.domain.commentreply.constant.CommentReplyConstant.COMMENT_REPLY_DEFAULT_SIZE;
-import static org.sopt.bofit.domain.post.constant.PostConstant.POSTS_DEFAULT_SIZE;
-import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
-import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_DESCRIPTION_COMMUNITY;
-import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_NAME_COMMUNITY;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -215,7 +216,7 @@ public class PostController {
         @Parameter(hidden = true) @LoginUserId Long userId
     ){
         postLikeService.deletePostLike(userId, postId);
-        return BaseResponse.create("좋아요 삭제 성공");
+        return BaseResponse.ok("좋아요 삭제 성공");
     }
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
@@ -259,7 +260,21 @@ public class PostController {
         @RequestBody @Valid CommentReplyUpdateRequest request
     ){
         commentReplyService.update(userId, postId, commentId, commentReplyId, request.toCommand());
-        return BaseResponse.create("대댓글 수정 성공");
+        return BaseResponse.ok("대댓글 수정 성공");
+    }
+
+    @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
+    @Operation(summary = "대댓글 삭제", description = "유저가 커뮤니티 댓글의 대댓글을 삭제합니다.")
+    @CustomExceptionDescription(DELETE_COMMENT_REPLY)
+    @DeleteMapping("/{post-id}/comments/{comment-id}/reply/{comment-reply-id}")
+    public BaseResponse<Void> deleteCommentReply(
+        @PathVariable(name = "post-id") Long postId,
+        @PathVariable(name = "comment-id") Long commentId,
+        @PathVariable(name = "comment-reply-id") Long commentReplyId,
+        @Parameter(hidden = true) @LoginUserId Long userId
+    ){
+        commentReplyService.delete(userId, postId, commentId, commentReplyId);
+        return BaseResponse.ok("대댓글 삭제 성공");
     }
 
     @Tag(name = TAG_NAME_COMMUNITY, description = TAG_DESCRIPTION_COMMUNITY)
