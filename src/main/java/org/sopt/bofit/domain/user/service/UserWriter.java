@@ -3,9 +3,9 @@ package org.sopt.bofit.domain.user.service;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.post.repository.PostRepository;
+import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.repository.UserRepository;
-import org.sopt.bofit.domain.user.service.dto.request.PersonalInfoCommand;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,16 +23,9 @@ public class UserWriter {
     @Transactional
     public User updateUser(
         User user,
-        PersonalInfoCommand personalInfoCommand
+        PersonalInfo personalInfo
     ){
-        user.updateName(personalInfoCommand.name());
-        user.updateJob(personalInfoCommand.job());
-        user.updateHasChild(personalInfoCommand.hasChild());
-        user.updateDriver(personalInfoCommand.isDriver());
-        user.updateGender(personalInfoCommand.gender());
-        user.updateMarried(personalInfoCommand.isMarried());
-        user.updateBirthDate(personalInfoCommand.birthDate());
-
+        user.updatePersonalInfo(personalInfo);
         user.recommendedInsurance();
 
         return user;
