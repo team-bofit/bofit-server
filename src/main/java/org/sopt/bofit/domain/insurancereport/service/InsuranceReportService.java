@@ -40,7 +40,7 @@ public class InsuranceReportService {
 	public IssueInsuranceReportResponse recommend(Long userId, UserInfoCommand userInfoCommand, UserInfoUpdateCommand userInfoUpdateCommand){
 		User user = userReader.getActiveById(userId);
         UserInfo userInfo = userInfoCommand.createUserInfo(user);
-        int age = UserUtil.convertInternationalAge(user.getBirthDate());
+        int age = UserUtil.convertInternationalAge(userInfoUpdateCommand.birthDate());
 
 		List<InsuranceProduct> products
 			= insuranceProductReader.getAgeAndPremiumFilteredProducts(age, userInfo.getMinPrice(), userInfo.getMaxPrice());
