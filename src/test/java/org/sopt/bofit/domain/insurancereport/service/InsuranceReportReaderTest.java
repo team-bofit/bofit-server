@@ -1,11 +1,14 @@
 package org.sopt.bofit.domain.insurancereport.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import java.util.List;
 import java.util.UUID;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,16 +23,13 @@ import org.sopt.bofit.domain.insurancereport.builder.InsuranceReportTestBuilder;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.entity.constant.CoverageStatus;
 import org.sopt.bofit.domain.insurancereport.errorcode.InsuranceReportErrorCode;
+import org.sopt.bofit.domain.insurancereport.fixture.UserFixture;
 import org.sopt.bofit.domain.insurancereport.repository.InsuranceReportRepository;
 import org.sopt.bofit.domain.user.entity.User;
-import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserRepository;
 import org.sopt.bofit.global.exception.customexception.NotFoundException;
 import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 
 class InsuranceReportReaderTest extends IntegrationTestSupport {
 
@@ -71,11 +71,7 @@ class InsuranceReportReaderTest extends IntegrationTestSupport {
 			.withStatisticRange(StatisticRange.TOTAL_AVERAGE)
 			.build();
 
-		User user = User.builder()
-			.name("유저1")
-			.loginProvider(LoginProvider.KAKAO)
-			.oauthId("0123456")
-			.build();
+		User user = UserFixture.getUser();
 
 		insuranceProductRepository.save(product);
 		insuranceStatisticRepository.save(statistic);
@@ -133,11 +129,7 @@ class InsuranceReportReaderTest extends IntegrationTestSupport {
 			.withStatisticRange(StatisticRange.TOTAL_AVERAGE)
 			.build();
 
-		User user = User.builder()
-			.name("유저1")
-			.loginProvider(LoginProvider.KAKAO)
-			.oauthId("0123456")
-			.build();
+		User user = UserFixture.getUser();
 
 		insuranceProductRepository.saveAll(List.of(product1, product2));
 		insuranceStatisticRepository.save(statistic);
@@ -176,11 +168,7 @@ class InsuranceReportReaderTest extends IntegrationTestSupport {
 	@Test
 	void getLastReportWhenReportDidntExist(){
 		// given
-		User user = User.builder()
-			.name("유저1")
-			.loginProvider(LoginProvider.KAKAO)
-			.oauthId("0123456")
-			.build();
+		User user = UserFixture.getUser();
 		userRepository.save(user);
 
 		// when // then
