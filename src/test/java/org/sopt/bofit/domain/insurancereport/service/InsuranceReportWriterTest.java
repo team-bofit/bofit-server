@@ -6,6 +6,7 @@ import static org.mockito.Mockito.anyList;
 import static org.mockito.Mockito.when;
 import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONALE_REASONS;
 import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONAL_KEYWORD_CHIPS;
+import static org.sopt.bofit.domain.insurancereport.fixture.UserFixture.PERSONAL_NAME;
 
 import java.util.List;
 import java.util.Map;
@@ -23,18 +24,15 @@ import org.sopt.bofit.domain.insurance.repository.InsuranceStatisticRepository;
 import org.sopt.bofit.domain.insurancereport.builder.InsuranceReportTestBuilder;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
-import org.sopt.bofit.domain.insurancereport.fixture.UserInfoFixture;
+import org.sopt.bofit.domain.insurancereport.fixture.UserFixture;
 import org.sopt.bofit.domain.insurancereport.repository.InsuranceReportRepository;
+import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
 import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
-import org.sopt.bofit.domain.user.entity.constant.Gender;
-import org.sopt.bofit.domain.user.entity.constant.Job;
-import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserInfoRepository;
 import org.sopt.bofit.domain.user.repository.UserRepository;
-import org.sopt.bofit.domain.user.service.dto.request.PersonalInfoCommand;
 import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -95,13 +93,7 @@ class InsuranceReportWriterTest extends IntegrationTestSupport {
 			.withStatus(InsuranceStatus.RECOMMENDED)
 			.build();
 
-		User user = User.builder()
-			.gender(Gender.FEMALE)
-			.hasChild(false)
-			.job(Job.STUDENT)
-			.isDriver(false)
-			.isMarried(false)
-			.build();
+		User user = UserFixture.getUser();
 
 		UserInfo userInfo = UserInfo.builder()
 			.minPrice(10000)
@@ -132,17 +124,7 @@ class InsuranceReportWriterTest extends IntegrationTestSupport {
             .withStatisticRange(StatisticRange.TOTAL_AVERAGE)
             .build();
 
-        String userName = "유저1";
-        User user = User.builder()
-            .name(userName)
-            .loginProvider(LoginProvider.KAKAO)
-            .gender(Gender.FEMALE)
-            .job(Job.STUDENT)
-            .isMarried(false)
-            .hasChild(false)
-            .oauthId("0123456")
-            .build();
-
+        User user = UserFixture.getUser();
         Map<CoveragePreference, Integer> selectedCoverages = Map.of(
             CoveragePreference.MAXIMUM_COVERAGE, 1,
             CoveragePreference.MAJOR_DISEASE, 2
@@ -164,14 +146,17 @@ class InsuranceReportWriterTest extends IntegrationTestSupport {
         when(openAiClient.sendReportRelationalRequest(anyList()))
             .thenReturn(new ReportRationale(DEFAULT_RATIONALE_REASONS, DEFAULT_RATIONAL_KEYWORD_CHIPS));
 
+        PersonalInfo personalInfo = UserFixture.getPersonalInfo();
+
         // when
-        InsuranceReport result = insuranceReportWriter.createReport(statistic, savedProduct, savedUser, userInfo, 30);
+        InsuranceReport result =
+            insuranceReportWriter.createReport(statistic, savedProduct, savedUser, userInfo, personalInfo, 30);
 
         // then
         assertThat(result)
             .isNotNull()
-            .extracting("product.basicInformation.name", "user.name", "reportRationale.reasons")
-            .containsExactly(productName, userName, DEFAULT_RATIONALE_REASONS );
+            .extracting("product.basicInformation.name", "user.personalInfo.name", "reportRationale.reasons")
+            .containsExactly(productName, PERSONAL_NAME, DEFAULT_RATIONALE_REASONS );
 
     }
 
@@ -188,16 +173,7 @@ class InsuranceReportWriterTest extends IntegrationTestSupport {
 			.withStatisticRange(StatisticRange.TOTAL_AVERAGE)
 			.build();
 
-		String userName = "유저1";
-		User user = User.builder()
-			.name(userName)
-			.loginProvider(LoginProvider.KAKAO)
-			.gender(Gender.FEMALE)
-			.job(Job.STUDENT)
-			.isMarried(false)
-			.hasChild(false)
-			.oauthId("0123456")
-			.build();
+		User user = UserFixture.getUser();
 
 		Map<CoveragePreference, Integer> selectedCoverages = Map.of(
 			CoveragePreference.MAXIMUM_COVERAGE, 1,
@@ -223,11 +199,10 @@ class InsuranceReportWriterTest extends IntegrationTestSupport {
             .withStatistic(savedStatistic)
             .build();
 
-        PersonalInfoCommand personalInfoCommand = UserInfoFixture.userInfoUpdateCommand();
+        PersonalInfo personalInfo = UserFixture.getPersonalInfo();
 
 	    // when
-		InsuranceReport result = insuranceReportWriter.saveReport(insuranceReport, savedUser, userInfo,
-            personalInfoCommand);
+		InsuranceReport result = insuranceReportWriter.saveReport(insuranceReport, savedUser, userInfo, personalInfo);
 
 		// then
 		assertThat(userInfoRepository.findAll().size()).isEqualTo(1);

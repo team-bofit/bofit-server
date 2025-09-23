@@ -1,14 +1,19 @@
 package org.sopt.bofit.domain.post.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.sopt.bofit.domain.insurancereport.fixture.UserFixture;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.entity.PostLike;
 import org.sopt.bofit.domain.post.repository.PostLikeRepository;
 import org.sopt.bofit.domain.post.repository.PostRepository;
 import org.sopt.bofit.domain.user.entity.User;
-import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserRepository;
 import org.sopt.bofit.global.exception.constant.ErrorCode;
 import org.sopt.bofit.global.exception.constant.PostErrorCode;
@@ -17,11 +22,6 @@ import org.sopt.bofit.global.exception.customexception.CustomException;
 import org.sopt.bofit.global.exception.customexception.NotFoundException;
 import org.sopt.bofit.support.IntegrationTestSupport;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class PostLikeServiceTest extends IntegrationTestSupport {
 
@@ -59,11 +59,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
     @Test
     void createPostLike(){
         // given
-        User user = User.builder()
-            .name("유저1")
-            .loginProvider(LoginProvider.KAKAO)
-            .oauthId("0123456")
-            .build();
+        User user = UserFixture.getUser();
         userRepository.save(user);
 
         Post post = Post.create(user, "testTitle", "testComment", "QNA", "test");
@@ -84,11 +80,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
     @Test
     void createPostLikeConflict(){
         // given
-        User user = User.builder()
-            .name("유저1")
-            .loginProvider(LoginProvider.KAKAO)
-            .oauthId("0123456")
-            .build();
+        User user = UserFixture.getUser();
         userRepository.save(user);
 
         Post post = Post.create(user, "testTitle", "testComment", "QNA","test");
@@ -108,11 +100,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
     @Test
     void deletePostLike(){
         // given
-        User user = User.builder()
-            .name("유저1")
-            .loginProvider(LoginProvider.KAKAO)
-            .oauthId("0123456")
-            .build();
+        User user = UserFixture.getUser();
         userRepository.save(user);
 
         Post post = Post.create(user, "testTitle", "testComment","QNA","test");
@@ -137,11 +125,7 @@ class PostLikeServiceTest extends IntegrationTestSupport {
     @Test
     void deletePostLikeConflict(){
         // given
-        User user = User.builder()
-            .name("유저1")
-            .loginProvider(LoginProvider.KAKAO)
-            .oauthId("0123456")
-            .build();
+        User user = UserFixture.getUser();
         userRepository.save(user);
 
         Post post = Post.create(user, "testTitle", "testComment","QNA", "test");

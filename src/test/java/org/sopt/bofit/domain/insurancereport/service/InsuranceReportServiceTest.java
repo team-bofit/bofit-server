@@ -31,14 +31,12 @@ import org.sopt.bofit.domain.insurancereport.entity.Disease;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
 import org.sopt.bofit.domain.insurancereport.entity.constant.CoverageStatus;
+import org.sopt.bofit.domain.insurancereport.fixture.UserFixture;
 import org.sopt.bofit.domain.insurancereport.fixture.UserInfoFixture;
 import org.sopt.bofit.domain.insurancereport.repository.InsuranceReportRepository;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
-import org.sopt.bofit.domain.user.entity.constant.Gender;
-import org.sopt.bofit.domain.user.entity.constant.Job;
-import org.sopt.bofit.domain.user.entity.constant.LoginProvider;
 import org.sopt.bofit.domain.user.repository.UserInfoRepository;
 import org.sopt.bofit.domain.user.repository.UserRepository;
 import org.sopt.bofit.domain.user.service.dto.request.UserInfoCommand;
@@ -109,30 +107,12 @@ class InsuranceReportServiceTest extends IntegrationTestSupport {
 			.build();
 
 		LocalDate birth = LocalDate.now().minusYears(30);
-		User user = User.builder()
-			.name("유저1")
-			.birthDate(birth)
-			.loginProvider(LoginProvider.KAKAO)
-			.gender(Gender.FEMALE)
-			.job(Job.STUDENT)
-			.isMarried(false)
-			.hasChild(false)
-			.oauthId("0123456")
-			.build();
+		User user = UserFixture.getUser();
 
 		Map<CoveragePreference, Integer> selectedCoverages = Map.of(
 			CoveragePreference.MAXIMUM_COVERAGE, 1,
 			CoveragePreference.MAJOR_DISEASE, 2
 		);
-
-//		UserInfo userInfo = UserInfo.builder()
-//			.minPrice(10000)
-//			.maxPrice(100000)
-//			.familyHistory(List.of(DiagnosedDisease.NONE))
-//			.diseaseHistory(List.of(DiagnosedDisease.NONE))
-//			.coveragePreferences(selectedCoverages)
-//			.user(user)
-//			.build();
 
         UserInfoCommand userInfo = UserInfoFixture.userInfoCommand(
             10000,
@@ -150,8 +130,8 @@ class InsuranceReportServiceTest extends IntegrationTestSupport {
 			.thenReturn(new ReportRationale(DEFAULT_RATIONALE_REASONS, DEFAULT_RATIONAL_KEYWORD_CHIPS));
 
 		// when
-		IssueInsuranceReportResponse result = insuranceReportService.recommend(savedUser.getId(), userInfo,
-            UserInfoFixture.userInfoUpdateCommand());
+		IssueInsuranceReportResponse result =
+            insuranceReportService.recommend(savedUser.getId(), userInfo, UserFixture.getPersonalInfo());
 
 		// then
 		Optional<InsuranceReport> resultReportId = insuranceReportRepository.findById(result.insuranceReportId());
@@ -189,11 +169,7 @@ class InsuranceReportServiceTest extends IntegrationTestSupport {
 			.withGeneralCancerSurgery(500)
 			.build();
 
-		User user = User.builder()
-			.name("유저1")
-			.loginProvider(LoginProvider.KAKAO)
-			.oauthId("0123456")
-			.build();
+		User user = UserFixture.getUser();
 
 		insuranceProductRepository.save(product1);
 		insuranceStatisticRepository.save(statistic);
@@ -237,11 +213,7 @@ class InsuranceReportServiceTest extends IntegrationTestSupport {
 			.withGeneralCancerSurgery(500)
 			.build();
 
-		User user = User.builder()
-			.name("유저1")
-			.loginProvider(LoginProvider.KAKAO)
-			.oauthId("0123456")
-			.build();
+		User user = UserFixture.getUser();
 
 		insuranceProductRepository.save(product1);
 		insuranceStatisticRepository.save(statistic);

@@ -1,13 +1,19 @@
 package org.sopt.bofit.domain.insurancereport.service.scoringrule;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.sopt.bofit.domain.insurancereport.constant.ScoringRuleConstant.*;
-import static org.sopt.bofit.domain.insurancereport.entity.scoringrule.ConditionCoverage.*;
-import static org.sopt.bofit.domain.insurancereport.entity.scoringrule.ConditionOperator.*;
-import static org.sopt.bofit.domain.insurancereport.entity.scoringrule.userinfo.UserInfoRuleType.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.sopt.bofit.domain.insurancereport.constant.ScoringRuleConstant.MAJOR_DISEASE_RISKED_AGE;
+import static org.sopt.bofit.domain.insurancereport.entity.scoringrule.ConditionCoverage.ATYPICAL_CANCER_DIAGNOSIS;
+import static org.sopt.bofit.domain.insurancereport.entity.scoringrule.ConditionCoverage.GENERAL_CANCER_DIAGNOSIS;
+import static org.sopt.bofit.domain.insurancereport.entity.scoringrule.ConditionCoverage.INJURY_SURGERY;
+import static org.sopt.bofit.domain.insurancereport.entity.scoringrule.ConditionCoverage.ISCHEMIC_HEART_DISEASE_DIAGNOSIS;
+import static org.sopt.bofit.domain.insurancereport.entity.scoringrule.ConditionOperator.EXIST;
+import static org.sopt.bofit.domain.insurancereport.entity.scoringrule.ConditionOperator.GE;
+import static org.sopt.bofit.domain.insurancereport.entity.scoringrule.userinfo.UserInfoRuleType.AT_RISK_OF_MAJOR_DISEASE;
+import static org.sopt.bofit.domain.insurancereport.entity.scoringrule.userinfo.UserInfoRuleType.DRIVER;
+import static org.sopt.bofit.domain.insurancereport.entity.scoringrule.userinfo.UserInfoRuleType.FEMALE;
+import static org.sopt.bofit.domain.insurancereport.entity.scoringrule.userinfo.UserInfoRuleType.HAS_CHILD;
 
 import java.util.List;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,7 +22,9 @@ import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.ConditionOperator;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.userinfo.UserInfoRuleType;
 import org.sopt.bofit.domain.insurancereport.entity.scoringrule.userinfo.UserInfoScoringRule;
+import org.sopt.bofit.domain.insurancereport.fixture.UserFixture;
 import org.sopt.bofit.domain.insurancereport.repository.scoringrule.UserInfoScoringRuleRepository;
+import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.constant.Gender;
 import org.sopt.bofit.domain.user.entity.constant.Job;
@@ -47,11 +55,13 @@ class UserInfoRuleCalculatorTest extends IntegrationTestSupport {
 			.withIschemicDiagnosis(1000)
 			.build();
 
-		User user = User.builder()
-			.job(Job.DRIVER_DELIVERY)
-			.isDriver(true)
-			.gender(Gender.FEMALE)
-			.build();
+        PersonalInfo personalInfo = PersonalInfo.builder()
+            .job(Job.DRIVER_DELIVERY)
+            .isDriver(true)
+            .gender(Gender.FEMALE)
+            .build();
+
+		User user = UserFixture.getUser(personalInfo);
 
 		UserInfoScoringRule appliedRule1 = UserInfoScoringRule.create(
 			FEMALE,
