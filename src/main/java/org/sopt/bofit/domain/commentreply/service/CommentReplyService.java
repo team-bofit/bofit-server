@@ -87,7 +87,7 @@ public class CommentReplyService {
                         .filter(image -> image.id() != null).map(UpdateImageRequest::id).toList(),
                 command.deleteImageIds());
 
-        commentReplyImageWriter.softDelete(commentReplyImageMap, command.deleteImageIds());
+        commentReplyImageWriter.delete(commentReplyImageMap, command.deleteImageIds());
         commentReplyImageWriter.updateAll(commentReply, commentReplyImageMap, command.updatedImages());
         command.content().ifPresent(commentReply::updateContent);
 
