@@ -1,15 +1,15 @@
 package org.sopt.bofit.domain.commentreply.service;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.commentreply.entity.CommentReply;
 import org.sopt.bofit.domain.commentreply.entity.CommentReplyImage;
+import org.sopt.bofit.domain.commentreply.entity.CommentReplyImageStatus;
 import org.sopt.bofit.domain.commentreply.repository.CommentReplyImageRepository;
 import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +41,13 @@ public class CommentReplyImageWriter {
                 currentImages.get(image.id()).updateSequence(image.sequence());
             }
         });
+    }
+
+    public void deleteFromCommentReply(CommentReply commentReply){
+        List<CommentReplyImage> activeImages = commentReplyImageRepository.findAllByCommentReplyAndStatus(
+            commentReply, CommentReplyImageStatus.ACTIVE);
+
+        activeImages.forEach(CommentReplyImage::softDelete);
     }
 
 }
