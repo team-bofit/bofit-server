@@ -14,13 +14,16 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import lombok.Builder;
+import org.sopt.bofit.domain.insurance.entity.product.constant.MaturityAge;
+import org.sopt.bofit.domain.insurance.entity.product.constant.PaymentPeriod;
+import org.sopt.bofit.domain.insurance.entity.product.constant.RefundType;
+import org.sopt.bofit.domain.insurance.entity.product.constant.RenewableType;
 import org.sopt.bofit.domain.insurancereport.annotation.PremiumRange;
 import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
 import org.sopt.bofit.domain.user.entity.constant.Gender;
 import org.sopt.bofit.domain.user.entity.constant.Job;
-import org.sopt.bofit.domain.user.service.dto.request.PersonalInfoCommand;
 import org.sopt.bofit.domain.user.service.dto.request.UserInfoCommand;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -82,12 +85,20 @@ public record InsuranceReportRequest(
 	@NotNull(message = "희망 최대 가격은 필수 항목입니다.")
 	@Positive(message = "희망 최대 가격은 음수일 수 없습니다.")
 	@Schema(description = "희망 최대 가격", example = "150000")
-	int maxPremium
-) {
+	int maxPremium,
 
-	public PersonalInfoCommand toPersonalInfoCommand(){
-			return new PersonalInfoCommand(name, gender, birthDate, job, isMarried, isDriver, hasChild);
-	}
+    @Schema(description = "납입구조")
+    RenewableType renewableType,
+
+    @Schema(description = "환급구조")
+    RefundType refundType,
+
+    @Schema(description = "납부기간")
+    PaymentPeriod paymentPeriod,
+
+    @Schema(description = "만기")
+    MaturityAge maturityAge
+) {
 
     public PersonalInfo toPersonalInfo(){
         return PersonalInfo.builder()
