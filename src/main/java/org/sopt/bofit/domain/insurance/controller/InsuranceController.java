@@ -140,7 +140,7 @@ public class InsuranceController {
     @Operation(summary = "보험 추천 시 선택 사항 항목 조회", description = "보험 추천 시 보험 상품의 선택 사항 항목을 조회합니다.")
     @GetMapping("/options")
     public BaseResponse<InsuranceOptionsResponse> getDeathSection(){
-        InsuranceOptionsResponse response = insuranceService.getOptional();
+        InsuranceOptionsResponse response = insuranceService.getOptionInfos();
         return BaseResponse.ok(response, "보험 추천 시 선택 사항 항목 조회");
     }
 }
