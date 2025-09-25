@@ -54,7 +54,7 @@ public class InsuranceReportService {
 		InsuranceStatistic totalAverage = insuranceStatisticReader.getTotalAverage();
 
 		InsuranceProduct recommendedProduct = insuranceReportWriter.recommendBestInsurance(
-			products, user, userInfo, age);
+			products, personalInfo, userInfo, age);
 
         InsuranceReport createdReport
             = insuranceReportWriter.createReport(totalAverage, recommendedProduct, user, userInfo, personalInfo, age);
