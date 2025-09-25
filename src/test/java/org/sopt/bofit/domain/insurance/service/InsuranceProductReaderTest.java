@@ -1,9 +1,9 @@
 package org.sopt.bofit.domain.insurance.service;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.List;
-
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.sopt.bofit.domain.insurance.builder.InsuranceProductTestBuilder;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurance.entity.product.constant.InsuranceStatus;
+import org.sopt.bofit.domain.insurance.fixture.InsuranceFixture;
 import org.sopt.bofit.domain.insurance.repository.InsuranceProductRepository;
+import org.sopt.bofit.domain.insurancereport.service.dto.InsuranceOptionCommand;
 import org.sopt.bofit.global.exception.constant.InsuranceErrorCode;
 import org.sopt.bofit.global.exception.customexception.InternalException;
 import org.sopt.bofit.support.IntegrationTestSupport;
@@ -69,8 +71,9 @@ class InsuranceProductReaderTest extends IntegrationTestSupport {
 		int minPremium = 20000;
 		int maxPremium = 80000;
 
-		List<InsuranceProduct> result = insuranceProductReader.getAgeAndPremiumFilteredProducts(
-			age, minPremium, maxPremium);
+        InsuranceOptionCommand emptyInsuranceOptionCommand = InsuranceFixture.getEmptyInsuranceOptionCommand();
+        List<InsuranceProduct> result = insuranceProductReader.getAgeAndPremiumAndOptionFilteredProducts(
+			age, minPremium, maxPremium, emptyInsuranceOptionCommand);
 
 		// then
 		assertThat(result).hasSize(2)

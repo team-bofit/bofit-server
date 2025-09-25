@@ -54,11 +54,8 @@ class InsuranceControllerTest extends ControllerTestSupport {
 			.coveragePreferences(Map.of(DEATH_BENEFIT, 1, ESSENTIAL_ONLY,2))
 			.build();
 
-		User mockUser = User.builder().id(1L).build();
-
-		when(userService.userUpdate(anyLong(), any())).thenReturn(mockUser);
-		when(insuranceReportService.recommend(notNull(), notNull(), notNull()))
-			.thenReturn(new IssueInsuranceReportResponse(UUID.randomUUID()));
+        when(insuranceReportService.recommend(notNull(), notNull(), notNull(), notNull()))
+            .thenReturn(new IssueInsuranceReportResponse(UUID.randomUUID()));
 
 		// when // then
 		mockMvc.perform(
@@ -97,7 +94,7 @@ class InsuranceControllerTest extends ControllerTestSupport {
 		User mockUser = User.builder().id(1L).build();
 
 		when(userService.userUpdate(anyLong(), any())).thenReturn(mockUser);
-		when(insuranceReportService.recommend(notNull(), notNull(), notNull()))
+		when(insuranceReportService.recommend(notNull(), notNull(), notNull(), notNull()))
 			.thenReturn(new IssueInsuranceReportResponse(UUID.randomUUID()));
 
 		// when // then
@@ -137,7 +134,7 @@ class InsuranceControllerTest extends ControllerTestSupport {
 		User mockUser = User.builder().id(1L).build();
 
 		when(userService.userUpdate(anyLong(), any())).thenReturn(mockUser);
-		when(insuranceReportService.recommend(notNull(), notNull(), notNull()))
+		when(insuranceReportService.recommend(notNull(), notNull(), notNull(), notNull()))
 			.thenReturn(new IssueInsuranceReportResponse(UUID.randomUUID()));
 
 		// when // then
@@ -176,7 +173,7 @@ class InsuranceControllerTest extends ControllerTestSupport {
 		User mockUser = User.builder().id(1L).build();
 
 		when(userService.userUpdate(anyLong(), any())).thenReturn(mockUser);
-		when(insuranceReportService.recommend(notNull(), notNull(), notNull()))
+		when(insuranceReportService.recommend(notNull(), notNull(), notNull(), notNull()))
 			.thenReturn(new IssueInsuranceReportResponse(UUID.randomUUID()));
 
 		// when // then
@@ -219,7 +216,7 @@ class InsuranceControllerTest extends ControllerTestSupport {
 		User mockUser = User.builder().id(1L).build();
 
 		when(userService.userUpdate(anyLong(), any())).thenReturn(mockUser);
-		when(insuranceReportService.recommend(notNull(), notNull(), notNull()))
+		when(insuranceReportService.recommend(notNull(), notNull(), notNull(), notNull()))
 			.thenReturn(new IssueInsuranceReportResponse(UUID.randomUUID()));
 
 		// when // then
