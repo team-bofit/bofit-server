@@ -22,6 +22,7 @@ import org.sopt.bofit.domain.insurance.builder.InsuranceStatisticTestBuilder;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurance.entity.statistic.InsuranceStatistic;
 import org.sopt.bofit.domain.insurance.entity.statistic.StatisticRange;
+import org.sopt.bofit.domain.insurance.fixture.InsuranceFixture;
 import org.sopt.bofit.domain.insurance.repository.InsuranceProductRepository;
 import org.sopt.bofit.domain.insurance.repository.InsuranceStatisticRepository;
 import org.sopt.bofit.domain.insurancereport.builder.InsuranceReportTestBuilder;
@@ -130,8 +131,8 @@ class InsuranceReportServiceTest extends IntegrationTestSupport {
 			.thenReturn(new ReportRationale(DEFAULT_RATIONALE_REASONS, DEFAULT_RATIONAL_KEYWORD_CHIPS));
 
 		// when
-		IssueInsuranceReportResponse result =
-            insuranceReportService.recommend(savedUser.getId(), userInfo, UserFixture.getPersonalInfo());
+		IssueInsuranceReportResponse result = insuranceReportService.recommend(
+            savedUser.getId(), userInfo, UserFixture.getPersonalInfo(), InsuranceFixture.getEmptyInsuranceOptionCommand());
 
 		// then
 		Optional<InsuranceReport> resultReportId = insuranceReportRepository.findById(result.insuranceReportId());
