@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class InsuranceService {
 
-    public InsuranceOptionsResponse getOptional(){
+    public InsuranceOptionsResponse getOptionInfos(){
         return new InsuranceOptionsResponse(
             Arrays.stream(RenewableType.values()).map(RenewableTypeResponse::create).toList(),
             Arrays.stream(RefundType.values()).map(RefundTypeResponse::create).toList(),
