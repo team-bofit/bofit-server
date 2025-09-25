@@ -32,6 +32,6 @@ public record CommentReplyUpdateRequest(
     List<@NotNull Long> deleteImageIds
 ) {
     public CommentReplyUpdateCommand toCommand(){
-        return new CommentReplyUpdateCommand(Optional.of(content), updatedImages, deleteImageIds);
+        return new CommentReplyUpdateCommand(Optional.ofNullable(content), updatedImages, deleteImageIds);
     }
 }
