@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.sopt.bofit.domain.insurance.dto.response.InsuranceOptionsResponse;
+import org.sopt.bofit.domain.insurance.service.InsuranceService;
 import org.sopt.bofit.domain.insurancereport.dto.request.InsuranceReportRequest;
 import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportResponse;
 import org.sopt.bofit.domain.insurancereport.dto.response.IssueInsuranceReportResponse;
@@ -39,6 +41,7 @@ public class InsuranceController {
 
 	private final InsuranceReportService insuranceReportService;
 	private final UserService userService;
+    private final InsuranceService insuranceService;
 
 	@Tag(name = TAG_NAME_INSURANCE, description = TAG_DESCRIPTION_INSURANCE)
 	@CustomExceptionDescription(ISSUE_INSURANCE_REPORT)
@@ -47,7 +50,8 @@ public class InsuranceController {
 	public BaseResponse<IssueInsuranceReportResponse> issueReport(
 		@Parameter(hidden = true) @LoginUserId Long userId,
 		@Valid @RequestBody InsuranceReportRequest request){
-		IssueInsuranceReportResponse response = insuranceReportService.recommend(userId, request.toUserInfoCommand(), request.toPersonalInfo());
+		IssueInsuranceReportResponse response = insuranceReportService.recommend(
+            userId, request.toUserInfoCommand(), request.toPersonalInfo(), request.toInsuranceOptionCommand());
 		return BaseResponse.create(response, "보험 추천 리포트 발급 성공");
 	}
 
@@ -131,4 +135,12 @@ public class InsuranceController {
 		DeathSection response = insuranceReportService.findDeathSection(insuranceReportId, section);
 		return BaseResponse.ok(response, "보험 추천 리포트 사망 섹션 조회 성공");
 	}
+
+    @Tag(name = TAG_NAME_INSURANCE, description = TAG_DESCRIPTION_INSURANCE)
+    @Operation(summary = "보험 추천 시 선택 사항 항목 조회", description = "보험 추천 시 보험 상품의 선택 사항 항목을 조회합니다.")
+    @GetMapping("/options")
+    public BaseResponse<InsuranceOptionsResponse> getDeathSection(){
+        InsuranceOptionsResponse response = insuranceService.getOptional();
+        return BaseResponse.ok(response, "보험 추천 시 선택 사항 항목 조회");
+    }
 }
