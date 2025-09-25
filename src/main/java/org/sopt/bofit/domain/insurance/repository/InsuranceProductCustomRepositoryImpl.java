@@ -3,8 +3,6 @@ package org.sopt.bofit.domain.insurance.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.SimpleTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -55,19 +53,11 @@ public class InsuranceProductCustomRepositoryImpl implements InsuranceProductCus
         optionCommand.refundType().ifPresent(refundType ->
             optionCondition.and(insuranceProduct.basicInformation.refundType.eq(refundType)));
 
-        optionCommand.maturityAge().ifPresent(maturityAge ->{
-            SimpleTemplate<Integer> maturityAgeAsInt = Expressions.template(Integer.class, "{0}",
-                insuranceProduct.basicInformation.maturityAge);
+        optionCommand.maturityAge().ifPresent(maturityAge ->
+            optionCondition.and(insuranceProduct.basicInformation.maturityAge.eq(maturityAge)));
 
-            optionCondition.and(maturityAgeAsInt.eq(maturityAge.getAge()));
-        });
-
-        optionCommand.paymentPeriod().ifPresent(period -> {
-            SimpleTemplate<Integer> paymentPeriodAsInt = Expressions.template(Integer.class, "{0}",
-                insuranceProduct.basicInformation.paymentPeriod);
-
-            optionCondition.and(paymentPeriodAsInt.eq(period.getYear()));
-        });
+        optionCommand.paymentPeriod().ifPresent(period ->
+            optionCondition.and(insuranceProduct.basicInformation.paymentPeriod.eq(period)));
 
         return optionCondition;
     }
