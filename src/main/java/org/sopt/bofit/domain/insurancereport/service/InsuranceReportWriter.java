@@ -58,7 +58,7 @@ public class InsuranceReportWriter {
 	@Transactional(readOnly = true)
 	public InsuranceProduct recommendBestInsurance(
 		List<InsuranceProduct> products,
-		User user,
+        PersonalInfo personalInfo,
 		UserInfo userInfo,
 		int age
 	){
@@ -66,7 +66,7 @@ public class InsuranceReportWriter {
 		// products = coveragePreferenceFilter.filtering(products, userInfo);
 
 		Optional<InsuranceProduct> scoringRuledProduct = products.stream()
-			.max(Comparator.comparingDouble(product -> scoringRuleCalculator.calculatorScoringRule(user, userInfo, product, age)));
+			.max(Comparator.comparingDouble(product -> scoringRuleCalculator.calculatorScoringRule(personalInfo, userInfo, product, age)));
 
 		return scoringRuledProduct.orElseGet(insuranceProductReader::getRecommendedStatusProducts);
 	}
