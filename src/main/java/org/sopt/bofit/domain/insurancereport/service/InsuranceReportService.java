@@ -16,6 +16,7 @@ import org.sopt.bofit.domain.insurancereport.dto.response.disability.DisabilityS
 import org.sopt.bofit.domain.insurancereport.dto.response.majordisease.MajorDiseaseSection;
 import org.sopt.bofit.domain.insurancereport.dto.response.surgery.SurgerySection;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
+import org.sopt.bofit.domain.insurancereport.service.dto.InsuranceOptionCommand;
 import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
@@ -37,13 +38,18 @@ public class InsuranceReportService {
 
 	private final UserReader userReader;
 
-	public IssueInsuranceReportResponse recommend(Long userId, UserInfoCommand userInfoCommand, PersonalInfo personalInfo){
+	public IssueInsuranceReportResponse recommend(
+        Long userId,
+        UserInfoCommand userInfoCommand,
+        PersonalInfo personalInfo,
+        InsuranceOptionCommand optionCommand
+    ){
 		User user = userReader.getActiveById(userId);
         UserInfo userInfo = userInfoCommand.createUserInfo(user);
         int age = UserUtil.convertInternationalAge(personalInfo.getBirthDate());
 
 		List<InsuranceProduct> products
-			= insuranceProductReader.getAgeAndPremiumFilteredProducts(age, userInfo.getMinPrice(), userInfo.getMaxPrice());
+			= insuranceProductReader.getAgeAndPremiumAndOptionFilteredProducts(age, userInfo.getMinPrice(), userInfo.getMaxPrice(), optionCommand);
 
 		InsuranceStatistic totalAverage = insuranceStatisticReader.getTotalAverage();
 
