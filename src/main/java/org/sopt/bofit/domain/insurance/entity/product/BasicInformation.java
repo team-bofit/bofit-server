@@ -1,12 +1,20 @@
 package org.sopt.bofit.domain.insurance.entity.product;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.sopt.bofit.domain.insurance.entity.product.constant.MaturityAge;
+import org.sopt.bofit.domain.insurance.entity.product.constant.PaymentPeriod;
+import org.sopt.bofit.domain.insurance.entity.product.constant.RefundType;
+import org.sopt.bofit.domain.insurance.entity.product.constant.RenewableType;
+import org.sopt.bofit.domain.insurance.entity.product.converter.MaturityAgeConverter;
+import org.sopt.bofit.domain.insurance.entity.product.converter.PaymentPeriodConverter;
 
 @Getter
 @Embeddable
@@ -35,22 +43,33 @@ public class BasicInformation {
 
 	@Column(name = "maturity_age", nullable = false,
 		columnDefinition = "TINYINT UNSIGNED DEFAULT 0")
-	private int	maturityAge;
+    @Convert(converter = MaturityAgeConverter.class)
+	private MaturityAge maturityAge;
 
-	@Column(name = "payment_period_years", nullable = false,
-		columnDefinition = "TINYINT UNSIGNED DEFAULT 0")
-	private int paymentPeriodYears;
+    @Column(name = "payment_period_years", nullable = false,
+        columnDefinition = "TINYINT UNSIGNED DEFAULT 0")
+    @Convert(converter = PaymentPeriodConverter.class)
+    private PaymentPeriod paymentPeriod;
+
+    @Enumerated(EnumType.STRING)
+    private RenewableType renewableType;
+
+    @Enumerated(EnumType.STRING)
+    private RefundType refundType;
 
 	@Builder
-	private BasicInformation(String name, String company, String productType, int minEnrollmentAge, int maxEnrollmentAge,
-		int premium, int maturityAge, int paymentPeriodYears) {
-		this.name = name;
-		this.company = company;
-		this.productType = productType;
-		this.minEnrollmentAge = minEnrollmentAge;
-		this.maxEnrollmentAge = maxEnrollmentAge;
-		this.premium = premium;
-		this.maturityAge = maturityAge;
-		this.paymentPeriodYears = paymentPeriodYears;
-	}
+    private BasicInformation(String name, RefundType refundType, RenewableType renewableType,
+        PaymentPeriod paymentPeriod, int premium, MaturityAge maturityAge, int maxEnrollmentAge,
+        int minEnrollmentAge, String company, String productType) {
+        this.name = name;
+        this.refundType = refundType;
+        this.renewableType = renewableType;
+        this.paymentPeriod = paymentPeriod;
+        this.premium = premium;
+        this.maturityAge = maturityAge;
+        this.maxEnrollmentAge = maxEnrollmentAge;
+        this.minEnrollmentAge = minEnrollmentAge;
+        this.company = company;
+        this.productType = productType;
+    }
 }
