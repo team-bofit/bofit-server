@@ -244,7 +244,7 @@ public class PostController {
         @RequestParam(defaultValue = COMMENT_REPLY_DEFAULT_SIZE) int size
     ){
         SliceResponse<CommentReplyWithImagesResponse, Long> response =
-            commentReplyService.findAllWithCursor(postId, commentId, userId, Optional.of(cursorId), size);
+            commentReplyService.findAllWithCursor(postId, commentId, userId, Optional.ofNullable(cursorId), size);
         return BaseResponse.ok(response, "대댓글 목록 조회 성공");
     }
 

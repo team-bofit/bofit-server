@@ -32,7 +32,7 @@ public record CommentUpdateRequest(
 ) {
     public CommentUpdateCommand toCommand(){
         return new CommentUpdateCommand(
-            Optional.of(content),
+            Optional.ofNullable(content),
             updatedImages,
             deleteImageIds
         );
