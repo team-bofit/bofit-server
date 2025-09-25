@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONALE_REASONS;
 import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONAL_KEYWORD_CHIPS;
 import static org.sopt.bofit.domain.insurancereport.fixture.UserFixture.PERSONAL_NAME;
+import static org.sopt.bofit.domain.insurancereport.fixture.UserFixture.getPersonalInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -93,17 +94,15 @@ class InsuranceReportWriterTest extends IntegrationTestSupport {
 			.withStatus(InsuranceStatus.RECOMMENDED)
 			.build();
 
-		User user = UserFixture.getUser();
-
 		UserInfo userInfo = UserInfo.builder()
 			.minPrice(10000)
 			.maxPrice(20000)
 			.build();
 
 		insuranceProductRepository.saveAll(List.of(product1, product2, recommendedProduct1));
-	    // when
 
-		InsuranceProduct result = insuranceReportWriter.recommendBestInsurance(List.of(), user, userInfo, 10);
+	    // when
+		InsuranceProduct result = insuranceReportWriter.recommendBestInsurance(List.of(), getPersonalInfo() , userInfo, 10);
 
 		// then
 		assertThat(result)
