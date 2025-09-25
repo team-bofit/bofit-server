@@ -13,12 +13,14 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.Builder;
 import org.sopt.bofit.domain.insurance.entity.product.constant.MaturityAge;
 import org.sopt.bofit.domain.insurance.entity.product.constant.PaymentPeriod;
 import org.sopt.bofit.domain.insurance.entity.product.constant.RefundType;
 import org.sopt.bofit.domain.insurance.entity.product.constant.RenewableType;
 import org.sopt.bofit.domain.insurancereport.annotation.PremiumRange;
+import org.sopt.bofit.domain.insurancereport.service.dto.InsuranceOptionCommand;
 import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
@@ -122,4 +124,12 @@ public record InsuranceReportRequest(
         );
     }
 
+    public InsuranceOptionCommand toInsuranceOptionCommand(){
+        return new InsuranceOptionCommand(
+            Optional.ofNullable(renewableType),
+            Optional.ofNullable(refundType),
+            Optional.ofNullable(paymentPeriod),
+            Optional.ofNullable(maturityAge)
+        );
+    }
 }
