@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import org.sopt.bofit.domain.insurance.dto.response.InsuranceOptionsResponse;
 import org.sopt.bofit.domain.insurance.service.InsuranceService;
 import org.sopt.bofit.domain.insurancereport.dto.request.InsuranceReportRequest;
 import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportResponse;
@@ -136,11 +135,4 @@ public class InsuranceController {
 		return BaseResponse.ok(response, "보험 추천 리포트 사망 섹션 조회 성공");
 	}
 
-    @Tag(name = TAG_NAME_INSURANCE, description = TAG_DESCRIPTION_INSURANCE)
-    @Operation(summary = "보험 추천 시 선택 사항 항목 조회", description = "보험 추천 시 보험 상품의 선택 사항 항목을 조회합니다.")
-    @GetMapping("/options")
-    public BaseResponse<InsuranceOptionsResponse> getDeathSection(){
-        InsuranceOptionsResponse response = insuranceService.getOptionInfos();
-        return BaseResponse.ok(response, "보험 추천 시 선택 사항 항목 조회");
-    }
 }
