@@ -1,7 +1,9 @@
 package org.sopt.bofit.domain.user.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Optional;
 import lombok.Builder;
+import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.User;
 
 public record UserProfileResponse(
@@ -36,9 +38,13 @@ public record UserProfileResponse(
     }
 
     public static UserProfileResponse from(User user) {
+        String name = Optional.ofNullable(user.getPersonalInfo())
+            .map(PersonalInfo::getName)
+            .orElse(null);
+
         return UserProfileResponse.builder()
             .userId(user.getId())
-            .username(user.getPersonalInfo().getName())
+            .username(name)
             .nickname(user.getNickname())
             .profileImageUrl(user.getProfileImage())
             .isRecommendInsurance(user.isRecommendInsurance())
