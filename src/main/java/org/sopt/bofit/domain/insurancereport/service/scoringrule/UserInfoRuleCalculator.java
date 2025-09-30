@@ -29,12 +29,14 @@ public class UserInfoRuleCalculator {
             .sum();
     }
 
+    /** deprecated*/
 	public double calculate(User user, InsuranceProduct product, int age){
 		return getUserInfoRuleMap(age).entrySet().stream()
 			.mapToDouble(entry ->  considerUserInfo(entry.getValue(), user, product, entry.getKey()))
 			.sum();
 	}
 
+    /** deprecated*/
 	private double considerUserInfo (Predicate<User> condition, User user, InsuranceProduct product, UserInfoRuleType ruleType) {
 		double additional = 0;
 		if (condition.test(user)) {
@@ -51,6 +53,7 @@ public class UserInfoRuleCalculator {
         return additional;
     }
 
+    /** deprecated*/
 	private Map<UserInfoRuleType, Predicate<User>> getUserInfoRuleMap(int age){
 		return Map.of(
 			UserInfoRuleType.AT_RISK_OF_MAJOR_DISEASE, user -> age > MAJOR_DISEASE_RISKED_AGE,
