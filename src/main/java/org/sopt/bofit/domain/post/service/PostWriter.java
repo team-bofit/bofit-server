@@ -31,10 +31,8 @@ public class PostWriter {
         return postRepository.save(post);
     }
 
-
-    @Transactional
-    public void delete(User user, Post post) {
-        postRepository.delete(post);
+    public void delete(Post post) {
+        post.softDelete();
 
         commentRepository.findAllByPostIdAndStatus(post.getId(), CommentStatus.ACTIVE).forEach(Comment::softDelete);
     }

@@ -1,5 +1,12 @@
 package org.sopt.bofit.domain.post.service;
 
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
 import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
@@ -21,14 +28,6 @@ import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 import org.sopt.bofit.global.file.util.ImageValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.IntStream;
-
-import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
 
 @Service
 @RequiredArgsConstructor
@@ -90,7 +89,7 @@ public class PostService {
         Post post = postReader.getActiveById(postId);
         post.getUser().checkIsWriter(userId, POST_UNAUTHORIZED);
 
-        postWriter.delete(user, post);
+        postWriter.delete(post);
         trendPostWriter.validDeletePost(post);
     }
 
