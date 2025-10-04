@@ -90,6 +90,7 @@ public class PostService {
         post.getUser().checkIsWriter(userId, POST_UNAUTHORIZED);
 
         postWriter.delete(post);
+        postImageWriter.deleteAllImagesInPost(post);
         trendPostWriter.validDeletePost(post);
     }
 
