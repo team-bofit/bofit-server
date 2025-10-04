@@ -57,11 +57,7 @@ public class UserService {
 		return userReader.getMyComments(userId, cursorId, size);
 	}
 
-	public void updateUserNickname(Long userId, String newNickname) {
-		userWriter.updateUserNickname(userId, newNickname);
-	}
-
-	public void updateUserProfileImage(Long userId, String newProfileImageUrl) {
-		userWriter.updateUserProfileImage(userId, newProfileImageUrl);
+	public void updateProfile(Long userId, String nickname, String profileImageUrl) {
+		userWriter.updateUserProfile(userId, nickname, profileImageUrl);
 	}
 }
