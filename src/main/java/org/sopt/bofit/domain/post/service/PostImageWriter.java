@@ -1,6 +1,8 @@
 package org.sopt.bofit.domain.post.service;
 
 import jakarta.transaction.Transactional;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.entity.PostImage;
@@ -8,13 +10,11 @@ import org.sopt.bofit.domain.post.repository.PostImageRepository;
 import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-
 @Service
 @RequiredArgsConstructor
 public class PostImageWriter {
 
+    private final PostImageReader postImageReader;
     private final PostImageRepository postImageRepository;
 
     public PostImage create(Post post, String url, Integer sequence) {
@@ -42,6 +42,11 @@ public class PostImageWriter {
         deleteImageIds.forEach(id -> {
             postImages.get(id).softDelete();
         });
+    }
+
+    public void deleteAllImagesInPost(Post post) {
+        List<PostImage> allActiveImages = postImageReader.getAllActiveImages(post);
+        allActiveImages.forEach(PostImage::softDelete);
     }
 
 }
