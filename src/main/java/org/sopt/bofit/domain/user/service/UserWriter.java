@@ -1,6 +1,5 @@
 package org.sopt.bofit.domain.user.service;
 
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.post.repository.PostRepository;
 import org.sopt.bofit.domain.user.entity.PersonalInfo;
@@ -8,6 +7,8 @@ import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 
 @Service
@@ -32,19 +33,11 @@ public class UserWriter {
     }
 
 	@Transactional
-	public void updateUserNickname(Long userId, String newNickname) {
-		User user = userReader.findById(userId);
+	public void updateUserProfile(Long userId, String nickname, String profileImageUrl){
+		User user =  userReader.findById(userId);
 
-		postRepository.updateWriterNicknameByUserId(newNickname, user.getId());
-
-		user.updateNickname(newNickname);
-	}
-
-	@Transactional
-	public void updateUserProfileImage(Long userId, String newProfileImageUrl) {
-		User user = userReader.findById(userId);
-
-		user.updateProfileImageUrl(newProfileImageUrl);
+		user.updateNickname(nickname);
+		user.updateProfileImageUrl(profileImageUrl);
 	}
 
 	@Transactional

@@ -6,8 +6,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.insurancereport.dto.response.InsuranceReportSummaryResponse;
 import org.sopt.bofit.domain.insurancereport.service.InsuranceReportService;
-import org.sopt.bofit.domain.user.dto.request.UpdateNicknameRequest;
-import org.sopt.bofit.domain.user.dto.request.UpdateProfileImageRequest;
+import org.sopt.bofit.domain.user.dto.request.UserUpdateProfileRequest;
 import org.sopt.bofit.domain.user.dto.response.MyCommentSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.MyPostSummaryResponse;
 import org.sopt.bofit.domain.user.dto.response.UserProfileResponse;
@@ -18,8 +17,8 @@ import org.sopt.bofit.global.dto.response.BaseResponse;
 import org.sopt.bofit.global.dto.response.SliceResponse;
 import org.springframework.web.bind.annotation.*;
 
-import static org.sopt.bofit.domain.comment.constant.CommentConstant.*;
-import static org.sopt.bofit.domain.post.constant.PostConstant.*;
+import static org.sopt.bofit.domain.comment.constant.CommentConstant.COMMENTS_DEFAULT_SIZE;
+import static org.sopt.bofit.domain.post.constant.PostConstant.POSTS_DEFAULT_SIZE;
 import static org.sopt.bofit.global.config.swagger.SwaggerResponseDescription.*;
 import static org.sopt.bofit.global.constant.SwaggerConstant.*;
 
@@ -78,27 +77,16 @@ public class UserController {
     }
 
     @Tag(name = TAG_NAME_USER_INFO, description = TAG_DESCRIPTION_USER_INFO)
-    @CustomExceptionDescription(UPDATE_NICKNAME)
-    @Operation(summary = "유저 닉네임 수정", description = "유저의 닉네임을 수정합니다.")
-    @PatchMapping("nickname")
-    public BaseResponse<Void> updateNickname(
+    @CustomExceptionDescription(UPDATE_PROFILE)
+    @Operation(summary = "유저 프로필 수정", description = "유저의 프로필을 수정합니다.")
+    @PatchMapping()
+    public BaseResponse<Void> updateProfile(
             @Parameter(hidden = true) @LoginUserId Long userId,
-            UpdateNicknameRequest req
+            UserUpdateProfileRequest req
     ){
-        userService.updateUserNickname(userId, req.newNickname());
-        return BaseResponse.ok("닉네임 수정 성공");
+        userService.updateProfile(userId, req.nickname(), req.profileImageUrl());
+        return BaseResponse.ok("프로필 수정 성공");
     }
 
-    @Tag(name = TAG_NAME_USER_INFO, description = TAG_DESCRIPTION_USER_INFO)
-    @CustomExceptionDescription(UPDATE_PROFILE_IMAGE)
-    @Operation(summary = "유저 프로필 이미지 수정", description = "유저의 프로필 이미지를 수정합니다.")
-    @PatchMapping("profile-image")
-    public BaseResponse<Void> updateProfileImage(
-            @Parameter(hidden = true) @LoginUserId Long userId,
-            UpdateProfileImageRequest req
-    ){
-        userService.updateUserProfileImage(userId, req.newProfileImageUrl());
-        return BaseResponse.ok("프로필 이미지 수정 성공");
-    }
 
 }
