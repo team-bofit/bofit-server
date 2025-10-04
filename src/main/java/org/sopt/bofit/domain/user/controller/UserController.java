@@ -82,7 +82,7 @@ public class UserController {
     @PatchMapping()
     public BaseResponse<Void> updateProfile(
             @Parameter(hidden = true) @LoginUserId Long userId,
-            UserUpdateProfileRequest req
+            @RequestBody UserUpdateProfileRequest req
     ){
         userService.updateProfile(userId, req.nickname(), req.profileImageUrl());
         return BaseResponse.ok("프로필 수정 성공");
