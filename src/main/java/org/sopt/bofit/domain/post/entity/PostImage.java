@@ -1,10 +1,23 @@
 package org.sopt.bofit.domain.post.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.sopt.bofit.domain.post.entity.constant.PostImageStatus;
-
 import static org.sopt.bofit.global.file.constant.ImageConstant.MAX_IMAGE_URL_LENGTH;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.sopt.bofit.domain.post.entity.constant.PostImageStatus;
 
 @Entity
 @Getter
@@ -24,7 +37,6 @@ public class PostImage {
     @Column(nullable = false, length = MAX_IMAGE_URL_LENGTH)
     private String imageUrl;
 
-    @Column(nullable = false)
     private Integer sequence;
 
     @Enumerated(EnumType.STRING)
