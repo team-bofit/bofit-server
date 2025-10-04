@@ -1,10 +1,12 @@
 package org.sopt.bofit.domain.post.dto.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.Builder;
+import org.sopt.bofit.domain.post.entity.Post;
+import org.sopt.bofit.domain.post.entity.PostImage;
+import org.sopt.bofit.domain.user.entity.User;
 
 @Builder
 public record PostDetailResponse(
@@ -29,6 +31,9 @@ public record PostDetailResponse(
         @Schema(description = "생성 시간")
         LocalDateTime createdAt,
 
+        @Schema(description = "수정 시간")
+        LocalDateTime updatedAt,
+
         @Schema(description = "좋아요 수")
         int likeCount,
 
@@ -50,6 +55,32 @@ public record PostDetailResponse(
                 @Schema(description = "이미지 url")
                 String imageUrl
         ){
+            public static PostDetailImageResponse from(PostImage postImage){
+                return new PostDetailImageResponse(postImage.getId(), postImage.getImageUrl());
+            }
+        }
 
+        public static PostDetailResponse of(
+            Post post,
+            User writer,
+            boolean isLiked,
+            List<PostImage> postImages
+        ){
+            List<PostDetailImageResponse> imageUrls = postImages.stream().map(PostDetailImageResponse::from).toList();
+
+            return PostDetailResponse.builder()
+                .writerId(writer.getId())
+                .writerNickname(writer.getNickname())
+                .profileImage(writer.getProfileImage())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .commentCount(post.getCommentCount())
+                .createdAt(post.getCreatedAt())
+                .updatedAt(post.getUpdatedAt())
+                .imageUrl(imageUrls)
+                .likeCount(post.getLikeCount())
+                .likedByCurrentUser(isLiked)
+                .category(PostCategoryResponse.from(post.getPostCategory()))
+                .build();
         }
 }
