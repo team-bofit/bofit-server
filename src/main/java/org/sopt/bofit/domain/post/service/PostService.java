@@ -99,8 +99,16 @@ public class PostService {
         return postReader.getAllPosts(order, category, userId, cursorId, size);
     }
 
+    @Transactional(readOnly = true)
     public PostDetailResponse getPostDetail(Long userId, Long postId){
-        return postReader.getPostById(userId, postId);
+        User user = userReader.getActiveById(userId);
+        Post post = postReader.findById(postId);
+
+        User writer = post.getUser();
+        List<PostImage> allActiveImages = postImageReader.getAllActiveImages(post);
+        boolean isLiked = postLikeReader.isExistsByPostAndUser(post, user);
+
+        return PostDetailResponse.of(post, writer, isLiked, allActiveImages);
     }
 
     public SliceResponse<PostSummaryResponse, Long> searchPosts(Long userId, String keyword, Long cursorId, int size){
