@@ -1,5 +1,6 @@
 package org.sopt.bofit.domain.post.repository;
 
+import org.sopt.bofit.domain.post.dto.response.PostSearchResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.entity.constant.PostCategoryFilter;
@@ -17,7 +18,7 @@ public interface PostCustomRepository {
 
     Slice<PostSummaryResponse> findAllByCursorId(PostSortOrder order, PostCategoryFilter category, Long userId, Long cursorId, int size);
 
-    Slice<PostSummaryResponse> findAllByKeywordAndCursorId(Long userId, String keyword, Long cursorId, int size);
+    Slice<PostSearchResponse> findAllByKeywordAndCursorId(Long userId, String keyword, String cursor, int size);
 
     List<Post> findTrendPosts(int size, LocalDateTime now);
 

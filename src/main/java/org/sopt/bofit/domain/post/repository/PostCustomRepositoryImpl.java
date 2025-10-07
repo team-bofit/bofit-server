@@ -11,6 +11,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.QComment;
 import org.sopt.bofit.domain.commentreply.entity.QCommentReply;
+import org.sopt.bofit.domain.post.dto.response.PostSearchResponse;
 import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.entity.QPost;
@@ -144,25 +145,42 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
     }
 
     @Override
-    public Slice<PostSummaryResponse> findAllByKeywordAndCursorId(Long userId, String keyword, Long cursorId, int size) {
+    public Slice<PostSearchResponse> findAllByKeywordAndCursorId(Long userId, String keyword, String cursor, int size) {
         QPost post = QPost.post;
         QPostLike postLike = QPostLike.postLike;
 
         BooleanExpression likedByCurrentUser = getLikedByCurrentUser(userId, postLike, post);
 
         BooleanExpression searchCondition;
+
+        NumberExpression<Double> relevanceScore;
+
         if (keyword != null && keyword.length() < 2) {
+            relevanceScore = Expressions.asNumber(0.0);
             String likePattern = "%" + keyword + "%";
             searchCondition = post.title.like(likePattern)
                     .or(post.content.like(likePattern))
                     .or(post.writerNickname.like(likePattern));
         } else {
-            NumberExpression<Double> relevanceScore = getRelevanceScore(keyword, post);
+            relevanceScore = getRelevanceScore(keyword, post);
             searchCondition = relevanceScore.gt(0);
         }
 
-        List<PostSummaryResponse> content = queryFactory
-                .select(Projections.constructor(PostSummaryResponse.class,
+        PostSearchResponse.Cursor cursorObj = PostSearchResponse.decodeCursor(cursor);
+        BooleanExpression cursorCondition = null;
+        if (cursorObj != null) {
+            cursorCondition = relevanceScore.lt(cursorObj.relevance())
+                    .or(relevanceScore.eq(cursorObj.relevance())
+                            .and(post.id.lt(cursorObj.postId())));
+        }
+
+        List<OrderSpecifier<?>> orderSpecifiers = List.of(
+                relevanceScore.desc(),
+                post.createdAt.desc()
+        );
+
+        List<PostSearchResponse> content = queryFactory
+                .select(Projections.constructor(PostSearchResponse.class,
                         post.id,
                         post.user.id,
                         post.title,
@@ -172,16 +190,16 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                         post.commentCount,
                         post.createdAt,
                         post.likeCount,
-                        likedByCurrentUser
+                        likedByCurrentUser,
+                        relevanceScore
                 ))
                 .from(post)
-                .where(searchCondition,
+                .where(
+                        searchCondition,
                         post.status.eq(PostStatus.ACTIVE),
-                        cursorId != null ? post.id.lt(cursorId) : null
+                        cursorCondition
                         )
-                .orderBy(keyword != null && keyword.length() > 1
-                        ? getRelevanceScore(keyword, post).desc()
-                        : post.id.desc())
+                .orderBy(orderSpecifiers.toArray(new OrderSpecifier[0]))
                 .limit(size + 1)
                 .fetch();
 
