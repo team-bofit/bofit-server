@@ -1,0 +1,60 @@
+package org.sopt.bofit.domain.post.dto.response;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.sopt.bofit.global.dto.response.CursorProvider;
+
+import java.time.LocalDateTime;
+
+public record PostSearchResponse(
+        @Schema(description = "게시글 ID")
+        Long postId,
+
+        @Schema(description = "작성자 ID")
+        Long writerId,
+
+        @Schema(description = "게시글 제목", example = "아니")
+        String title,
+
+        @Schema(description = "게시글 내용", example = "장정훈 그는 누구인가")
+        String content,
+
+        @Schema(description = "작성자 닉네임", example = "정훈 장")
+        String writerNickname,
+
+        @Schema(description = "작성자 프로필 사진")
+        String profileImageUrl,
+
+        @Schema(description = "댓글 수", example = "8")
+        int commentCount,
+
+        @Schema(description = "게시물 작성 시각")
+        LocalDateTime createdAt,
+
+        @Schema(description = "좋아요 수")
+        int likeCount,
+
+        @Schema(description = "사용자의 좋아요 여부")
+        boolean likedByCurrentUser,
+
+        @Schema(description = "연관도")
+        double relevanceScore
+
+) implements CursorProvider<String> {
+
+    @Override
+    public String nextCursor() {
+        return relevanceScore + "," + postId;
+    }
+
+    public static Cursor decodeCursor(String cursor) {
+        if (cursor == null || !cursor.contains(",")) {
+            return null;
+        }
+        String[] parts = cursor.split(",");
+        double relevance = Double.parseDouble(parts[0]);
+        long postId = Long.parseLong(parts[1]);
+        return new Cursor(relevance, postId);
+    }
+
+    public record Cursor(double relevance, long postId) {}
+}
