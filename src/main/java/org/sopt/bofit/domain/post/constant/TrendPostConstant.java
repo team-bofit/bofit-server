@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TrendPostConstant {
 
-    public static final String TREND_POST_DEFAULT_SIZE = "5";
+    public static final String TREND_POST_DEFAULT_SIZE = "3";
     public final static String TREND_POST_DEFAULT_SORT = "rank";
 
     public static final int TREND_POST_SCORED_DATE_RANGE = 7;
