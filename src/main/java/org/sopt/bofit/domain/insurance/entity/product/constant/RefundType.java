@@ -7,9 +7,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum RefundType {
-    PROTECTION_ONLY("순수보장형"),
-    PARTIAL_RETURN("일부환급형"),
-    FULL_RETURN("만기환급형")
+    PROTECTION_ONLY("순수보장"),
+    PARTIAL_RETURN("일부환급"),
+    FULL_RETURN("만기환급")
     ;
 
     private final String displayName;
