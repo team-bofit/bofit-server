@@ -1,6 +1,5 @@
 package org.sopt.bofit.domain.insurance.entity.product.constant;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -15,7 +14,6 @@ public enum MaturityAge {
     OLD_100(100, "100세")
     ;
 
-    @JsonValue
     private final int age;
     private final String displayName;
 
