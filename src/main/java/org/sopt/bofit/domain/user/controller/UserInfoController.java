@@ -6,7 +6,7 @@ import static org.sopt.bofit.global.constant.SwaggerConstant.TAG_NAME_USER_INFO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.sopt.bofit.domain.insurance.dto.response.InsuranceOptionsResponse;
+import org.sopt.bofit.domain.insurance.dto.response.option.InsuranceOptionsResponse;
 import org.sopt.bofit.domain.insurance.service.InsuranceService;
 import org.sopt.bofit.domain.user.dto.response.CoveragePreferenceResponses;
 import org.sopt.bofit.domain.user.dto.response.DiagnosedDiseaseResponses;

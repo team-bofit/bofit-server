@@ -1,4 +1,4 @@
-package org.sopt.bofit.domain.insurance.dto.response;
+package org.sopt.bofit.domain.insurance.dto.response.option;
 
 import org.sopt.bofit.domain.insurance.entity.product.constant.MaturityAge;
 
@@ -7,7 +7,7 @@ public record MaturityAgeResponse(
     String displayName
 ) {
 
-    public static MaturityAgeResponse create(MaturityAge maturityAge){
+    public static MaturityAgeResponse from(MaturityAge maturityAge){
         return new MaturityAgeResponse(maturityAge, maturityAge.getDisplayName());
     }
 
