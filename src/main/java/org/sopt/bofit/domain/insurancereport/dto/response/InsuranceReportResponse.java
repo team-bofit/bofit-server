@@ -1,26 +1,21 @@
 package org.sopt.bofit.domain.insurancereport.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.List;
 import java.util.UUID;
-
-import org.sopt.bofit.domain.insurance.entity.benefit.Cancer;
-import org.sopt.bofit.domain.insurance.entity.product.BasicInformation;
+import lombok.Builder;
+import org.sopt.bofit.domain.insurance.dto.response.BasicInformationResponse;
 import org.sopt.bofit.domain.insurancereport.constant.AdditionalInfo;
 import org.sopt.bofit.domain.insurancereport.entity.Disease;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
-import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
-
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-
-import lombok.Builder;
 
 @Builder
 @JsonPropertyOrder({"reportId", "reportInformation", "reportRationale",
 	"majorDisease", "surgery", "hospitalization", "disability", "death", "externalUri"})
 public record InsuranceReportResponse (
 	UUID reportId,
-	BasicInformation reportInformation,
-	ReportRationale reportRationale,
+	BasicInformationResponse reportInformation,
+	ReportRationaleResponse reportRationale,
 	SectionData majorDisease,
 	SectionData surgery,
 	SectionData hospitalization,
@@ -32,8 +27,8 @@ public record InsuranceReportResponse (
 	public static InsuranceReportResponse from(InsuranceReport report){
 		return InsuranceReportResponse.builder()
 			.reportId(report.getId())
-			.reportInformation(report.getProduct().getBasicInformation())
-			.reportRationale(report.getReportRationale())
+			.reportInformation(BasicInformationResponse.from(report.getProduct().getBasicInformation()))
+			.reportRationale(ReportRationaleResponse.from(report.getReportRationale()))
 			.majorDisease(SectionData.majorDisease(report))
 			.surgery(SectionData.surgery(report))
 			.hospitalization(SectionData.hospitalization(report))
