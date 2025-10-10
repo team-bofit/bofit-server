@@ -1,6 +1,5 @@
 package org.sopt.bofit.domain.insurance.entity.product.constant;
 
-import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +12,6 @@ public enum PaymentPeriod {
     YEAR_30(30, "30년")
     ;
 
-    @JsonValue
     private final int year;
     private final String displayName;
 
