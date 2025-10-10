@@ -1,4 +1,4 @@
-package org.sopt.bofit.domain.insurance.dto.response;
+package org.sopt.bofit.domain.insurance.dto.response.option;
 
 import org.sopt.bofit.domain.insurance.entity.product.constant.PaymentPeriod;
 
@@ -7,7 +7,7 @@ public record PaymentPeriodResponse(
     String displayName
 ) {
 
-    public static PaymentPeriodResponse create(PaymentPeriod paymentPeriod){
+    public static PaymentPeriodResponse from(PaymentPeriod paymentPeriod){
         return new PaymentPeriodResponse(paymentPeriod, paymentPeriod.getDisplayName());
     }
 

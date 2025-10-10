@@ -1,4 +1,4 @@
-package org.sopt.bofit.domain.insurance.dto.response;
+package org.sopt.bofit.domain.insurance.dto.response.option;
 
 import java.util.List;
 
