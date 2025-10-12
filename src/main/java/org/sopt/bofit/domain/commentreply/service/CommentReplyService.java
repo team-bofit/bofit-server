@@ -60,7 +60,7 @@ public class CommentReplyService {
         CommentReply commentReply = commentReplyWriter.create(comment, user, command.content());
         IntStream.range(0, command.imageUrls().size())
                 .forEach(sequence ->
-                    commentReplyImageWriter.create(commentReply, command.imageUrls().get(sequence), sequence+ 1));
+                    commentReplyImageWriter.create(commentReply, command.imageUrls().get(sequence), sequence));
         commentWriter.increaseReplyCount(comment);
         postWriter.increaseTrendScore(post);
         return commentReply;
