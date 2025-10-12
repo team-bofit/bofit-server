@@ -58,7 +58,7 @@ public class CommentService {
 
         IntStream.range(0, command.imageUrls().size())
                 .forEach(sequence -> commentImageWriter
-                    .create(comment, command.imageUrls().get(sequence), sequence + 1));
+                    .create(comment, command.imageUrls().get(sequence), sequence));
 
 		postWriter.increaseCommentCount(post);
         postCacheService.increaseCommentCount(postId);
