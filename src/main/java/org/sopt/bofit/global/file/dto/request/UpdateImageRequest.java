@@ -3,7 +3,7 @@ package org.sopt.bofit.global.file.dto.request;
 import static org.sopt.bofit.global.file.constant.ImageConstant.MAX_IMAGE_URL_LENGTH;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.hibernate.validator.constraints.Length;
 
 public record UpdateImageRequest(
@@ -14,8 +14,8 @@ public record UpdateImageRequest(
         @Schema(description = "새 이미지 URL (변경 없으면 null)")
         String imageUrl,
 
-        @Schema(description = "순서, 1부터 시작")
-        @Positive
+        @Schema(description = "순서, 0부터 시작")
+        @PositiveOrZero
         Integer sequence
 ) {
 }

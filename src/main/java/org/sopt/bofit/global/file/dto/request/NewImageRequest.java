@@ -4,7 +4,7 @@ import static org.sopt.bofit.global.file.constant.ImageConstant.MAX_IMAGE_URL_LE
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import org.hibernate.validator.constraints.Length;
 
 public record NewImageRequest(
@@ -14,7 +14,7 @@ public record NewImageRequest(
         String imageUrl,
 
         @Schema(description = "순서 (null이면 맨 뒤에 추가, 1부터 시작)", example = "3")
-        @Positive
+        @PositiveOrZero
         Integer sequence
 ) {
 }
