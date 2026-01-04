@@ -92,13 +92,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'com.github.ben-manes.caffeine:caffeine:3.1.8'
 
-	//AWS
+	//AWS TODO 버전 맞추기
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 	implementation 'software.amazon.awssdk:s3:2.25.66'
 	implementation 'software.amazon.awssdk:auth:2.25.66'
 	implementation 'software.amazon.awssdk:regions:2.25.66'
 	implementation group: 'com.amazonaws', name: 'aws-lambda-java-core', version: '1.2.1'
 	implementation group: 'com.amazonaws', name: 'aws-lambda-java-events', version: '3.7.0'
+    // Spring Cloud AWS SQS Starter
+    implementation "io.awspring.cloud:spring-cloud-aws-starter-sqs:3.3.1"
 }
 
 def generated = "build/generated/querydsl"
