@@ -1,9 +1,14 @@
 package org.sopt.bofit.global.external.openai.client;
 
-import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.*;
-import static org.sopt.bofit.global.constant.ConfigConstant.*;
-import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.*;
+import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONALE_REASONS;
+import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONAL_KEYWORD_CHIPS;
+import static org.sopt.bofit.global.constant.ConfigConstant.LLM_RETRY_NAME;
+import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.EXTERNAL_SERVER_ERROR;
 
+import io.github.resilience4j.retry.annotation.Retry;
+import java.util.List;
+import java.util.Objects;
+import lombok.extern.log4j.Log4j2;
 import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
 import org.sopt.bofit.global.config.properties.OpenAiProperties;
 import org.sopt.bofit.global.exception.customexception.InternalException;
@@ -11,19 +16,13 @@ import org.sopt.bofit.global.external.openai.dto.request.ChatRequestMessage;
 import org.sopt.bofit.global.external.openai.dto.request.OpenAiRequest;
 import org.sopt.bofit.global.external.openai.dto.response.OpenAiResponse;
 import org.sopt.bofit.global.oauth.constant.HttpHeaderConstants;
-import org.sopt.bofit.global.util.JsonUtil;
+import org.sopt.bofit.global.util.JsonMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
-
-import java.util.List;
-import java.util.Objects;
-
-import io.github.resilience4j.retry.annotation.Retry;
-import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Component
@@ -32,14 +31,16 @@ public class OpenAiClient {
 
 	private final RestClient restClient;
 	private final OpenAiProperties properties;
+    private final JsonMapper jsonMapper;
 
-	public OpenAiClient(OpenAiProperties properties) {
+	public OpenAiClient(OpenAiProperties properties, JsonMapper jsonMapper) {
 		this.properties = properties;
 		this.restClient = RestClient.builder()
 				.baseUrl(properties.baseUrl())
 				.defaultHeader(HttpHeaders.AUTHORIZATION, HttpHeaderConstants.BEARER_PREFIX + properties.secretKey())
 				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
 				.build();
+        this.jsonMapper = jsonMapper;
 	}
 
 	public String sendRequest(List<ChatRequestMessage> messages) {
@@ -63,7 +64,7 @@ public class OpenAiClient {
 	public ReportRationale sendReportRelationalRequest(List<ChatRequestMessage> messages) {
 		try {
 			String responseString = sendRequest(messages);
-			return JsonUtil.parseClass(ReportRationale.class, responseString);
+			return jsonMapper.fromJson(ReportRationale.class, responseString);
 		} catch (HttpClientErrorException | HttpServerErrorException e) {
 		// } catch (RuntimeException e) {
 			log.info("OpenAI Exception:{}", e.getMessage());
