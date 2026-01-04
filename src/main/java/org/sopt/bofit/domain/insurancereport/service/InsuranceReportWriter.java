@@ -1,7 +1,6 @@
 package org.sopt.bofit.domain.insurancereport.service;
 
 import static org.sopt.bofit.global.constant.CacheConstant.INSURANCE_REPORT_CACHE_NAME;
-import static org.sopt.bofit.global.external.openai.constant.OpenAiRole.SYSTEM;
 
 import java.util.Comparator;
 import java.util.List;
@@ -27,9 +26,8 @@ import org.sopt.bofit.domain.user.entity.UserInfo;
 import org.sopt.bofit.domain.user.service.UserInfoWriter;
 import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.domain.user.service.UserWriter;
-import org.sopt.bofit.global.external.openai.client.OpenAiClient;
-import org.sopt.bofit.global.external.openai.dto.request.ChatRequestMessage;
-import org.sopt.bofit.global.external.openai.template.OpenAiPromptManager;
+import org.sopt.bofit.global.external.generativeai.GenerativeAiClient;
+import org.sopt.bofit.global.external.generativeai.reportrelational.GenerateReportRelationalRequest;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,8 +50,7 @@ public class InsuranceReportWriter {
 	private final DiseaseHistoryFilter diseaseHistoryFilter;
 	private final CoveragePreferenceFilter coveragePreferenceFilter;
 
-	private final OpenAiPromptManager openAiPromptManager;
-	private final OpenAiClient openAiClient;
+    private final GenerativeAiClient generativeAiClient;
 
 	@Transactional(readOnly = true)
 	public InsuranceProduct recommendBestInsurance(
@@ -164,12 +161,9 @@ public class InsuranceReportWriter {
 		InsuranceReport report,
 		int age
 	){
-
-		ReportRationale response = openAiClient.sendReportRelationalRequest(
-			List.of(
-				new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportSystemMessage()),
-				new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportRationale(personalInfo, userInfo, report, age))
-			));
+        GenerateReportRelationalRequest request = GenerateReportRelationalRequest.create(
+            personalInfo, userInfo, report, age);
+        ReportRationale response = generativeAiClient.generateReportRelational(request);
 		return response;
 	}
 

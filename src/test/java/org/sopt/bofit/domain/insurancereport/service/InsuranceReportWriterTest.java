@@ -2,7 +2,7 @@ package org.sopt.bofit.domain.insurancereport.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.anyList;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONALE_REASONS;
 import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONAL_KEYWORD_CHIPS;
@@ -142,7 +142,7 @@ class InsuranceReportWriterTest extends IntegrationTestSupport {
         InsuranceStatistic savedStatistic = insuranceStatisticRepository.save(statistic);
         User savedUser = userRepository.save(user);
 
-        when(openAiClient.sendReportRelationalRequest(anyList()))
+        when(openAiClient.generateReportRelational(any()))
             .thenReturn(new ReportRationale(DEFAULT_RATIONALE_REASONS, DEFAULT_RATIONAL_KEYWORD_CHIPS));
 
         PersonalInfo personalInfo = UserFixture.getPersonalInfo();
