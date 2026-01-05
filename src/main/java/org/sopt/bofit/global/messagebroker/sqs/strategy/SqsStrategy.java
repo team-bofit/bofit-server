@@ -103,8 +103,9 @@ public abstract class SqsStrategy extends MessageBrokerStrategy {
         org.springframework.messaging.Message<?> message) {
         return CompletableFuture.runAsync(() -> {
                 String type = message.getHeaders().get(ATTRIBUTE_TYPE_ID, String.class);
+                String traceId = message.getHeaders().get(ATTRIBUTE_TRACE_ID, String.class);
                 String payload = message.getPayload().toString();
-                handleMessage(type, payload);
+                handleMessage(type, traceId, payload);
             }, messageConsumeExecutor)
             .thenRun(() -> deleteMessage(message))
             .exceptionally(e -> {
@@ -113,22 +114,25 @@ public abstract class SqsStrategy extends MessageBrokerStrategy {
             });
     }
 
-    protected void handleMessage(String typeId, String payload) {
+    protected void handleMessage(String typeId, String traceId, String payload) {
         MessageHandler<? extends Message> messageHandler = getHandlerByTypeId(typeId);
         if (messageHandler == null) {
             log.error("Cannot find message handler: {}. Payload: {}", typeId, payload);
             throw new InternalException(GlobalErrorCode.INTERNAL_SERVER_ERROR);
         }
 
-        processMessage(messageHandler, payload);
+        processMessage(messageHandler, payload, traceId);
     }
 
-    protected <T extends Message> void processMessage(MessageHandler<T> messageHandler,
-        String payload) {
+    protected <T extends Message> void processMessage(
+        MessageHandler<T> messageHandler,
+        String payload,
+        String traceId
+    ) {
         Class<T> supportedMessageType = messageHandler.getSupportedType();
         T message = jsonMapper.fromJson(supportedMessageType, payload);
 
-        messageHandler.handle(message);
+        messageHandler.handle(message, traceId);
     }
 
     public void consumeSqsMessages(
