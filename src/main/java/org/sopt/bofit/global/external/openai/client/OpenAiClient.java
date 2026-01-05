@@ -14,7 +14,7 @@ import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
 import org.sopt.bofit.global.config.properties.OpenAiProperties;
 import org.sopt.bofit.global.exception.customexception.InternalException;
 import org.sopt.bofit.global.external.generativeai.GenerativeAiClient;
-import org.sopt.bofit.global.external.generativeai.reportrelational.GenerateReportRelationalRequest;
+import org.sopt.bofit.global.external.generativeai.reportrelational.GenerateReportRationaleRequest;
 import org.sopt.bofit.global.external.openai.dto.request.ChatRequestMessage;
 import org.sopt.bofit.global.external.openai.dto.request.OpenAiRequest;
 import org.sopt.bofit.global.external.openai.dto.response.OpenAiResponse;
@@ -53,7 +53,7 @@ public class OpenAiClient implements GenerativeAiClient {
     @Override
     @Retry(name = LLM_RETRY_NAME, fallbackMethod = "generateRationaleFallback")
     public ReportRationale generateReportRelational(
-        GenerateReportRelationalRequest request
+        GenerateReportRationaleRequest request
     ){
         try {
             String responseString = generate(
