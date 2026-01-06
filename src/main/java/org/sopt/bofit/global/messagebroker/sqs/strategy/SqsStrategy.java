@@ -102,8 +102,7 @@ public abstract class SqsStrategy extends MessageBrokerStrategy {
             }, messageConsumeExecutor)
             .thenRun(() -> deleteMessage(message))
             .exceptionally(e -> {
-                log.error("[Process Message Error]: {}", message.toString(), e);
-                return null;
+                return handleProcessingError(message, e);
             });
     }
 
@@ -148,4 +147,8 @@ public abstract class SqsStrategy extends MessageBrokerStrategy {
         sqsAsyncClient.deleteMessage(deleteMessageRequest);
     }
 
+    protected Void handleProcessingError(org.springframework.messaging.Message<?> message, Throwable e) {
+        log.error("[Process Message Error]: {}", message.toString(), e);
+        return null;
+    }
 }
