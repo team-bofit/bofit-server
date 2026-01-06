@@ -9,6 +9,7 @@ import static org.sopt.bofit.global.external.openai.constant.OpenAiRole.SYSTEM;
 import io.github.resilience4j.retry.annotation.Retry;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import lombok.extern.log4j.Log4j2;
 import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
 import org.sopt.bofit.global.config.properties.OpenAiProperties;
@@ -19,7 +20,11 @@ import org.sopt.bofit.global.external.openai.dto.request.ChatRequestMessage;
 import org.sopt.bofit.global.external.openai.dto.request.OpenAiRequest;
 import org.sopt.bofit.global.external.openai.dto.response.OpenAiResponse;
 import org.sopt.bofit.global.external.openai.template.OpenAiPromptManager;
+import org.sopt.bofit.global.messagebroker.MessageBrokerResolver;
+import org.sopt.bofit.global.messagebroker.sqs.message.CreateReportRationaleMessage;
 import org.sopt.bofit.global.oauth.constant.HttpHeaderConstants;
+import org.sopt.bofit.global.outbox.service.OutboxMessageService;
+import org.sopt.bofit.global.outbox.service.dto.request.CreateOutboxMessageCommand;
 import org.sopt.bofit.global.util.JsonMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -37,9 +42,12 @@ public class OpenAiClient implements GenerativeAiClient {
 	private final OpenAiProperties properties;
     private final JsonMapper jsonMapper;
     private final OpenAiPromptManager openAiPromptManager;
+    private final MessageBrokerResolver messageBrokerResolver;
+    private final OutboxMessageService outboxMessageService;
 
 	public OpenAiClient(OpenAiProperties properties, JsonMapper jsonMapper,
-        OpenAiPromptManager openAiPromptManager) {
+        OpenAiPromptManager openAiPromptManager, MessageBrokerResolver messageBrokerResolver,
+        OutboxMessageService outboxMessageService) {
 		this.properties = properties;
 		this.restClient = RestClient.builder()
 				.baseUrl(properties.baseUrl())
@@ -48,11 +56,29 @@ public class OpenAiClient implements GenerativeAiClient {
 				.build();
         this.jsonMapper = jsonMapper;
         this.openAiPromptManager = openAiPromptManager;
+        this.messageBrokerResolver = messageBrokerResolver;
+        this.outboxMessageService = outboxMessageService;
     }
 
+    /**
+     * API 요청 시 사용함. 최초 호출되어 Fallback 로직 적용
+     */
     @Override
     @Retry(name = LLM_RETRY_NAME, fallbackMethod = "generateRationaleFallback")
-    public ReportRationale generateReportRelational(
+    public ReportRationale generateReportRationaleForApi(GenerateReportRationaleRequest request) {
+        return this.generateReportRationaleForApi(request);
+    }
+
+    /**
+     * SQS 컨슈머가 사용함. Fallback 없이 예외를 밖으로 던짐
+     */
+    @Override
+    @Retry(name = LLM_RETRY_NAME)
+    public ReportRationale generateReportRationaleForMessage(GenerateReportRationaleRequest request) {
+        return generateReportRationale(request);
+    }
+
+    public ReportRationale generateReportRationale(
         GenerateReportRationaleRequest request
     ){
         try {
@@ -70,7 +96,17 @@ public class OpenAiClient implements GenerativeAiClient {
         }
     }
 
-	public ReportRationale generateRationaleFallback(List<ChatRequestMessage> messages, Throwable t){
+    /**
+     * fallback 메서드, OutboxMessage 생성 및 Sqs 메세지 생성
+     */
+	public ReportRationale generateRationaleFallback(GenerateReportRationaleRequest request, Throwable t){
+        UUID traceId = UUID.randomUUID();
+        log.info("traceId: {}", traceId);
+        CreateReportRationaleMessage message = CreateReportRationaleMessage.from(request);
+        CreateOutboxMessageCommand command = new CreateOutboxMessageCommand(
+            traceId.toString(), jsonMapper.toJson(message), t.getMessage(), message.getClass());
+        outboxMessageService.create(command);
+        messageBrokerResolver.publish(message, traceId.toString());
 		return new ReportRationale(DEFAULT_RATIONALE_REASONS, DEFAULT_RATIONAL_KEYWORD_CHIPS);
 	}
 
