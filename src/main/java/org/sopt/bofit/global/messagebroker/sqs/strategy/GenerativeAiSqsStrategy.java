@@ -3,6 +3,8 @@ package org.sopt.bofit.global.messagebroker.sqs.strategy;
 import static org.sopt.bofit.global.config.ThreadPoolConfig.MESSAGE_CONSUMER_POOL;
 
 import io.awspring.cloud.sqs.annotation.SqsListener;
+import io.awspring.cloud.sqs.listener.SqsHeaders;
+import io.awspring.cloud.sqs.listener.SqsHeaders.MessageSystemAttributes;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +21,7 @@ import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 
 @Slf4j
 @Component
-public class GenerativeAiSqsStrategy <T extends GenerativeAiMessageHandler<GenerativeAiMessage> & SqsMessageHandler>
+public class GenerativeAiSqsStrategy <T extends GenerativeAiMessageHandler<? extends GenerativeAiMessage> & SqsMessageHandler>
     extends SqsStrategy {
 
     protected GenerativeAiSqsStrategy(
@@ -35,8 +37,13 @@ public class GenerativeAiSqsStrategy <T extends GenerativeAiMessageHandler<Gener
     }
 
     @Override
-    public void publish(Message message) {
-        asyncSend(super.getQueueUrl(), message);
+    public void publish(Message message, String traceId) {
+        asyncSend(super.getQueueUrl(), message, traceId);
+    }
+
+    @Override
+    public void publishSync(Message message, String traceId) {
+        syncSend(super.getQueueUrl(), message, traceId);
     }
 
     @Override

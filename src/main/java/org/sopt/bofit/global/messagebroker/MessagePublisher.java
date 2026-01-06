@@ -4,5 +4,6 @@ import org.sopt.bofit.global.messagebroker.message.Message;
 
 public interface MessagePublisher {
 
-    void publish(Message message);
+    void publish(Message message, String traceId);
+    void publishSync(Message message, String traceId);
 }

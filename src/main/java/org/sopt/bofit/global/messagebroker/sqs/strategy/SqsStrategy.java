@@ -5,7 +5,6 @@ import io.awspring.cloud.sqs.listener.SqsHeaders;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,6 @@ import org.sopt.bofit.global.util.JsonMapper;
 import org.springframework.core.task.TaskExecutor;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
 import software.amazon.awssdk.services.sqs.model.DeleteMessageRequest;
-import software.amazon.awssdk.services.sqs.model.MessageAttributeValue;
 
 @Slf4j
 @Getter
@@ -54,8 +52,8 @@ public abstract class SqsStrategy extends MessageBrokerStrategy {
 
     abstract void listen(List<org.springframework.messaging.Message<String>> messages);
 
-    protected void asyncSend(String queueName, Message message) {
-        Map<String, Object> messageAttributes = createMessageAttributes(message);
+    protected void asyncSend(String queueName, Message message, String traceId) {
+        Map<String, Object> messageAttributes = createMessageAttributes(message, traceId);
         String serializedData = jsonMapper.toJson(message);
 
         sqsTemplate.sendAsync(to -> to
@@ -70,7 +68,19 @@ public abstract class SqsStrategy extends MessageBrokerStrategy {
             });
     }
 
-    private Map<String, Object> createMessageAttributes(Message message) {
+    protected void syncSend(String queueName, Message message, String traceId) {
+        Map<String, Object> messageAttributes = createMessageAttributes(message, traceId);
+        String serializedData = jsonMapper.toJson(message);
+
+        sqsTemplate.sendAsync(to -> to
+                .queue(queueName)
+                .payload(serializedData)
+                .headers(messageAttributes)
+            )
+            .join();
+    }
+
+    private Map<String, Object> createMessageAttributes(Message message, String traceId) {
         String messageType = message.getClass().getSimpleName();
 
         return Map.of(
