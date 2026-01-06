@@ -7,6 +7,7 @@ public record ReportRationaleCreateCommand (
     PersonalInfo personalInfo,
     InsuranceCriteria insuranceCriteria,
     UUID reportId,
+    Long insuranceProductId,
     int age
 ){
 

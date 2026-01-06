@@ -63,7 +63,7 @@ public class InsuranceReportService {
         InsuranceReport savedReport = insuranceReportWriter.saveReport(createdReport, user, userInfo,
             personalInfo);
         insuranceReportWriter.generateAndApplyRationale(
-            personalInfo, InsuranceCriteria.from(userInfo), savedReport, age);
+            personalInfo, InsuranceCriteria.from(userInfo), savedReport, recommendedProduct, age);
 
 		return new IssueInsuranceReportResponse(savedReport.getId());
 	}
@@ -113,7 +113,8 @@ public class InsuranceReportService {
         ReportRationaleCreateCommand command
     ){
         InsuranceReport report = insuranceReportReader.findById(command.reportId());
+        InsuranceProduct product = insuranceProductReader.getById(command.insuranceProductId());
         insuranceReportWriter.generateAndApplyRationaleForMessage(
-            command.personalInfo(), command.insuranceCriteria(), report, command.age());
+            command.personalInfo(), command.insuranceCriteria(), report, product, command.age());
     }
 }

@@ -142,6 +142,7 @@ class InsuranceReportWriterTest extends IntegrationTestSupport {
         InsuranceStatistic savedStatistic = insuranceStatisticRepository.save(statistic);
         User savedUser = userRepository.save(user);
 
+        // 생성 시 rationale 을 생성하지 않고 리포트 생성 후 발급받아 업데이트 하는 형태로 변경됨
         when(openAiClient.generateReportRationaleForApi(any()))
             .thenReturn(new ReportRationale(DEFAULT_RATIONALE_REASONS, DEFAULT_RATIONAL_KEYWORD_CHIPS));
 
@@ -155,7 +156,7 @@ class InsuranceReportWriterTest extends IntegrationTestSupport {
         assertThat(result)
             .isNotNull()
             .extracting("product.basicInformation.name", "user.personalInfo.name", "reportRationale.reasons")
-            .containsExactly(productName, PERSONAL_NAME, DEFAULT_RATIONALE_REASONS );
+            .containsExactly(productName, PERSONAL_NAME, null );
 
     }
 

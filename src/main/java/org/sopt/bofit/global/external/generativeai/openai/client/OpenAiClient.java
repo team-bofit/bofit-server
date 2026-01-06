@@ -86,7 +86,7 @@ public class OpenAiClient implements GenerativeAiClient {
                 List.of(
                     new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportSystemMessage()),
                     new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportRationale(
-                        request.personalInfo(), request.insuranceCriteria(), request.report(), request.age()))
+                        request.personalInfo(), request.insuranceCriteria(), request.report(), request.product(), request.age()))
                 ));
             return jsonMapper.fromJson(ReportRationale.class, responseString);
         } catch (HttpClientErrorException | HttpServerErrorException e) {
@@ -101,7 +101,6 @@ public class OpenAiClient implements GenerativeAiClient {
      */
 	public ReportRationale generateRationaleFallback(GenerateReportRationaleRequest request, Throwable t){
         UUID traceId = UUID.randomUUID();
-        log.info("traceId: {}", traceId);
         CreateReportRationaleMessage message = CreateReportRationaleMessage.from(request);
         CreateOutboxMessageCommand command = new CreateOutboxMessageCommand(
             traceId.toString(), jsonMapper.toJson(message), t.getMessage(), message.getClass());

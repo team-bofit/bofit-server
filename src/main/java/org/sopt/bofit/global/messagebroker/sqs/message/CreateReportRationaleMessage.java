@@ -11,12 +11,12 @@ public record CreateReportRationaleMessage(
     PersonalInfo personalInfo,
     InsuranceCriteria insuranceCriteria,
     UUID reportId,
-//    Long insuranceProductId,
+    Long insuranceProductId,
     int age
 ) implements GenerativeAiMessage {
 
     public ReportRationaleCreateCommand toCommand(){
-        return new ReportRationaleCreateCommand(personalInfo, insuranceCriteria, reportId, age);
+        return new ReportRationaleCreateCommand(personalInfo, insuranceCriteria, reportId, insuranceProductId, age);
     }
 
     public static CreateReportRationaleMessage from(GenerateReportRationaleRequest request){
@@ -24,6 +24,7 @@ public record CreateReportRationaleMessage(
             request.personalInfo(),
             request.insuranceCriteria(),
             request.report().getId(),
+            request.product().getId(),
             request.age());
     }
 }

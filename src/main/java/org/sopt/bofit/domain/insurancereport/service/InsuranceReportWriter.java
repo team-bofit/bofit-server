@@ -160,10 +160,11 @@ public class InsuranceReportWriter {
         PersonalInfo personalInfo,
 		InsuranceCriteria insuranceCriteria,
 		InsuranceReport report,
+        InsuranceProduct product,
 		int age
 	){
         GenerateReportRationaleRequest request = GenerateReportRationaleRequest.create(
-            personalInfo, insuranceCriteria, report, age);
+            personalInfo, insuranceCriteria, report, product, age);
         ReportRationale reportRationale = generativeAiClient.generateReportRationaleForApi(request);
         report.updateRationale(reportRationale);
         return insuranceReportRepository.save(report);
@@ -174,10 +175,11 @@ public class InsuranceReportWriter {
         PersonalInfo personalInfo,
         InsuranceCriteria insuranceCriteria,
         InsuranceReport report,
+        InsuranceProduct product,
         int age
     ){
         GenerateReportRationaleRequest request = GenerateReportRationaleRequest.create(
-            personalInfo, insuranceCriteria, report, age);
+            personalInfo, insuranceCriteria, report, product, age);
         ReportRationale reportRationale = generativeAiClient.generateReportRationaleForMessage(request);
         report.updateRationale(reportRationale);
         return insuranceReportRepository.save(report);

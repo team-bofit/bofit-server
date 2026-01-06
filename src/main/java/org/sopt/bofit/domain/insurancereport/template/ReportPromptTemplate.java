@@ -20,6 +20,7 @@ public class ReportPromptTemplate {
         PersonalInfo personalInfo,
         InsuranceCriteria insuranceCriteria,
 		InsuranceReport report,
+        InsuranceProduct product,
 		int age
 	){
 		return OpenAiPromptTemplate.createDefaultMessage(
@@ -38,7 +39,7 @@ public class ReportPromptTemplate {
 		keywordChips example: "중대 질환 든든 보장", "합리적인 보험료"
     """ +
 			userDetailTemplate(personalInfo, insuranceCriteria, age)
-			+ reportInfoTemplate(report, report.getProduct()),
+			+ reportInfoTemplate(report, product),
     """
      {
     	"reasons": [
