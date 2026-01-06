@@ -27,7 +27,7 @@ import org.sopt.bofit.domain.user.service.UserInfoWriter;
 import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.domain.user.service.UserWriter;
 import org.sopt.bofit.global.external.generativeai.GenerativeAiClient;
-import org.sopt.bofit.global.external.generativeai.reportrelational.GenerateReportRelationalRequest;
+import org.sopt.bofit.global.external.generativeai.reportrelational.GenerateReportRationaleRequest;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -134,7 +134,6 @@ public class InsuranceReportWriter {
 
             .build();
 
-        report.updateRationale(generateRationale(personalInfo, userInfo, report, age));
         return report;
     }
 
@@ -155,17 +154,33 @@ public class InsuranceReportWriter {
 		return savedInsuranceReport;
 	}
 
-	public ReportRationale generateRationale(
+    @CachePut(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id", unless = "#result==null")
+	public InsuranceReport generateAndApplyRationale(
         PersonalInfo personalInfo,
 		UserInfo userInfo,
 		InsuranceReport report,
 		int age
 	){
-        GenerateReportRelationalRequest request = GenerateReportRelationalRequest.create(
+        GenerateReportRationaleRequest request = GenerateReportRationaleRequest.create(
             personalInfo, userInfo, report, age);
-        ReportRationale response = generativeAiClient.generateReportRelational(request);
-		return response;
+        ReportRationale reportRationale = generativeAiClient.generateReportRationaleForApi(request);
+        report.updateRationale(reportRationale);
+        return insuranceReportRepository.save(report);
 	}
+
+    @CachePut(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id", unless = "#result==null")
+    public InsuranceReport generateAndApplyRationaleForMessage(
+        PersonalInfo personalInfo,
+        UserInfo userInfo,
+        InsuranceReport report,
+        int age
+    ){
+        GenerateReportRationaleRequest request = GenerateReportRationaleRequest.create(
+            personalInfo, userInfo, report, age);
+        ReportRationale reportRationale = generativeAiClient.generateReportRationaleForMessage(request);
+        report.updateRationale(reportRationale);
+        return insuranceReportRepository.save(report);
+    }
 
 	private CoverageStatus diseaseDeathCoverageStatus (InsuranceProduct product, InsuranceBenefit average){
 		List<Function<InsuranceBenefit, Integer>> functions = List.of(

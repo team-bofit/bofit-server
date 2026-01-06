@@ -17,6 +17,7 @@ import org.sopt.bofit.domain.insurancereport.dto.response.majordisease.MajorDise
 import org.sopt.bofit.domain.insurancereport.dto.response.surgery.SurgerySection;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.service.dto.InsuranceOptionCommand;
+import org.sopt.bofit.domain.insurancereport.service.dto.request.ReportRationaleCreateCommand;
 import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
@@ -58,10 +59,11 @@ public class InsuranceReportService {
 
         InsuranceReport createdReport
             = insuranceReportWriter.createReport(totalAverage, recommendedProduct, user, userInfo, personalInfo, age);
-        InsuranceReport insuranceReport = insuranceReportWriter.saveReport(createdReport, user, userInfo,
+        InsuranceReport savedReport = insuranceReportWriter.saveReport(createdReport, user, userInfo,
             personalInfo);
+        insuranceReportWriter.generateAndApplyRationale(personalInfo, userInfo, savedReport, age);
 
-		return new IssueInsuranceReportResponse(insuranceReport.getId());
+		return new IssueInsuranceReportResponse(savedReport.getId());
 	}
 
 	public MajorDiseaseSection findMajorDiseaseSection(UUID insuranceReportId, String hyphenSection){
@@ -101,4 +103,15 @@ public class InsuranceReportService {
 		InsuranceReport report = insuranceReportReader.findLastByUser(user);
 		return InsuranceReportSummaryResponse.from(report);
 	}
+
+    /**
+     * 현재는 report 가 수정되는 케이스가 이 메서드를 제외하고 존재하지 않으므로 업데이트 시 이전에 조회했던 report를 그대로 사용함
+     */
+    public void updateReportRationale(
+        ReportRationaleCreateCommand command
+    ){
+        InsuranceReport report = insuranceReportReader.findById(command.reportId());
+        insuranceReportWriter.generateAndApplyRationaleForMessage(
+            command.personalInfo(), command.userInfo(), report, command.age());
+    }
 }
