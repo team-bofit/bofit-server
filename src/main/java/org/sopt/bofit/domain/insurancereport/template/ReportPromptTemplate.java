@@ -5,8 +5,8 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.sopt.bofit.domain.insurance.entity.product.InsuranceProduct;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
+import org.sopt.bofit.domain.insurancereport.service.dto.request.InsuranceCriteria;
 import org.sopt.bofit.domain.user.entity.PersonalInfo;
-import org.sopt.bofit.domain.user.entity.UserInfo;
 import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
 import org.sopt.bofit.global.external.openai.template.OpenAiPromptTemplate;
@@ -18,7 +18,7 @@ public class ReportPromptTemplate {
 	private final static String SYSTEM_MESSAGE = "너는 보험 리포트를 작성하는 전문가야. 아래 사용자 정보를 바탕으로, 요구사항에 맞춰 보험 리포트 설명을 작성해줘.";
 	public static String recommendReasonAndKeywordChip(
         PersonalInfo personalInfo,
-		UserInfo userInfo,
+        InsuranceCriteria insuranceCriteria,
 		InsuranceReport report,
 		int age
 	){
@@ -37,7 +37,7 @@ public class ReportPromptTemplate {
 		
 		keywordChips example: "중대 질환 든든 보장", "합리적인 보험료"
     """ +
-			userDetailTemplate(personalInfo, userInfo, age)
+			userDetailTemplate(personalInfo, insuranceCriteria, age)
 			+ reportInfoTemplate(report, report.getProduct()),
     """
      {
@@ -52,7 +52,7 @@ public class ReportPromptTemplate {
 			);
 	}
 
-	public static String userDetailTemplate(PersonalInfo personalInfo, UserInfo userInfo, int age){
+	public static String userDetailTemplate(PersonalInfo personalInfo, InsuranceCriteria insuranceCriteria, int age){
 		return """
    			### 사용자 정보
 			- 나이: %d
@@ -74,16 +74,16 @@ public class ReportPromptTemplate {
                 personalInfo.isMarried(),
                 personalInfo.isHasChild(),
                 personalInfo.isDriver(),
-				userInfo.getDiseaseHistory().stream()
+				insuranceCriteria.diseaseHistory().stream()
 					.map(DiagnosedDisease::getDiseaseName)
 					.collect(Collectors.joining(DELIMITER)),
-				userInfo.getFamilyHistory().stream()
+				insuranceCriteria.familyHistory().stream()
 					.map(DiagnosedDisease::getDiseaseName)
 					.collect(Collectors.joining(DELIMITER)),
-				userInfo.getCoveragePreferences().keySet().stream()
+				insuranceCriteria.coveragePreferences().keySet().stream()
 					.map(CoveragePreference::getPrompting)
 					.collect(Collectors.joining(DELIMITER)),
-				userInfo.getMinPrice(), userInfo.getMaxPrice()
+				insuranceCriteria.minPrice(), insuranceCriteria.maxPrice()
 		);
 	}
 

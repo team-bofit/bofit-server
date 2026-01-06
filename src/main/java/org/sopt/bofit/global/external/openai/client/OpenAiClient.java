@@ -86,7 +86,7 @@ public class OpenAiClient implements GenerativeAiClient {
                 List.of(
                     new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportSystemMessage()),
                     new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportRationale(
-                        request.personalInfo(), request.userInfo(), request.report(), request.age()))
+                        request.personalInfo(), request.insuranceCriteria(), request.report(), request.age()))
                 ));
             return jsonMapper.fromJson(ReportRationale.class, responseString);
         } catch (HttpClientErrorException | HttpServerErrorException e) {

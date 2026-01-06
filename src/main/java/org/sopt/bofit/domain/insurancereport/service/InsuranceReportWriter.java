@@ -17,6 +17,7 @@ import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
 import org.sopt.bofit.domain.insurancereport.entity.constant.CoverageStatus;
 import org.sopt.bofit.domain.insurancereport.repository.InsuranceReportRepository;
+import org.sopt.bofit.domain.insurancereport.service.dto.request.InsuranceCriteria;
 import org.sopt.bofit.domain.insurancereport.service.filter.CoveragePreferenceFilter;
 import org.sopt.bofit.domain.insurancereport.service.filter.DiseaseHistoryFilter;
 import org.sopt.bofit.domain.insurancereport.service.scoringrule.ScoringRuleCalculator;
@@ -157,12 +158,12 @@ public class InsuranceReportWriter {
     @CachePut(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id", unless = "#result==null")
 	public InsuranceReport generateAndApplyRationale(
         PersonalInfo personalInfo,
-		UserInfo userInfo,
+		InsuranceCriteria insuranceCriteria,
 		InsuranceReport report,
 		int age
 	){
         GenerateReportRationaleRequest request = GenerateReportRationaleRequest.create(
-            personalInfo, userInfo, report, age);
+            personalInfo, insuranceCriteria, report, age);
         ReportRationale reportRationale = generativeAiClient.generateReportRationaleForApi(request);
         report.updateRationale(reportRationale);
         return insuranceReportRepository.save(report);
@@ -171,12 +172,12 @@ public class InsuranceReportWriter {
     @CachePut(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id", unless = "#result==null")
     public InsuranceReport generateAndApplyRationaleForMessage(
         PersonalInfo personalInfo,
-        UserInfo userInfo,
+        InsuranceCriteria insuranceCriteria,
         InsuranceReport report,
         int age
     ){
         GenerateReportRationaleRequest request = GenerateReportRationaleRequest.create(
-            personalInfo, userInfo, report, age);
+            personalInfo, insuranceCriteria, report, age);
         ReportRationale reportRationale = generativeAiClient.generateReportRationaleForMessage(request);
         report.updateRationale(reportRationale);
         return insuranceReportRepository.save(report);

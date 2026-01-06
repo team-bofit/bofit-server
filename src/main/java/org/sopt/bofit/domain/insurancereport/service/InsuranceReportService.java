@@ -17,6 +17,7 @@ import org.sopt.bofit.domain.insurancereport.dto.response.majordisease.MajorDise
 import org.sopt.bofit.domain.insurancereport.dto.response.surgery.SurgerySection;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.service.dto.InsuranceOptionCommand;
+import org.sopt.bofit.domain.insurancereport.service.dto.request.InsuranceCriteria;
 import org.sopt.bofit.domain.insurancereport.service.dto.request.ReportRationaleCreateCommand;
 import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.User;
@@ -61,7 +62,8 @@ public class InsuranceReportService {
             = insuranceReportWriter.createReport(totalAverage, recommendedProduct, user, userInfo, personalInfo, age);
         InsuranceReport savedReport = insuranceReportWriter.saveReport(createdReport, user, userInfo,
             personalInfo);
-        insuranceReportWriter.generateAndApplyRationale(personalInfo, userInfo, savedReport, age);
+        insuranceReportWriter.generateAndApplyRationale(
+            personalInfo, InsuranceCriteria.from(userInfo), savedReport, age);
 
 		return new IssueInsuranceReportResponse(savedReport.getId());
 	}
@@ -112,6 +114,6 @@ public class InsuranceReportService {
     ){
         InsuranceReport report = insuranceReportReader.findById(command.reportId());
         insuranceReportWriter.generateAndApplyRationaleForMessage(
-            command.personalInfo(), command.userInfo(), report, command.age());
+            command.personalInfo(), command.insuranceCriteria(), report, command.age());
     }
 }
