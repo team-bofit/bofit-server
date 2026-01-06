@@ -2,6 +2,8 @@ package org.sopt.bofit.support;
 
 import org.sopt.bofit.config.TestCacheConfig;
 import org.sopt.bofit.global.external.openai.client.OpenAiClient;
+import org.sopt.bofit.global.messagebroker.MessageStrategyProvider;
+import org.sopt.bofit.global.messagebroker.sqs.strategy.GenerativeAiSqsStrategy;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
@@ -9,9 +11,15 @@ import org.springframework.test.context.ActiveProfiles;
 
 @ActiveProfiles("test")
 @SpringBootTest
-@Import(TestCacheConfig.class)
+@Import({TestCacheConfig.class})
 public abstract class IntegrationTestSupport {
 
 	@MockBean
 	protected OpenAiClient openAiClient;
+
+    @MockBean
+    protected GenerativeAiSqsStrategy generativeAiSqsStrategy;
+
+    @MockBean
+    protected MessageStrategyProvider messageStrategyProvider;
 }

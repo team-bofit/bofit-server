@@ -64,3 +64,6 @@ cloud:
       bucket: bofit-bucket
     stack:
       auto: false
+message-broker:
+  sqs:
+    generative-ai: "test-queue-url"

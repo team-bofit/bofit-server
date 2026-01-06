@@ -127,7 +127,7 @@ class InsuranceReportServiceTest extends IntegrationTestSupport {
 		insuranceStatisticRepository.save(statistic);
 		User savedUser = userRepository.save(user);
 
-		when(openAiClient.generateReportRelational(any()))
+		when(openAiClient.generateReportRationaleForApi(any()))
 			.thenReturn(new ReportRationale(DEFAULT_RATIONALE_REASONS, DEFAULT_RATIONAL_KEYWORD_CHIPS));
 
 		// when
