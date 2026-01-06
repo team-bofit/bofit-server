@@ -31,4 +31,18 @@ public class JsonMapper {
             throw new InternalException(GlobalErrorCode.JSON_DESERIALIZATION_ERROR, e.getMessage());
         }
     }
+
+    @SuppressWarnings("unchecked")
+    public <T> T fromJson(String className, String content) {
+        try {
+            Class<?> clazz = Class.forName(className);
+            return (T) objectMapper.readValue(content, clazz);
+        } catch (ClassNotFoundException e) {
+            log.error("클래스를 찾을 수 없습니다: {}", className, e);
+            throw new InternalException(GlobalErrorCode.CLASS_NOT_FOUND, e.getMessage());
+        } catch (JsonProcessingException e) {
+            log.error("json 역직렬화 실패: {}", e.getMessage(), e);
+            throw new InternalException(GlobalErrorCode.JSON_DESERIALIZATION_ERROR, e.getMessage());
+        }
+    }
 }
