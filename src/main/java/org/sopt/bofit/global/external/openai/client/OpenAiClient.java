@@ -66,7 +66,7 @@ public class OpenAiClient implements GenerativeAiClient {
     @Override
     @Retry(name = LLM_RETRY_NAME, fallbackMethod = "generateRationaleFallback")
     public ReportRationale generateReportRationaleForApi(GenerateReportRationaleRequest request) {
-        return this.generateReportRationaleForApi(request);
+        return generateReportRationale(request);
     }
 
     /**
