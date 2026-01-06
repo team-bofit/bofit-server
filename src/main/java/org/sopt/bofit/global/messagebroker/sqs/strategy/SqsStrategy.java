@@ -72,17 +72,10 @@ public abstract class SqsStrategy extends MessageBrokerStrategy {
 
     private Map<String, Object> createMessageAttributes(Message message) {
         String messageType = message.getClass().getSimpleName();
-        String messageTraceId = UUID.randomUUID().toString();
 
         return Map.of(
-            ATTRIBUTE_MESSAGE_TYPE, MessageAttributeValue.builder()
-                .stringValue(messageType)
-                .dataType(ATTRIBUTE_DATA_TYPE_STRING)
-                .build(),
-            ATTRIBUTE_TRACE_ID, MessageAttributeValue.builder()
-                .stringValue(messageTraceId)
-                .dataType(ATTRIBUTE_DATA_TYPE_STRING)
-                .build(),
+            ATTRIBUTE_MESSAGE_TYPE, messageType,
+            ATTRIBUTE_TRACE_ID, traceId,
             ATTRIBUTE_TYPE_ID, getMessageTypeId(message)
         );
     }
