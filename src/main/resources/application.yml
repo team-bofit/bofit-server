@@ -3,10 +3,10 @@ spring:
     name: bofit
   profiles:
     group:
-      local: local-db, local-port, common
-      dev-blue: common, dev-db, dev-blue-port
-      dev-green: common, dev-db, dev-green-port
-      prod: prod-db, prod-port, common
+      local: local-db, local-port, common, local-message-broker
+      dev-blue: common, dev-db, dev-blue-port, dev-message-broker
+      dev-green: common, dev-db, dev-green-port, dev-message-broker
+      prod: prod-db, prod-port, common, prod-message-broker
     active: local
 
 ---
@@ -60,7 +60,7 @@ server:
 resilience4j.retry:
   instances:
     LLMRetry:
-      maxAttempts: 3
+      maxAttempts: 2
       waitDuration: 1s
       enableExponentialBackoff: true
       exponentialBackoffMultiplier: 2.5
@@ -179,3 +179,32 @@ spring:
       on-profile: prod-port
 server:
   port: 8082
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local-message-broker
+message-broker:
+  sqs:
+    generative-ai: ${SQS_GENERATIVE_AI_QUEUE_LOCAL}
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev-message-broker
+message-broker:
+  sqs:
+    generative-ai: ${SQS_GENERATIVE_AI_QUEUE_DEV}
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod-message-broker
+message-broker:
+  sqs:
+    generative-ai: ${SQS_GENERATIVE_AI_QUEUE_PROD}
