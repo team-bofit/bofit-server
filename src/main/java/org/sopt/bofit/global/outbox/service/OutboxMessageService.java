@@ -1,5 +1,6 @@
 package org.sopt.bofit.global.outbox.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.global.exception.constant.GlobalErrorCode;
@@ -44,5 +45,9 @@ public class OutboxMessageService {
     public void markAsPending(String traceId, String errorMessage) {
         get(traceId).failAndRetryLater(errorMessage);
     }
-    
+
+    public void updateLastAttemptAt(String traceId, LocalDateTime attemptedAt){
+        OutboxMessage outboxMessage = get(traceId);
+        outboxMessage.updateLastAttemptAt(attemptedAt);
+    }
 }
