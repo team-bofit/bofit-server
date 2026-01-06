@@ -1,4 +1,4 @@
-package org.sopt.bofit.global.external.openai.dto.response;
+package org.sopt.bofit.global.external.generativeai.openai.dto.response;
 
 import java.util.List;
 

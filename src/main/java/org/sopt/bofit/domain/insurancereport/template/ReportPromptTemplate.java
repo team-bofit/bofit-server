@@ -9,7 +9,7 @@ import org.sopt.bofit.domain.insurancereport.service.dto.request.InsuranceCriter
 import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.constant.CoveragePreference;
 import org.sopt.bofit.domain.user.entity.constant.DiagnosedDisease;
-import org.sopt.bofit.global.external.openai.template.OpenAiPromptTemplate;
+import org.sopt.bofit.global.external.generativeai.openai.template.OpenAiPromptTemplate;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ReportPromptTemplate {

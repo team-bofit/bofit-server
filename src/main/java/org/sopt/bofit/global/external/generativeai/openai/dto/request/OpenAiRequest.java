@@ -1,9 +1,7 @@
-package org.sopt.bofit.global.external.openai.dto.request;
-
-import java.util.List;
+package org.sopt.bofit.global.external.generativeai.openai.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;

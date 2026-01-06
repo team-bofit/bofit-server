@@ -1,7 +1,7 @@
 package org.sopt.bofit.support;
 
 import org.sopt.bofit.config.TestCacheConfig;
-import org.sopt.bofit.global.external.openai.client.OpenAiClient;
+import org.sopt.bofit.global.external.generativeai.openai.client.OpenAiClient;
 import org.sopt.bofit.global.messagebroker.MessageStrategyProvider;
 import org.sopt.bofit.global.messagebroker.sqs.strategy.GenerativeAiSqsStrategy;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,10 +1,10 @@
-package org.sopt.bofit.global.external.openai.client;
+package org.sopt.bofit.global.external.generativeai.openai.client;
 
 import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONALE_REASONS;
 import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONAL_KEYWORD_CHIPS;
 import static org.sopt.bofit.global.constant.ConfigConstant.LLM_RETRY_NAME;
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.EXTERNAL_SERVER_ERROR;
-import static org.sopt.bofit.global.external.openai.constant.OpenAiRole.SYSTEM;
+import static org.sopt.bofit.global.external.generativeai.openai.constant.OpenAiRole.SYSTEM;
 
 import io.github.resilience4j.retry.annotation.Retry;
 import java.util.List;
@@ -15,11 +15,11 @@ import org.sopt.bofit.domain.insurancereport.entity.ReportRationale;
 import org.sopt.bofit.global.config.properties.OpenAiProperties;
 import org.sopt.bofit.global.exception.customexception.InternalException;
 import org.sopt.bofit.global.external.generativeai.GenerativeAiClient;
+import org.sopt.bofit.global.external.generativeai.openai.dto.request.ChatRequestMessage;
+import org.sopt.bofit.global.external.generativeai.openai.dto.request.OpenAiRequest;
+import org.sopt.bofit.global.external.generativeai.openai.dto.response.OpenAiResponse;
+import org.sopt.bofit.global.external.generativeai.openai.template.OpenAiPromptManager;
 import org.sopt.bofit.global.external.generativeai.reportrelational.GenerateReportRationaleRequest;
-import org.sopt.bofit.global.external.openai.dto.request.ChatRequestMessage;
-import org.sopt.bofit.global.external.openai.dto.request.OpenAiRequest;
-import org.sopt.bofit.global.external.openai.dto.response.OpenAiResponse;
-import org.sopt.bofit.global.external.openai.template.OpenAiPromptManager;
 import org.sopt.bofit.global.messagebroker.MessageBrokerResolver;
 import org.sopt.bofit.global.messagebroker.sqs.message.CreateReportRationaleMessage;
 import org.sopt.bofit.global.oauth.constant.HttpHeaderConstants;

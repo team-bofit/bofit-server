@@ -1,4 +1,4 @@
-package org.sopt.bofit.global.external.openai.constant;
+package org.sopt.bofit.global.external.generativeai.openai.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

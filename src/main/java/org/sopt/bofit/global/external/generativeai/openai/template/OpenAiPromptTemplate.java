@@ -1,4 +1,4 @@
-package org.sopt.bofit.global.external.openai.template;
+package org.sopt.bofit.global.external.generativeai.openai.template;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

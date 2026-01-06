@@ -1,4 +1,4 @@
-package org.sopt.bofit.global.external.openai.template;
+package org.sopt.bofit.global.external.generativeai.openai.template;
 
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.service.dto.request.InsuranceCriteria;
