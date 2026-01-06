@@ -1,9 +1,9 @@
 package org.sopt.bofit.global.exception.constant;
 
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-
-import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @AllArgsConstructor
 public enum GlobalErrorCode implements ErrorCode {
@@ -21,13 +21,16 @@ public enum GlobalErrorCode implements ErrorCode {
     NOT_SUPPORTED_URI_ERROR(NOT_FOUND.value(), "지원하지 않는 URL입니다."),
     JSON_SERIALIZATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Enum 리스트를 JSON 문자열로 직렬화하는 데 실패했습니다."),
     JSON_DESERIALIZATION_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "JSON 문자열을 Enum 리스트로 역직렬화하는 데 실패했습니다."),
+    CLASS_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR.value(), "클래스를 찾을 수 없습니다."),
     AUTHENTICATION_SETTING_FAIL(HttpStatus.INTERNAL_SERVER_ERROR.value(), "인증 정보 처리에 실패했습니다"),
     JWT_USER_ID_EXTRACTION_FAILED(HttpStatus.UNAUTHORIZED.value(), "JWT에서 userId 추출 실패"),
     JWT_INVALID_SIGNATURE(HttpStatus.UNAUTHORIZED.value(), "잘못된 JWT 서명입니다."),
     JWT_EXPIRED(HttpStatus.UNAUTHORIZED.value(), "만료된 토큰입니다."),
     JWT_UNSUPPORTED(HttpStatus.UNAUTHORIZED.value(), "지원하지 않는 JWT입니다."),
     JWT_INVALID(HttpStatus.UNAUTHORIZED.value(), "유효하지 않은 JWT입니다."),
-    EXTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "외부 서버 오류입니다.")
+    EXTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "외부 서버 오류입니다."),
+    NOT_FOUND_OUTBOX(NOT_FOUND.value(), "존재하지 않는 OutBox 입니다."),
+    CONFLICT_OUTBOX_STATUS(NOT_FOUND.value(), "OutBox Status 충돌입니다."),
     ;
 
 
