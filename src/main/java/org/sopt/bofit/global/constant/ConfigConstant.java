@@ -6,4 +6,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConfigConstant {
 	public static final String LLM_RETRY_NAME = "LLMRetry";
+    public static final String LLM_CIRCUIT_BREAKER_NAME = "LLMCircuitBreaker";
 }

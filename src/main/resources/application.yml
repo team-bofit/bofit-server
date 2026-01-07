@@ -57,17 +57,31 @@ openai:
 server:
   forward-headers-strategy: FRAMEWORK
 
-resilience4j.retry:
-  instances:
-    LLMRetry:
-      maxAttempts: 2
-      waitDuration: 1s
-      enableExponentialBackoff: true
-      exponentialBackoffMultiplier: 2.5
-      retryExceptions:
-        - java.io.IOException
-        - org.sopt.bofit.global.exception.customexception.InternalException
-        - org.sopt.bofit.global.exception.customexception.CustomException
+resilience4j:
+  circuitbreaker:
+    instances:
+      LLMCircuitBreaker:
+        registerHealthIndicator: true
+        slidingWindowType: COUNT_BASED
+        slidingWindowSize: 20
+        minimumNumberOfCalls: 10
+        failureRateThreshold: 50
+        slowCallDurationThreshold: 15000ms
+        slowCallRateThreshold: 50
+        waitDurationInOpenState: 60s
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+  retry:
+    instances:
+      LLMRetry:
+        maxAttempts: 2
+        waitDuration: 1s
+        enableExponentialBackoff: true
+        exponentialBackoffMultiplier: 2.5
+        retryExceptions:
+          - java.io.IOException
+          - org.sopt.bofit.global.exception.customexception.InternalException
+          - org.sopt.bofit.global.exception.customexception.CustomException
 
 management:
   endpoints:

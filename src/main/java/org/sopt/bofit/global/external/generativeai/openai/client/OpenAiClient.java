@@ -2,10 +2,12 @@ package org.sopt.bofit.global.external.generativeai.openai.client;
 
 import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONALE_REASONS;
 import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONAL_KEYWORD_CHIPS;
+import static org.sopt.bofit.global.constant.ConfigConstant.LLM_CIRCUIT_BREAKER_NAME;
 import static org.sopt.bofit.global.constant.ConfigConstant.LLM_RETRY_NAME;
 import static org.sopt.bofit.global.exception.constant.GlobalErrorCode.EXTERNAL_SERVER_ERROR;
 import static org.sopt.bofit.global.external.generativeai.openai.constant.OpenAiRole.SYSTEM;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import java.util.List;
 import java.util.Objects;
@@ -36,24 +38,24 @@ import org.springframework.web.client.RestClient;
 @Log4j2
 @Component
 public class OpenAiClient implements GenerativeAiClient {
-	public static final String REQUEST_URI = "/chat/completions";
+    public static final String REQUEST_URI = "/chat/completions";
 
-	private final RestClient restClient;
-	private final OpenAiProperties properties;
+    private final RestClient restClient;
+    private final OpenAiProperties properties;
     private final JsonMapper jsonMapper;
     private final OpenAiPromptManager openAiPromptManager;
     private final MessageBrokerResolver messageBrokerResolver;
     private final OutboxMessageService outboxMessageService;
 
-	public OpenAiClient(OpenAiProperties properties, JsonMapper jsonMapper,
+    public OpenAiClient(OpenAiProperties properties, JsonMapper jsonMapper,
         OpenAiPromptManager openAiPromptManager, MessageBrokerResolver messageBrokerResolver,
         OutboxMessageService outboxMessageService) {
-		this.properties = properties;
-		this.restClient = RestClient.builder()
-				.baseUrl(properties.baseUrl())
-				.defaultHeader(HttpHeaders.AUTHORIZATION, HttpHeaderConstants.BEARER_PREFIX + properties.secretKey())
-				.defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-				.build();
+        this.properties = properties;
+        this.restClient = RestClient.builder()
+            .baseUrl(properties.baseUrl())
+            .defaultHeader(HttpHeaders.AUTHORIZATION, HttpHeaderConstants.BEARER_PREFIX + properties.secretKey())
+            .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+            .build();
         this.jsonMapper = jsonMapper;
         this.openAiPromptManager = openAiPromptManager;
         this.messageBrokerResolver = messageBrokerResolver;
@@ -64,6 +66,7 @@ public class OpenAiClient implements GenerativeAiClient {
      * API 요청 시 사용함. 최초 호출되어 Fallback 로직 적용
      */
     @Override
+    @CircuitBreaker(name = LLM_CIRCUIT_BREAKER_NAME, fallbackMethod = "generateRationaleFallback")
     @Retry(name = LLM_RETRY_NAME, fallbackMethod = "generateRationaleFallback")
     public ReportRationale generateReportRationaleForApi(GenerateReportRationaleRequest request) {
         return generateReportRationale(request);
@@ -99,15 +102,15 @@ public class OpenAiClient implements GenerativeAiClient {
     /**
      * fallback 메서드, OutboxMessage 생성 및 Sqs 메세지 생성
      */
-	public ReportRationale generateRationaleFallback(GenerateReportRationaleRequest request, Throwable t){
+    public ReportRationale generateRationaleFallback(GenerateReportRationaleRequest request, Throwable t){
         UUID traceId = UUID.randomUUID();
         CreateReportRationaleMessage message = CreateReportRationaleMessage.from(request);
         CreateOutboxMessageCommand command = new CreateOutboxMessageCommand(
             traceId.toString(), jsonMapper.toJson(message), t.getMessage(), message.getClass());
         outboxMessageService.create(command);
         messageBrokerResolver.publish(message, traceId.toString());
-		return new ReportRationale(DEFAULT_RATIONALE_REASONS, DEFAULT_RATIONAL_KEYWORD_CHIPS);
-	}
+        return new ReportRationale(DEFAULT_RATIONALE_REASONS, DEFAULT_RATIONAL_KEYWORD_CHIPS);
+    }
 
     private String generate(List<ChatRequestMessage> messages) {
         OpenAiRequest request = new OpenAiRequest(
@@ -126,7 +129,7 @@ public class OpenAiClient implements GenerativeAiClient {
         return parseContent(Objects.requireNonNull(response));
     }
 
-	private String parseContent(OpenAiResponse response) {
-		return response.choices().get(0).message().content().trim();
-	}
+    private String parseContent(OpenAiResponse response) {
+        return response.choices().get(0).message().content().trim();
+    }
 }
