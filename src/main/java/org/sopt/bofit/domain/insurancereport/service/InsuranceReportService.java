@@ -106,9 +106,6 @@ public class InsuranceReportService {
 		return InsuranceReportSummaryResponse.from(report);
 	}
 
-    /**
-     * 현재는 report 가 수정되는 케이스가 이 메서드를 제외하고 존재하지 않으므로 업데이트 시 이전에 조회했던 report를 그대로 사용함
-     */
     public void updateReportRationale(
         ReportRationaleCreateCommand command
     ){
