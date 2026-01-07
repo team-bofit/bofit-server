@@ -60,8 +60,8 @@ server:
 resilience4j.retry:
   instances:
     LLMRetry:
-      maxAttempts: 1
-      waitDuration: 2s
+      maxAttempts: 2
+      waitDuration: 1s
       enableExponentialBackoff: true
       exponentialBackoffMultiplier: 2.5
       retryExceptions:
