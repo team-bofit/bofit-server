@@ -46,6 +46,7 @@ public class OutboxMessageService {
         get(traceId).failAndRetryLater(errorMessage);
     }
 
+    @Transactional
     public void updateLastAttemptAt(String traceId, LocalDateTime attemptedAt){
         OutboxMessage outboxMessage = get(traceId);
         outboxMessage.updateLastAttemptAt(attemptedAt);
