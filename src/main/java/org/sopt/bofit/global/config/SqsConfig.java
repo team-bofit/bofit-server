@@ -8,8 +8,8 @@ import io.awspring.cloud.sqs.listener.acknowledgement.handler.AcknowledgementMod
 import io.awspring.cloud.sqs.operations.SqsTemplate;
 import java.time.Duration;
 import java.util.concurrent.Executor;
+import org.sopt.bofit.global.config.properties.AWSProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
@@ -25,12 +25,10 @@ public class SqsConfig {
     @Bean
     public SqsAsyncClient sqsAsyncClient(
         @Qualifier(MESSAGE_PROVIDER_POOL) Executor providerExecutor,
-        @Value("${cloud.aws.credentials.access-key}") String accessKey,
-        @Value("${cloud.aws.credentials.secret-key}") String secretKey,
-        @Value("${cloud.aws.region.static}") String region
+        AWSProperties awsProperties
     ) {
         AwsCredentialsProvider myCredentialsProvider = StaticCredentialsProvider.create(
-            AwsBasicCredentials.create(accessKey, secretKey)
+            AwsBasicCredentials.create(awsProperties.credentials().accessKey(), awsProperties.credentials().secretKey())
         );
         return SqsAsyncClient.builder()
             .credentialsProvider(myCredentialsProvider)
