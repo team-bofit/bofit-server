@@ -8,6 +8,7 @@ import org.sopt.bofit.domain.insurance.repository.InsuranceProductRepository;
 import org.sopt.bofit.domain.insurancereport.service.dto.InsuranceOptionCommand;
 import org.sopt.bofit.global.exception.constant.InsuranceErrorCode;
 import org.sopt.bofit.global.exception.customexception.InternalException;
+import org.sopt.bofit.global.exception.customexception.NotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,5 +30,10 @@ public class InsuranceProductReader {
 		return insuranceProductRepository.findFirstByStatus(InsuranceStatus.RECOMMENDED).orElseThrow(() ->
 				new InternalException(InsuranceErrorCode.NOT_FOUND_RECOMMENDED_STATUS_INSURANCE));
 	}
+
+    public InsuranceProduct getById(Long id){
+        return insuranceProductRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException(InsuranceErrorCode.NOT_FOUND_RECOMMENDED_STATUS_INSURANCE));
+    }
 
 }

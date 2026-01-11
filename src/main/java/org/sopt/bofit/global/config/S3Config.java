@@ -3,7 +3,7 @@ package org.sopt.bofit.global.config;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.sopt.bofit.global.config.properties.S3Properties;
+import org.sopt.bofit.global.config.properties.AWSProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -17,7 +17,7 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 @Getter
 public class S3Config {
 
-    private final S3Properties properties;
+    private final AWSProperties properties;
 
     @Bean
     public S3Presigner s3Presigner() {

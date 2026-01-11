@@ -2,7 +2,7 @@ package org.sopt.bofit.domain.insurancereport.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.anyList;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONALE_REASONS;
 import static org.sopt.bofit.domain.insurancereport.constant.InsuranceReportConstant.DEFAULT_RATIONAL_KEYWORD_CHIPS;
@@ -142,7 +142,8 @@ class InsuranceReportWriterTest extends IntegrationTestSupport {
         InsuranceStatistic savedStatistic = insuranceStatisticRepository.save(statistic);
         User savedUser = userRepository.save(user);
 
-        when(openAiClient.sendReportRelationalRequest(anyList()))
+        // 생성 시 rationale 을 생성하지 않고 리포트 생성 후 발급받아 업데이트 하는 형태로 변경됨
+        when(openAiClient.generateReportRationaleForApi(any()))
             .thenReturn(new ReportRationale(DEFAULT_RATIONALE_REASONS, DEFAULT_RATIONAL_KEYWORD_CHIPS));
 
         PersonalInfo personalInfo = UserFixture.getPersonalInfo();
@@ -155,7 +156,7 @@ class InsuranceReportWriterTest extends IntegrationTestSupport {
         assertThat(result)
             .isNotNull()
             .extracting("product.basicInformation.name", "user.personalInfo.name", "reportRationale.reasons")
-            .containsExactly(productName, PERSONAL_NAME, DEFAULT_RATIONALE_REASONS );
+            .containsExactly(productName, PERSONAL_NAME, null );
 
     }
 

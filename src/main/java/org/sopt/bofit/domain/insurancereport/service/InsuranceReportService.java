@@ -17,6 +17,8 @@ import org.sopt.bofit.domain.insurancereport.dto.response.majordisease.MajorDise
 import org.sopt.bofit.domain.insurancereport.dto.response.surgery.SurgerySection;
 import org.sopt.bofit.domain.insurancereport.entity.InsuranceReport;
 import org.sopt.bofit.domain.insurancereport.service.dto.InsuranceOptionCommand;
+import org.sopt.bofit.domain.insurancereport.service.dto.request.InsuranceCriteria;
+import org.sopt.bofit.domain.insurancereport.service.dto.request.ReportRationaleCreateCommand;
 import org.sopt.bofit.domain.user.entity.PersonalInfo;
 import org.sopt.bofit.domain.user.entity.User;
 import org.sopt.bofit.domain.user.entity.UserInfo;
@@ -58,10 +60,12 @@ public class InsuranceReportService {
 
         InsuranceReport createdReport
             = insuranceReportWriter.createReport(totalAverage, recommendedProduct, user, userInfo, personalInfo, age);
-        InsuranceReport insuranceReport = insuranceReportWriter.saveReport(createdReport, user, userInfo,
+        InsuranceReport savedReport = insuranceReportWriter.saveReport(createdReport, user, userInfo,
             personalInfo);
+        insuranceReportWriter.generateAndApplyRationale(
+            personalInfo, InsuranceCriteria.from(userInfo), savedReport, recommendedProduct, age);
 
-		return new IssueInsuranceReportResponse(insuranceReport.getId());
+		return new IssueInsuranceReportResponse(savedReport.getId());
 	}
 
 	public MajorDiseaseSection findMajorDiseaseSection(UUID insuranceReportId, String hyphenSection){
@@ -101,4 +105,13 @@ public class InsuranceReportService {
 		InsuranceReport report = insuranceReportReader.findLastByUser(user);
 		return InsuranceReportSummaryResponse.from(report);
 	}
+
+    public void updateReportRationale(
+        ReportRationaleCreateCommand command
+    ){
+        InsuranceReport report = insuranceReportReader.findById(command.reportId());
+        InsuranceProduct product = insuranceProductReader.getById(command.insuranceProductId());
+        insuranceReportWriter.generateAndApplyRationaleForMessage(
+            command.personalInfo(), command.insuranceCriteria(), report, product, command.age());
+    }
 }
