@@ -19,6 +19,7 @@ import org.sopt.bofit.global.exception.customexception.InternalException;
 import org.sopt.bofit.global.external.generativeai.GenerativeAiClient;
 import org.sopt.bofit.global.external.generativeai.openai.dto.request.ChatRequestMessage;
 import org.sopt.bofit.global.external.generativeai.openai.dto.request.OpenAiRequest;
+import org.sopt.bofit.global.external.generativeai.openai.dto.request.ResponseFormat;
 import org.sopt.bofit.global.external.generativeai.openai.dto.response.OpenAiResponse;
 import org.sopt.bofit.global.external.generativeai.openai.template.OpenAiPromptManager;
 import org.sopt.bofit.global.external.generativeai.reportrelational.GenerateReportRationaleRequest;
@@ -39,6 +40,7 @@ import org.springframework.web.client.RestClient;
 @Component
 public class OpenAiClient implements GenerativeAiClient {
     public static final String REQUEST_URI = "/chat/completions";
+    private static final String MINIMAL_REASONING_EFFORT = "minimal";
 
     private final RestClient restClient;
     private final OpenAiProperties properties;
@@ -90,7 +92,7 @@ public class OpenAiClient implements GenerativeAiClient {
                     new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportSystemMessage()),
                     new ChatRequestMessage(SYSTEM.getValue(), openAiPromptManager.generateReportRationale(
                         request.personalInfo(), request.insuranceCriteria(), request.report(), request.product(), request.age()))
-                ));
+                ), ResponseFormat.createReportRationaleSchema());
             return jsonMapper.fromJson(ReportRationale.class, responseString);
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             // } catch (RuntimeException e) {
@@ -112,12 +114,14 @@ public class OpenAiClient implements GenerativeAiClient {
         return new ReportRationale(DEFAULT_RATIONALE_REASONS, DEFAULT_RATIONAL_KEYWORD_CHIPS);
     }
 
-    private String generate(List<ChatRequestMessage> messages) {
+    private String generate(List<ChatRequestMessage> messages, ResponseFormat responseFormat) {
         OpenAiRequest request = new OpenAiRequest(
             properties.model(),
             messages,
             properties.maxTokens(),
-            properties.temperature()
+            properties.temperature(),
+            responseFormat,
+            MINIMAL_REASONING_EFFORT
         );
 
         OpenAiResponse response = restClient.post()
@@ -132,4 +136,5 @@ public class OpenAiClient implements GenerativeAiClient {
     private String parseContent(OpenAiResponse response) {
         return response.choices().get(0).message().content().trim();
     }
+
 }
