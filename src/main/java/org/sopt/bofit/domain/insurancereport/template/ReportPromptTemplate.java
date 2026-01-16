@@ -16,42 +16,38 @@ public class ReportPromptTemplate {
 	private final static String DELIMITER = ", ";
 
 	private final static String SYSTEM_MESSAGE = "너는 보험 리포트를 작성하는 전문가야. 아래 사용자 정보를 바탕으로, 요구사항에 맞춰 보험 리포트 설명을 작성해줘.";
-	public static String recommendReasonAndKeywordChip(
+
+    public static String recommendReasonAndKeywordChip(
         PersonalInfo personalInfo,
         InsuranceCriteria insuranceCriteria,
-		InsuranceReport report,
+        InsuranceReport report,
         InsuranceProduct product,
-		int age
-	){
-		return OpenAiPromptTemplate.createDefaultMessage(
-    """
-		추천 받은 보험 상품에 대한 이유(reasons)와 이를 핵심적으로 표현하는 키워드 칩(keywordChips)을 아래 형식대로 생성해줘.
-		제시되는 모든 정보를 사용할 필요없이 상품 추천 설명에 필요한 정보만 사용해줘.
-		각 reason은 반드시 한 문장으로만 작성하며 불필요한 미사어구를 제외하고 핵심을 제시해줘
-		문장 길이는 짧고 명확하되, 의미가 부족하지 않도록 구성 (35 ~ 40 내외)
-		각 문장은 반드시 사용자 정보 기반의 '이유 + 설계 방향'을 포함할 것
-		말하듯 자연스럽고 부드럽게, 그러나 단정하고 신뢰감 있는 톤으로 작성할 것
-		reasons의 각 문장은 총 3개 작성, keywordChips은 2개 작성
-		나이는 언급하지 말아줘
-		높은 신뢰도를 위해 입력된 정보를 정확하게 사용하는지 한번 더 생각해서 작성해줘
-		'~했습니다'를 '~했어요' 말투로 작성해줘
-		
-		keywordChips example: "중대 질환 든든 보장", "합리적인 보험료"
-    """ +
-			userDetailTemplate(personalInfo, insuranceCriteria, age)
-			+ reportInfoTemplate(report, product),
-    """
-     {
-    	"reasons": [
-    		"<보험 상품 추천 이유>"
-    	],
-    	"keywordChips": [
-    		"<보험 상품 핵심 키워드>"
-    	]
+        int age
+    ){
+        return OpenAiPromptTemplate.createDefaultMessage(
+            """
+                추천 받은 보험 상품에 대한 이유(reasons)와 이를 핵심적으로 표현하는 키워드 칩(keywordChips)을 아래 형식대로 생성해줘.
+                제시되는 모든 정보를 사용할 필요없이 상품 추천 설명에 필요한 정보만 사용해줘.
+                각 reason은 반드시 한 문장으로만 작성하며 불필요한 미사어구를 제외하고 핵심을 제시해줘
+                문장 길이는 짧고 명확하되, 의미가 부족하지 않도록 구성 (35 ~ 40 내외)
+                각 문장은 반드시 사용자 정보 기반의 '이유 + 설계 방향'을 포함할 것
+                말하듯 자연스럽고 부드럽게, 그러나 단정하고 신뢰감 있는 톤으로 작성할 것
+                reasons의 각 문장은 총 3개 작성, keywordChips은 2개 작성
+                나이는 언급하지 말아줘
+                높은 신뢰도를 위해 입력된 정보를 정확하게 사용하는지 한번 더 생각해서 작성해줘
+                '~했습니다'를 '~했어요' 말투로 작성해줘
+                [작성 절대 원칙]
+                    1. 너는 이미 확정된 보험 상품을 '설명'하는 역할이다. 내용을 수정하거나 '추가 설계'할 수 없다.
+                    2. 입력된 정보 중 '부족'하거나 '약함'으로 표시된 항목은 언급하지 않는다.
+                    3. 오직 '강력'하거나 '충분'한 항목을 근거로, 왜 이 상품이 고객에게 유리한지만 설명한다.
+                    4. 문장은 "제가 ~게 설계했어요"가 아니라, "고객님의 ~상황에 맞춰 ~보장이 든든해요" 형태로 작성한다.
+                
+                keywordChips example: "중대 질환 든든 보장", "합리적인 보험료"
+            """ +
+                userDetailTemplate(personalInfo, insuranceCriteria, age)
+                + reportInfoTemplate(report, product)
+        );
     }
-    """
-			);
-	}
 
 	public static String userDetailTemplate(PersonalInfo personalInfo, InsuranceCriteria insuranceCriteria, int age){
 		return """

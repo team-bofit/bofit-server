@@ -29,7 +29,7 @@ import org.sopt.bofit.domain.user.service.UserReader;
 import org.sopt.bofit.domain.user.service.UserWriter;
 import org.sopt.bofit.global.external.generativeai.GenerativeAiClient;
 import org.sopt.bofit.global.external.generativeai.reportrelational.GenerateReportRationaleRequest;
-import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -139,7 +139,8 @@ public class InsuranceReportWriter {
     }
 
     @Transactional
-	@CachePut(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id", unless = "#result==null")
+//	@CachePut(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id", unless = "#result==null")
+    @CacheEvict(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id")
 	public InsuranceReport saveReport(
 		InsuranceReport report,
 		User requestUser,
@@ -155,7 +156,8 @@ public class InsuranceReportWriter {
 		return savedInsuranceReport;
 	}
 
-    @CachePut(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id", unless = "#result==null")
+//    @CachePut(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id", unless = "#result==null")
+    @CacheEvict(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id")
 	public InsuranceReport generateAndApplyRationale(
         PersonalInfo personalInfo,
 		InsuranceCriteria insuranceCriteria,
@@ -170,7 +172,8 @@ public class InsuranceReportWriter {
         return insuranceReportRepository.save(report);
 	}
 
-    @CachePut(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id", unless = "#result==null")
+//    @CachePut(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id", unless = "#result==null")
+    @CacheEvict(cacheNames = INSURANCE_REPORT_CACHE_NAME, key = "#result.id")
     public InsuranceReport generateAndApplyRationaleForMessage(
         PersonalInfo personalInfo,
         InsuranceCriteria insuranceCriteria,
