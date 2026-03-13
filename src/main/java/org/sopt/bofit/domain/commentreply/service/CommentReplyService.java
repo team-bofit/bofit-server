@@ -58,9 +58,9 @@ public class CommentReplyService {
         comment.checkPost(post);
 
         CommentReply commentReply = commentReplyWriter.create(comment, user, command.content());
-        IntStream.range(0, command.imageUrls().size())
+        IntStream.range(0, command.imageKeys().size())
                 .forEach(sequence ->
-                    commentReplyImageWriter.create(commentReply, command.imageUrls().get(sequence), sequence));
+                    commentReplyImageWriter.create(commentReply, command.imageKeys().get(sequence), sequence));
         commentWriter.increaseReplyCount(comment);
         postWriter.increaseTrendScore(post);
         return commentReply;

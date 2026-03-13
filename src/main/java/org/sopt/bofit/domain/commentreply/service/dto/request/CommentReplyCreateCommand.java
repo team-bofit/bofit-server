@@ -4,7 +4,7 @@ import java.util.List;
 
 public record CommentReplyCreateCommand(
     String content,
-    List<String> imageUrls
+    List<String> imageKeys
 ) {
 
 }
