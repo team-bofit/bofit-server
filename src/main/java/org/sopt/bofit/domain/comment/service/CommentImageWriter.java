@@ -33,7 +33,7 @@ public class CommentImageWriter {
     ){
         updatedImages.forEach(image -> {
                 if(image.id() == null){
-                    create(comment, image.imageUrl(), image.sequence());
+                    create(comment, image.imageKey(), image.sequence());
                 }else {
                     currentImages.get(image.id()).updateSequence(image.sequence());
                 }
