@@ -34,7 +34,7 @@ public class PostImageWriter {
     ){
         updatedImages.forEach(image -> {
             if(image.id() == null){
-                create(post, image.imageUrl(), image.sequence());
+                create(post, image.imageKey(), image.sequence());
             } else {
                 currentImages.get(image.id()).updateSequence(image.sequence());
             }
