@@ -7,9 +7,11 @@ import org.springframework.boot.context.properties.bind.Name;
 public record AWSProperties(
         Credentials credentials,
         Region region,
-        S3 s3
+        S3 s3,
+        CloudFront cloudFront
 ) {
     public record Credentials(String accessKey, String secretKey) {}
     public record Region(@Name("static") String value) {}
     public record S3(String bucket) {}
+    public record CloudFront(String domain) {}
 }
