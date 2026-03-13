@@ -1,13 +1,8 @@
 package org.sopt.bofit.global.config;
 
-import static org.sopt.bofit.global.config.ThreadPoolConfig.MESSAGE_CONSUMER_POOL;
-import static org.sopt.bofit.global.config.ThreadPoolConfig.MESSAGE_PROVIDER_POOL;
-
 import io.awspring.cloud.sqs.config.SqsMessageListenerContainerFactory;
 import io.awspring.cloud.sqs.listener.acknowledgement.handler.AcknowledgementMode;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
-import java.time.Duration;
-import java.util.concurrent.Executor;
 import org.sopt.bofit.global.config.properties.AWSProperties;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +12,14 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.client.config.SdkAdvancedAsyncClientOption;
+import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.sqs.SqsAsyncClient;
+
+import java.time.Duration;
+import java.util.concurrent.Executor;
+
+import static org.sopt.bofit.global.config.ThreadPoolConfig.MESSAGE_CONSUMER_POOL;
+import static org.sopt.bofit.global.config.ThreadPoolConfig.MESSAGE_PROVIDER_POOL;
 
 @Configuration
 public class SqsConfig {
@@ -31,6 +33,7 @@ public class SqsConfig {
             AwsBasicCredentials.create(awsProperties.credentials().accessKey(), awsProperties.credentials().secretKey())
         );
         return SqsAsyncClient.builder()
+                .region(Region.of(awsProperties.region().value()))
             .credentialsProvider(myCredentialsProvider)
             .asyncConfiguration(
                 config -> config.advancedOption(
