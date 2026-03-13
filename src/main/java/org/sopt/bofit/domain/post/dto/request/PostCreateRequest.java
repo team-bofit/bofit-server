@@ -25,10 +25,10 @@ public record PostCreateRequest(
         @ValidPostCategory
         String category,
 
-        @Schema(description = "이미지 url")
-        List<String> imageUrls
+        @Schema(description = "이미지 url key 값")
+        List<String> imageKeys
 ) {
     public PostCreateCommand toCommand() {
-        return new PostCreateCommand(title, content, category, imageUrls);
+        return new PostCreateCommand(title, content, category, imageKeys);
     }
 }

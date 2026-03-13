@@ -19,6 +19,8 @@ cloud:
       static: ap-northeast-2
     s3:
       bucket: bofit-bucket
+    cloudfront:
+      domain: ${CLOUDFRONT_DOMAIN_NAME}
     stack:
       auto: false
 spring:

@@ -1,13 +1,5 @@
 package org.sopt.bofit.domain.comment.service;
 
-import static org.sopt.bofit.domain.comment.constant.CommentConstant.MAX_IMAGE_COUNT;
-import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_UNAUTHORIZED;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.dto.response.CommentWithImagesResponse;
 import org.sopt.bofit.domain.comment.entity.Comment;
@@ -29,6 +21,15 @@ import org.sopt.bofit.global.file.util.ImageValidator;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.IntStream;
+
+import static org.sopt.bofit.domain.comment.constant.CommentConstant.MAX_IMAGE_COUNT;
+import static org.sopt.bofit.global.exception.constant.CommentErrorCode.COMMENT_UNAUTHORIZED;
 
 @Service
 @RequiredArgsConstructor
@@ -56,9 +57,9 @@ public class CommentService {
 
 		Comment comment = commentWriter.create(post, user, command.content());
 
-        IntStream.range(0, command.imageUrls().size())
+        IntStream.range(0, command.imageKeys().size())
                 .forEach(sequence -> commentImageWriter
-                    .create(comment, command.imageUrls().get(sequence), sequence));
+                    .create(comment, command.imageKeys().get(sequence), sequence));
 
 		postWriter.increaseCommentCount(post);
         postCacheService.increaseCommentCount(postId);

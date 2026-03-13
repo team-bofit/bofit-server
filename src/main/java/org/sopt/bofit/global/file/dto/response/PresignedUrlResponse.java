@@ -3,9 +3,9 @@ package org.sopt.bofit.global.file.dto.response;
 import java.util.List;
 
 public record PresignedUrlResponse(
-        List<String> presignedUrls
+        List<PresignedUrlDto> presignedUrlDtos
 ) {
-    public static PresignedUrlResponse of(List<String> urls){
-        return new PresignedUrlResponse(urls);
+    public static PresignedUrlResponse of(List<PresignedUrlDto> presignedUrlDtos) {
+        return new PresignedUrlResponse(presignedUrlDtos);
     }
 }

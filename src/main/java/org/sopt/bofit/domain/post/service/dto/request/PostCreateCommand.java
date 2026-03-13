@@ -6,6 +6,6 @@ public record PostCreateCommand(
         String title,
         String content,
         String category,
-        List<String> imageUrls
+        List<String> imageKeys
 ) {
 }

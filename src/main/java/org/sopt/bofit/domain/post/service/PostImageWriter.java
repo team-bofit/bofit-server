@@ -1,14 +1,16 @@
 package org.sopt.bofit.domain.post.service;
 
 import jakarta.transaction.Transactional;
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.entity.PostImage;
 import org.sopt.bofit.domain.post.repository.PostImageRepository;
 import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
+import org.sopt.bofit.global.file.util.CloudFrontUrlCreator;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -16,9 +18,11 @@ public class PostImageWriter {
 
     private final PostImageReader postImageReader;
     private final PostImageRepository postImageRepository;
+    private final CloudFrontUrlCreator cloudFrontUrlCreator;
 
-    public PostImage create(Post post, String url, Integer sequence) {
-        PostImage postImage = PostImage.create(url, post, sequence);
+    public PostImage create(Post post, String imageKey, Integer sequence) {
+        String cloudFrontUrl = cloudFrontUrlCreator.createCloudFrontUrl(imageKey);
+        PostImage postImage = PostImage.create(cloudFrontUrl, post, sequence);
         return postImageRepository.save(postImage);
     }
 
@@ -30,7 +34,7 @@ public class PostImageWriter {
     ){
         updatedImages.forEach(image -> {
             if(image.id() == null){
-                create(post, image.imageUrl(), image.sequence());
+                create(post, image.imageKey(), image.sequence());
             } else {
                 currentImages.get(image.id()).updateSequence(image.sequence());
             }

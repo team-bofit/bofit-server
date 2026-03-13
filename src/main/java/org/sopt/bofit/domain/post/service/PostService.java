@@ -1,18 +1,7 @@
 package org.sopt.bofit.domain.post.service;
 
-import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
-import org.sopt.bofit.domain.post.dto.response.PostCreateResponse;
-import org.sopt.bofit.domain.post.dto.response.PostDetailResponse;
-import org.sopt.bofit.domain.post.dto.response.PostSearchResponse;
-import org.sopt.bofit.domain.post.dto.response.PostSummaryResponse;
-import org.sopt.bofit.domain.post.dto.response.TrendingPostsResponses;
+import org.sopt.bofit.domain.post.dto.response.*;
 import org.sopt.bofit.domain.post.entity.Post;
 import org.sopt.bofit.domain.post.entity.PostImage;
 import org.sopt.bofit.domain.post.entity.TrendPost;
@@ -29,6 +18,14 @@ import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
 import org.sopt.bofit.global.file.util.ImageValidator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
+
+import static org.sopt.bofit.global.exception.constant.PostErrorCode.POST_UNAUTHORIZED;
 
 @Service
 @RequiredArgsConstructor
@@ -55,9 +52,9 @@ public class PostService {
 
         Post post = postWriter.createPost(userId, command.title(), command.content(), command.category());
 
-        IntStream.range(0, command.imageUrls().size())
+        IntStream.range(0, command.imageKeys().size())
                 .forEach(sequence -> postImageWriter
-                        .create(post, command.imageUrls().get(sequence), sequence));
+                        .create(post, command.imageKeys().get(sequence), sequence));
 
         return PostCreateResponse.from(post.getId());
     }

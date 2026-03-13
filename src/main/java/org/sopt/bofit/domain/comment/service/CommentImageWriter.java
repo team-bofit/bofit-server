@@ -1,23 +1,27 @@
 package org.sopt.bofit.domain.comment.service;
 
 import jakarta.transaction.Transactional;
-import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.sopt.bofit.domain.comment.entity.Comment;
 import org.sopt.bofit.domain.comment.entity.CommentImage;
 import org.sopt.bofit.domain.comment.entity.CommentImageStatus;
 import org.sopt.bofit.domain.comment.repository.CommentImageRepository;
 import org.sopt.bofit.global.file.dto.request.UpdateImageRequest;
+import org.sopt.bofit.global.file.util.CloudFrontUrlCreator;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class CommentImageWriter {
     private final CommentImageRepository commentImageRepository;
+    private final CloudFrontUrlCreator cloudFrontUrlCreator;
 
-    public CommentImage create(Comment comment, String url, Integer sequence){
-        CommentImage commentImage = CommentImage.create(comment, url, sequence);
+    public CommentImage create(Comment comment, String imageKey, Integer sequence){
+        String cloudFrontUrl = cloudFrontUrlCreator.createCloudFrontUrl(imageKey);
+        CommentImage commentImage = CommentImage.create(comment, cloudFrontUrl, sequence);
         return commentImageRepository.save(commentImage);
     }
 
@@ -29,7 +33,7 @@ public class CommentImageWriter {
     ){
         updatedImages.forEach(image -> {
                 if(image.id() == null){
-                    create(comment, image.imageUrl(), image.sequence());
+                    create(comment, image.imageKey(), image.sequence());
                 }else {
                     currentImages.get(image.id()).updateSequence(image.sequence());
                 }
